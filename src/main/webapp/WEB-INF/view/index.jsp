@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.List" %>
+<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -7,6 +8,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<%
+    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getParameter("listaUsuarios");
+
+%>
+
 <head>
     <title>Title</title>
 </head>
