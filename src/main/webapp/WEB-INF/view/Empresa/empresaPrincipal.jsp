@@ -21,13 +21,11 @@
 </head>
 <body>
 
-<a href="Empresa/empresaPrincipal.jsp">Empresa</a>
-
 <%
     for (UsuarioEntity u:listaUsuarios) {
 
 %>
-    <%=u.getNombre()%><br>
+<%=u.getNombre()%><br>
 <%
     }
 %>
