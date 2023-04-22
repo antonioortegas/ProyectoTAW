@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -11,6 +12,7 @@
 <html>
 <%
     List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
+    List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("listaEmpresas");
 
 %>
 
@@ -24,6 +26,14 @@
 
 %>
     <%=u.getNombre()%><br>
+<%
+    }
+%>
+<%
+    for (EmpresaEntity e:listaEmpresa) {
+
+%>
+<%=e.getNombre()%><br>
 <%
     }
 %>

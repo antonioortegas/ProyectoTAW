@@ -2,6 +2,7 @@ package es.taw.proyectotaw.Entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -9,17 +10,41 @@ import java.util.Objects;
 public class UsuarioEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "idUsuario", nullable = false)
+    @Column(name = "id_usuario", nullable = false)
     private Integer idUsuario;
+    @Basic
+    @Column(name = "nif", nullable = false, length = 45)
+    private String nif;
     @Basic
     @Column(name = "nombre", nullable = false, length = 45)
     private String nombre;
     @Basic
-    @Column(name = "apellido", nullable = true, length = 45)
-    private String apellido;
+    @Column(name = "segundo_nombre", nullable = true, length = 45)
+    private String segundoNombre;
+    @Basic
+    @Column(name = "primer_apellido", nullable = false, length = 45)
+    private String primerApellido;
+    @Basic
+    @Column(name = "segundo_apellido", nullable = true, length = 45)
+    private String segundoApellido;
+    @Basic
+    @Column(name = "fecha_nacimiento", nullable = false)
+    private Date fechaNacimiento;
+    @Basic
+    @Column(name = "contrasena", nullable = false, length = 45)
+    private String contrasena;
+    @Basic
+    @Column(name = "fecha_inicio", nullable = false)
+    private Date fechaInicio;
     @ManyToOne
-    @JoinColumn(name = "Cuenta_idCuenta", referencedColumnName = "idCuenta", nullable = false)
-    private CuentaEntity cuentaByCuentaIdCuenta;
+    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
+    private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
+    @ManyToOne
+    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa", nullable = false)
+    private EmpresaEntity empresaByEmpresaIdEmpresa;
+    @ManyToOne
+    @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
+    private DireccionEntity direccionByDireccionIdDireccion;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -27,6 +52,14 @@ public class UsuarioEntity {
 
     public void setIdUsuario(Integer idUsuario) {
         this.idUsuario = idUsuario;
+    }
+
+    public String getNif() {
+        return nif;
+    }
+
+    public void setNif(String nif) {
+        this.nif = nif;
     }
 
     public String getNombre() {
@@ -37,12 +70,52 @@ public class UsuarioEntity {
         this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
+    public String getSegundoNombre() {
+        return segundoNombre;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
+    public void setSegundoNombre(String segundoNombre) {
+        this.segundoNombre = segundoNombre;
+    }
+
+    public String getPrimerApellido() {
+        return primerApellido;
+    }
+
+    public void setPrimerApellido(String primerApellido) {
+        this.primerApellido = primerApellido;
+    }
+
+    public String getSegundoApellido() {
+        return segundoApellido;
+    }
+
+    public void setSegundoApellido(String segundoApellido) {
+        this.segundoApellido = segundoApellido;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public Date getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
     @Override
@@ -50,19 +123,35 @@ public class UsuarioEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UsuarioEntity that = (UsuarioEntity) o;
-        return Objects.equals(idUsuario, that.idUsuario) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido);
+        return Objects.equals(idUsuario, that.idUsuario) && Objects.equals(nif, that.nif) && Objects.equals(nombre, that.nombre) && Objects.equals(segundoNombre, that.segundoNombre) && Objects.equals(primerApellido, that.primerApellido) && Objects.equals(segundoApellido, that.segundoApellido) && Objects.equals(fechaNacimiento, that.fechaNacimiento) && Objects.equals(contrasena, that.contrasena) && Objects.equals(fechaInicio, that.fechaInicio);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, nombre, apellido);
+        return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio);
     }
 
-    public CuentaEntity getCuentaByCuentaIdCuenta() {
-        return cuentaByCuentaIdCuenta;
+    public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
+        return cuentabancoByCuentaBancoIdCuentaBanco;
     }
 
-    public void setCuentaByCuentaIdCuenta(CuentaEntity cuentaByCuentaIdCuenta) {
-        this.cuentaByCuentaIdCuenta = cuentaByCuentaIdCuenta;
+    public void setCuentabancoByCuentaBancoIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco) {
+        this.cuentabancoByCuentaBancoIdCuentaBanco = cuentabancoByCuentaBancoIdCuentaBanco;
+    }
+
+    public EmpresaEntity getEmpresaByEmpresaIdEmpresa() {
+        return empresaByEmpresaIdEmpresa;
+    }
+
+    public void setEmpresaByEmpresaIdEmpresa(EmpresaEntity empresaByEmpresaIdEmpresa) {
+        this.empresaByEmpresaIdEmpresa = empresaByEmpresaIdEmpresa;
+    }
+
+    public DireccionEntity getDireccionByDireccionIdDireccion() {
+        return direccionByDireccionIdDireccion;
+    }
+
+    public void setDireccionByDireccionIdDireccion(DireccionEntity direccionByDireccionIdDireccion) {
+        this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
     }
 }
