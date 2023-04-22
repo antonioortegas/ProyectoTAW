@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %><%--
   Created by IntelliJ IDEA.
@@ -9,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getParameter("listaUsuarios");
+    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
 
 %>
 
@@ -17,6 +18,14 @@
     <title>Title</title>
 </head>
 <body>
-INDEX.jsp
+
+<%
+    for (UsuarioEntity u:listaUsuarios) {
+
+%>
+    <%=u.getNombre()%><br>
+<%
+    }
+%>
 </body>
 </html>
