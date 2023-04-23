@@ -11,8 +11,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
-    List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("listaEmpresas");
+
+    List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("empresa");
 
 %>
 
@@ -20,15 +20,13 @@
     <title>Title</title>
 </head>
 <body>
+<a href="crearNuevaEmpresa"> NUEVA EMPRESA</a>
+<a> NUEVO SOCIO</a>
+<a> INCIAR SESION EMPRESA</a>
+<a> INCIAR SESION SOCIO</a>
 
-<%
-    for (UsuarioEntity u:listaUsuarios) {
+<% System.out.println("HOLA");%>
 
-%>
-<%=u.getNombre()%><br>
-<%
-    }
-%>
 <%
     for (EmpresaEntity e:listaEmpresa) {
 

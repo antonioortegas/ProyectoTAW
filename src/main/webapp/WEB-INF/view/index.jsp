@@ -21,7 +21,7 @@
 </head>
 <body>
 
-<a href="Empresa/empresaPrincipal.jsp">Empresa</a>
+<a href="Empresa/empresaPrincipal">Empresa</a>
 
 <%
     for (UsuarioEntity u:listaUsuarios) {
