@@ -22,13 +22,21 @@ public class EmpresaController {
         return "Empresa/crearNuevaEmpresa";
     }
 
+
+    @GetMapping("/Empresa/crearUsuarioEmpresa")
     public String crearNuevoSocio() {
-        return "";
+        return "Empresa/crearUsuarioEmpresa";
     }
 
+
+    @GetMapping("/Empresa/loginSocio")
+
     public String iniciarSesionEmpresa() {
-        return "";
+        return "Empresa/login";
     }
+
+
+
     public String iniciarSesionEmpleadp() {
         return "";
     }

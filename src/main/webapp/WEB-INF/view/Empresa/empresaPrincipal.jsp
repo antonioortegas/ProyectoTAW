@@ -20,12 +20,12 @@
     <title>Title</title>
 </head>
 <body>
-<a href="crearNuevaEmpresa"> NUEVA EMPRESA</a>
-<a> NUEVO SOCIO</a>
-<a> INCIAR SESION EMPRESA</a>
-<a> INCIAR SESION SOCIO</a>
+<a href="crearNuevaEmpresa"> NUEVA EMPRESA</a><br>
+<a href="crearUsuarioEmpresa"> NUEVO SOCIO</a><br>
+<a > INCIAR SESION EMPRESA</a><br>
+<a href="loginSocio"> INCIAR SESION SOCIO</a><br>
 
-<% System.out.println("HOLA");%>
+<%// System.out.println("HOLA");%>
 
 <%
     for (EmpresaEntity e:listaEmpresa) {
