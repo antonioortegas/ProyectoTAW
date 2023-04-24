@@ -13,9 +13,9 @@
 </head>
 <body>
 <h1>Iniciar Sesión</h1>
-<form action="/procesar-inicio-sesion" method="post">
-    <label for="usuario">Usuario:</label>
-    <input type="text" id="usuario" name="usuario" required>
+<form action="/loginSocio" method="post">
+    <label for="nif">NIF:</label>
+    <input type="text" id="nif" name="nif" required>
     <br>
     <label for="contrasena">Contraseña:</label>
     <input type="password" id="contrasena" name="contrasena" required>
@@ -24,6 +24,5 @@
     <input type="reset" value="Limpiar">
 </form>
 <br>
-<p>¿No tienes una cuenta? <a href="/registro.html">Regístrate aquí</a></p>
 </body>
 </html>

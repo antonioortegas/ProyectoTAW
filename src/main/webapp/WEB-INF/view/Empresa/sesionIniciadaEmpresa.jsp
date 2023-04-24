@@ -1,4 +1,4 @@
-bloquearSocios.jsp<%--
+<%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
