@@ -1,7 +1,4 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="java.util.List" %>
-<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -9,15 +6,23 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<%
-    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
-%>
 
+<html>
 <head>
-    <title>Title</title>
+    <title>Iniciar Sesión</title>
 </head>
 <body>
-
+<h1>Iniciar Sesión</h1>
+<form action="/loginCliente" method="post">
+    <label for="nif">NIF:</label>
+    <input type="text" id="nif" name="nif" required>
+    <br>
+    <label for="contrasena">Contraseña:</label>
+    <input type="password" id="contrasena" name="contrasena" required>
+    <br>
+    <input type="submit" value="Iniciar Sesión">
+    <input type="reset" value="Limpiar">
+</form>
+<br>
 </body>
 </html>
