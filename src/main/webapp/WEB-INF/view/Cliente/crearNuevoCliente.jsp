@@ -10,14 +10,14 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-
+<%
+    List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
+%>
 
 <head>
     <title>Title</title>
 </head>
 <body>
-
-<a href="Empresa/empresaPrincipal">Empresa</a>br>
-<a href="Cliente/clientePrincipal">Cliente</a>
+AQUI LO CREAS
 </body>
 </html>

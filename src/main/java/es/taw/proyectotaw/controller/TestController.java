@@ -37,5 +37,9 @@ public class TestController {
 
     }
 
+    @GetMapping("/Cliente/clientePrincipal")
+    public String goCliente(Model model) {
+        return "Cliente/clientePrincipal";
+    }
 
 }
