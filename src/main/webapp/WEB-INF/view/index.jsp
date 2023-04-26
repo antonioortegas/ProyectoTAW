@@ -16,8 +16,10 @@
     <title>Title</title>
 </head>
 <body>
-
-<a href="Empresa/empresaPrincipal">Empresa</a><br>
-<a href="Cliente/clientePrincipal">Cliente</a>
+<td>${pageContext.session.id}</td><br>
+<button> <a href="Empresa/empresaPrincipal">Empresa</a>  </button> <br>
+<button> <a href="Cliente/clientePrincipal">Cliente</a></button> <br>
+<button> <a href="" >Gestor </a></button><br>
+<button> <a href="" >Asistente </a></button><br>
 </body>
 </html>

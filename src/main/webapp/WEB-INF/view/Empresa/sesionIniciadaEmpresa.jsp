@@ -13,14 +13,14 @@
 <body>
 <h1>Bienvenido a la Aplicación Bancaria</h1>
 <h2>Menú Principal</h2>
-<button onclick="altaSocio()">Dar de alta a nuevo socio</button>
-<button onclick="modificarDatos()">Modificar datos</button>
-<button onclick="bloquearSocios()">Bloquear socios</button>
-<button onclick="transferenciaBancaria()">Transferencia bancaria</button>
-<button onclick="cambioDivisas()">Cambio de divisas</button>
-<button onclick="verHistorial()">Ver historial de operaciones</button>
-<button onclick="estadoCuenta()">Estado de la cuenta</button>
-<button onclick="salir()">Salir</button>
+<button><a href="">Dar de alta a nuevo socio</a></button>
+<button><a href="Empresa/bloquearSocios">Bloquear socios</a></button>
+<button><a href="">Modificar datos</a></button>
+<button><a href="">Transferencia bancaria</a></button>
+<button><a href="">Cambio de divisas</a></button>
+<button><a href="">Ver historial de operaciones</a></button>
+<button><a href="">Estado de la cuenta</a></button>
+<button><a href="">Salir</a></button>
 
 </body>
 </html>

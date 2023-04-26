@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 public class EmpresaController {
 
@@ -25,7 +27,7 @@ public class EmpresaController {
 
 
     @GetMapping("/Empresa/crearNuevaEmpresa")
-    public String crearNuevaEmpresa(){
+    public String crearNuevaEmpresa(HttpSession httpSession){
         return "Empresa/crearNuevaEmpresa";
     }
 
@@ -61,6 +63,22 @@ public class EmpresaController {
     @GetMapping("/Empresa/loginSocio")
     public String iniciarSesionEmpleadp() {
         return "Empresa/login";
+    }
+
+    @GetMapping("/Empresa/bloquearSocios")
+    public String bloquarSocios(Model model, HttpSession httpSession){
+        UsuarioEntity usuario = (UsuarioEntity) httpSession.getAttribute("nif");
+
+        //List<UsuarioEntity> listaUsuriosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(usuario.getEmpresaByEmpresaIdEmpresa().getIdEmpresa());
+        List<UsuarioEntity> listaUsuriosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa("1");
+        model.addAttribute("listaUsuriosEmpresa", listaUsuriosEmpresa);
+
+        for (UsuarioEntity u:
+             listaUsuriosEmpresa) {
+            System.out.println(u.getNombre());
+        }
+
+        return "Empresa/bloquearSocios";
     }
 
 

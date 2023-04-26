@@ -20,20 +20,14 @@
     <title>Title</title>
 </head>
 <body>
-<a href="crearNuevaEmpresa"> NUEVA EMPRESA</a><br>
-<a href="crearUsuarioEmpresa"> NUEVO SOCIO</a><br>
-<a > INCIAR SESION EMPRESA</a><br>
-<a href="loginSocio"> INCIAR SESION SOCIO</a><br>
+<td>${pageContext.session.id}</td><br><br><br>
+<h6> Accediendo con el siguiente sessionid: <%= session.getId() %> </h6>
 
-<%// System.out.println("HOLA");%>
+<button> <a href="crearNuevaEmpresa"> NUEVA EMPRESA</a></button><br>
+<button> <a href="crearUsuarioEmpresa"> NUEVO SOCIO</a></button><br>
+<button> <a href=""> INCIAR SESION EMPRESA</a></button><br>
+<button> <a href="loginSocio"> INCIAR SESION SOCIO</a></button><br>
 
-<%
-    for (EmpresaEntity e:listaEmpresa) {
 
-%>
-<%=e.getNombre()%><br>
-<%
-    }
-%>
 </body>
 </html>
