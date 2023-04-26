@@ -18,7 +18,11 @@
     <title>Title</title>
 </head>
 <body>
-Bienvenido
-<%=cliente.getNombre()%>
+<hi>Bienvenido <%=cliente.getNombre()%></hi><br>
+
+<a href="/editarUsuario?id=<%= cliente.getIdUsuario() %>">Modificar mis datos</a><br>
+Realizar una transferencia <br>
+Cambio de divisas <br>
+Historial de operaciones <br>
 </body>
 </html>

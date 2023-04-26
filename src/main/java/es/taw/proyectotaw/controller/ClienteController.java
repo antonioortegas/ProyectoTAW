@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -45,5 +46,18 @@ public class ClienteController {
         }
 
         return urlTo;
+    }
+
+    @GetMapping("/editarUsuario")
+    public String editarCliente (Integer id, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        return "Cliente/editarDatosCliente";
+    }
+
+    @PostMapping("/editarCliente")
+    public String doEditar (@ModelAttribute("cliente") UsuarioEntity cliente) {
+        this.usuarioRepository.save(cliente);
+        return "Cliente/indexCliente";
     }
 }
