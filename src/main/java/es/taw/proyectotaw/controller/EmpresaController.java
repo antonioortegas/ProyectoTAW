@@ -1,8 +1,7 @@
 package es.taw.proyectotaw.controller;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import es.taw.proyectotaw.Entity.UsuarioEntity;
+import es.taw.proyectotaw.entity.UsuarioEntity;
 import es.taw.proyectotaw.dao.EmpresaRepository;
 import es.taw.proyectotaw.dao.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
