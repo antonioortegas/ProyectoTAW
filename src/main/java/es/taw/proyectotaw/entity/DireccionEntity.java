@@ -1,4 +1,4 @@
-package es.taw.proyectotaw.Entity;
+package es.taw.proyectotaw.entity;
 
 import jakarta.persistence.*;
 

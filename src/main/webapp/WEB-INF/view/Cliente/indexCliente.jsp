@@ -1,7 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%@ page import="es.taw.proyectotaw.entity.UsuarioEntity" %>
+<%@ page import="es.taw.proyectotaw.entity.EmpresaEntity" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023

@@ -1,8 +1,9 @@
-package es.taw.proyectotaw.Entity;
+package es.taw.proyectotaw.entity;
 
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -36,6 +37,19 @@ public class UsuarioEntity {
     @Basic
     @Column(name = "fecha_inicio", nullable = false)
     private Date fechaInicio;
+    @Basic
+    @Column(name = "tipo_usuario", nullable = false, length = 45)
+    private String tipoUsuario;
+    @Basic
+    @Column(name = "estado_usuario", nullable = false, length = 45)
+    private String estadoUsuario;
+    @Basic
+    @Column(name = "tipo_persona_relacionada", nullable = true, length = 45)
+    private String tipoPersonaRelacionada;
+    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
+    private Collection<PeticionEntity> peticionsByIdUsuario;
+    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
+    private Collection<ServiciochatEntity> serviciochatsByIdUsuario;
     @ManyToOne
     @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
@@ -118,17 +132,57 @@ public class UsuarioEntity {
         this.fechaInicio = fechaInicio;
     }
 
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getEstadoUsuario() {
+        return estadoUsuario;
+    }
+
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
+    }
+
+    public String getTipoPersonaRelacionada() {
+        return tipoPersonaRelacionada;
+    }
+
+    public void setTipoPersonaRelacionada(String tipoPersonaRelacionada) {
+        this.tipoPersonaRelacionada = tipoPersonaRelacionada;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UsuarioEntity that = (UsuarioEntity) o;
-        return Objects.equals(idUsuario, that.idUsuario) && Objects.equals(nif, that.nif) && Objects.equals(nombre, that.nombre) && Objects.equals(segundoNombre, that.segundoNombre) && Objects.equals(primerApellido, that.primerApellido) && Objects.equals(segundoApellido, that.segundoApellido) && Objects.equals(fechaNacimiento, that.fechaNacimiento) && Objects.equals(contrasena, that.contrasena) && Objects.equals(fechaInicio, that.fechaInicio);
+        return Objects.equals(idUsuario, that.idUsuario) && Objects.equals(nif, that.nif) && Objects.equals(nombre, that.nombre) && Objects.equals(segundoNombre, that.segundoNombre) && Objects.equals(primerApellido, that.primerApellido) && Objects.equals(segundoApellido, that.segundoApellido) && Objects.equals(fechaNacimiento, that.fechaNacimiento) && Objects.equals(contrasena, that.contrasena) && Objects.equals(fechaInicio, that.fechaInicio) && Objects.equals(tipoUsuario, that.tipoUsuario) && Objects.equals(estadoUsuario, that.estadoUsuario) && Objects.equals(tipoPersonaRelacionada, that.tipoPersonaRelacionada);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio);
+        return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio, tipoUsuario, estadoUsuario, tipoPersonaRelacionada);
+    }
+
+    public Collection<PeticionEntity> getPeticionsByIdUsuario() {
+        return peticionsByIdUsuario;
+    }
+
+    public void setPeticionsByIdUsuario(Collection<PeticionEntity> peticionsByIdUsuario) {
+        this.peticionsByIdUsuario = peticionsByIdUsuario;
+    }
+
+    public Collection<ServiciochatEntity> getServiciochatsByIdUsuario() {
+        return serviciochatsByIdUsuario;
+    }
+
+    public void setServiciochatsByIdUsuario(Collection<ServiciochatEntity> serviciochatsByIdUsuario) {
+        this.serviciochatsByIdUsuario = serviciochatsByIdUsuario;
     }
 
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
