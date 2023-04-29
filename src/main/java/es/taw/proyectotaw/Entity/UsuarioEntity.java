@@ -3,6 +3,7 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -36,6 +37,19 @@ public class UsuarioEntity {
     @Basic
     @Column(name = "fecha_inicio", nullable = false)
     private Date fechaInicio;
+    @Basic
+    @Column(name = "tipo_usuario", nullable = false, length = 45)
+    private String tipoUsuario;
+    @Basic
+    @Column(name = "estado_usuario", nullable = false, length = 45)
+    private String estadoUsuario;
+    @Basic
+    @Column(name = "tipo_persona_relacionada", nullable = true, length = 45)
+    private String tipoPersonaRelacionada;
+    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
+    private Collection<PeticionEntity> peticionsByIdUsuario;
+    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
+    private Collection<ServiciochatEntity> serviciochatsByIdUsuario;
     @ManyToOne
     @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
@@ -116,6 +130,30 @@ public class UsuarioEntity {
 
     public void setFechaInicio(Date fechaInicio) {
         this.fechaInicio = fechaInicio;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getEstadoUsuario() {
+        return estadoUsuario;
+    }
+
+    public void setEstadoUsuario(String estadoUsuario) {
+        this.estadoUsuario = estadoUsuario;
+    }
+
+    public String getTipoPersonaRelacionada() {
+        return tipoPersonaRelacionada;
+    }
+
+    public void setTipoPersonaRelacionada(String tipoPersonaRelacionada) {
+        this.tipoPersonaRelacionada = tipoPersonaRelacionada;
     }
 
     @Override
