@@ -1,4 +1,4 @@
-<%--
+<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -7,6 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+
+<%
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
+
+
+%>
 <head>
     <title>Aplicación Bancaria</title>
 </head>
@@ -15,7 +21,7 @@
 <h2>Menú Principal</h2>
 <button><a href="">Dar de alta a nuevo socio</a></button>
 <button><a href="Empresa/bloquearSocios">Bloquear socios</a></button>
-<button><a href="">Modificar datos</a></button>
+<button><a href="Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>" >Modificar datos</a></button>
 <button><a href="">Transferencia bancaria</a></button>
 <button><a href="">Cambio de divisas</a></button>
 <button><a href="">Ver historial de operaciones</a></button>

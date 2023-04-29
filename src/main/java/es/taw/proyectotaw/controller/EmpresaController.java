@@ -2,6 +2,7 @@ package es.taw.proyectotaw.controller;
 
 
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import es.taw.proyectotaw.Entity.EmpresaEntity;
 import es.taw.proyectotaw.Entity.UsuarioEntity;
 import es.taw.proyectotaw.dao.EmpresaRepository;
 import es.taw.proyectotaw.dao.UsuarioRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +29,8 @@ public class EmpresaController {
 
 
     @GetMapping("/Empresa/crearNuevaEmpresa")
-    public String crearNuevaEmpresa(HttpSession httpSession){
+    public String crearNuevaEmpresa(@ModelAttribute("empresa")EmpresaEntity empresa){
+        this.empresaRepository.save(empresa);
         return "Empresa/crearNuevaEmpresa";
     }
 
@@ -49,12 +52,13 @@ public class EmpresaController {
                                 @RequestParam("contrasena") String contrasena,
                                 Model model, HttpSession session) {
         String urlTo = "/Empresa/sesionIniciadaEmpresa";
-        UsuarioEntity admin = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
-        if (admin == null) {
+        UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
+        if (socio == null) {
             model.addAttribute("error", "Credenciales incorrectas");
             urlTo = "loginSocio";
         } else {
-            session.setAttribute("admin", admin);
+            model.addAttribute("socio",socio);
+            session.setAttribute("socio", socio);
         }
 
         return urlTo;
@@ -81,7 +85,12 @@ public class EmpresaController {
         return "Empresa/bloquearSocios";
     }
 
-
+    @GetMapping("/Empresa/editarDatosSocio")
+    public String editarCliente (Integer id, Model model, HttpSession session) {
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("socio",socio);
+        return "Empresa/editarDatosSocio";
+    }
 
 
 

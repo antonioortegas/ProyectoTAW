@@ -11,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-
+    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
 %>
 
 <head>
@@ -21,7 +21,7 @@
 <% System.out.println("HOLA");%>
 <h1>HOLA   PAGINA   DE   CREAR   EMPRESAS</h1>
 <h1>Formulario de Registro de Empresa</h1>
-<form>
+<form method="post" action="/crearNuevaEmpresa" modelAttribute="empresa">
     <label for="cif">CIF *</label>
     <input type="text" id="cif" name="cif" required>
     <br>
