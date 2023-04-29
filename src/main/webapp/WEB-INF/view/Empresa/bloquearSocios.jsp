@@ -1,4 +1,4 @@
-<%@ page import="es.taw.proyectotaw.entity.UsuarioEntity" %>
+<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: anton

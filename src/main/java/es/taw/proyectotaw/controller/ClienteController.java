@@ -1,6 +1,6 @@
 package es.taw.proyectotaw.controller;
 
-import es.taw.proyectotaw.entity.UsuarioEntity;
+import es.taw.proyectotaw.Entity.UsuarioEntity;
 import es.taw.proyectotaw.dao.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
