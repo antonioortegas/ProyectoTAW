@@ -41,13 +41,15 @@
     <table class="wrap">
         <tr>
             <td>
-                <button> <a href="/gestor/usuarios">Back</a></button><br>
+                <button> <a href="/gestor/usuarios">Back</a></button>
                 <button> <a href="/">Home</a></button><br>
+                <hr>
             </td>
         </tr>
         <tr>
             <td>
                 <h1>Detalles</h1>
+                <hr>
                 <h2>Empresa :</h2>
                 Nombre: <%= empresa.getNombre() %><br>
                 CIF: <%= empresa.getCif() %><br>
@@ -58,6 +60,7 @@
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCalle()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getNumero()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getPuerta() %><br>
+                <hr>
                 <h2>Socios / Autorizados</h2>
                 <div>
                     <table>
@@ -121,6 +124,7 @@
 
                         <%
                             for (UsuarioEntity u : usuariosDeLaEmpresa) {
+                                if(u.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
                                 for (TransaccionEntity transaccion : u.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()){
                         %>
                         <tr>
@@ -143,7 +147,7 @@
                         <%
                                     }
                                 }
-
+                            }
                         %>
 
                     </table>

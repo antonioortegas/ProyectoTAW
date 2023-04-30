@@ -51,10 +51,10 @@ public class UsuarioEntity {
     @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
     private Collection<ServiciochatEntity> serviciochatsByIdUsuario;
     @ManyToOne
-    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
+    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
     @ManyToOne
-    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa", nullable = false)
+    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa")
     private EmpresaEntity empresaByEmpresaIdEmpresa;
     @ManyToOne
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
@@ -160,13 +160,29 @@ public class UsuarioEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UsuarioEntity that = (UsuarioEntity) o;
-        return Objects.equals(idUsuario, that.idUsuario) && Objects.equals(nif, that.nif) && Objects.equals(nombre, that.nombre) && Objects.equals(segundoNombre, that.segundoNombre) && Objects.equals(primerApellido, that.primerApellido) && Objects.equals(segundoApellido, that.segundoApellido) && Objects.equals(fechaNacimiento, that.fechaNacimiento) && Objects.equals(contrasena, that.contrasena) && Objects.equals(fechaInicio, that.fechaInicio);
+        UsuarioEntity usuario = (UsuarioEntity) o;
+        return Objects.equals(idUsuario, usuario.idUsuario) && Objects.equals(nif, usuario.nif) && Objects.equals(nombre, usuario.nombre) && Objects.equals(segundoNombre, usuario.segundoNombre) && Objects.equals(primerApellido, usuario.primerApellido) && Objects.equals(segundoApellido, usuario.segundoApellido) && Objects.equals(fechaNacimiento, usuario.fechaNacimiento) && Objects.equals(contrasena, usuario.contrasena) && Objects.equals(fechaInicio, usuario.fechaInicio) && Objects.equals(tipoUsuario, usuario.tipoUsuario) && Objects.equals(estadoUsuario, usuario.estadoUsuario) && Objects.equals(tipoPersonaRelacionada, usuario.tipoPersonaRelacionada);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio);
+        return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio, tipoUsuario, estadoUsuario, tipoPersonaRelacionada);
+    }
+
+    public Collection<PeticionEntity> getPeticionsByIdUsuario() {
+        return peticionsByIdUsuario;
+    }
+
+    public void setPeticionsByIdUsuario(Collection<PeticionEntity> peticionsByIdUsuario) {
+        this.peticionsByIdUsuario = peticionsByIdUsuario;
+    }
+
+    public Collection<ServiciochatEntity> getServiciochatsByIdUsuario() {
+        return serviciochatsByIdUsuario;
+    }
+
+    public void setServiciochatsByIdUsuario(Collection<ServiciochatEntity> serviciochatsByIdUsuario) {
+        this.serviciochatsByIdUsuario = serviciochatsByIdUsuario;
     }
 
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {

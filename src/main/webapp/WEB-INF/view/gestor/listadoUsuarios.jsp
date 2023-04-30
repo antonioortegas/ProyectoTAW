@@ -30,7 +30,7 @@
         .wrap { -webkit-border-horizontal-spacing: 100px; }
         .wrap tr td { vertical-align: top; }
 
-        button {
+        div button {
             padding: 5px;
             margin: 5px;
         }
@@ -53,6 +53,7 @@
                         <th>Empresa</th>
                         <th>Tipo de Usuario</th>
                         <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
 
                     <% for (UsuarioEntity usuario : listaUsuarios) { %>
@@ -71,9 +72,22 @@
                                 %>
                             </a>
                         </td>
-                        <td><%= usuario.getEmpresaByEmpresaIdEmpresa().getNombre() %></td>
+                        <td><%
+                            if(usuario.getEmpresaByEmpresaIdEmpresa() != null) {
+                        %>
+                            <%= usuario.getEmpresaByEmpresaIdEmpresa().getNombre() %>
+                        <%
+                            }
+                        %></td>
                         <td><%= usuario.getTipoUsuario() %></td>
                         <td><%= usuario.getEstadoUsuario() %></td>
+
+                        <!-- Posible actions from "gestor" -->
+                        <td>
+                            <% if(usuario.getEstadoUsuario().equals("pendiente")) { %>
+                                <button><a href="/gestor/aceptarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Aceptar</a></button>
+                            <% } %>
+                        </td>
                     </tr>
                     <% } %>
                 </table>
@@ -102,7 +116,9 @@
                 <table>
                     <tr>
                         <td>
-                            <button><a href="/">Home</a></button><br>
+                            <div>
+                                <button><a href="/">Home</a></button>
+                            </div>
                         </td>
                     </tr>
                 </table>

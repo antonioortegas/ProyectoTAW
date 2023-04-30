@@ -45,11 +45,13 @@
             <td>
                 <button> <a href="/gestor/usuarios">Back</a></button>
                 <button> <a href="/">Home</a></button><br>
+                <hr>
             </td>
         </tr>
         <tr>
             <td>
                 <h1>Detalles Cliente</h1>
+                <hr>
                 <h2>Usuario :</h2>
                 ID de Usuario: <%= usuario.getIdUsuario() %><br>
                 NIF: <%= usuario.getNif() %><br>
@@ -72,8 +74,13 @@
                 Fecha de Nacimiento: <%= usuario.getFechaNacimiento() %><br>
                 Tipo de Usuario: <%= usuario.getTipoUsuario() %><br>
                 Estado del Usuario: <%= usuario.getEstadoUsuario() %><br>
-                <br>
-
+                Cuenta Bancaria:
+                <% if(usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null) { %>
+                <%= usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %><br>
+                <% } else { %>
+                PENDIENTE DE ASIGNAR
+                <% } %>
+                <hr>
                 <h2>Direccion : </h2>
                 Pais: <%= usuario.getDireccionByDireccionIdDireccion().getPais() %><br>
                 Ciudad: <%= usuario.getDireccionByDireccionIdDireccion().getCiudad() %><br>
@@ -86,6 +93,7 @@
                 <%
                     if(empresa!=null){
                 %>
+                <hr>
                 <h2>Trabaja para :</h2>
                 Nombre: <%= empresa.getNombre() %><br>
                 CIF: <%= empresa.getCif() %><br>
@@ -103,12 +111,17 @@
             <td>
                 <div>
                     <table>
-                        <h2>Transacciones :</h2>
+                        <%
+                            if (usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
+                        %>
+                        <h2>Transacciones del cliente :</h2>
                         <tr>
                             <th>Nombre</th>
                             <th>IBAN</th>
                             <th>Fecha de Instruccion</th>
                         </tr>
+
+
                         <%
                             for (TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
                         %>
@@ -130,8 +143,10 @@
 
                         </tr>
                         <%
+                                }
                             }
                         %>
+
 
                     </table>
                 </div>
