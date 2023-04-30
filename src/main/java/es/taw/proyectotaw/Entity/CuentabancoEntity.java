@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "cuentabanco", schema = "mydb", catalog = "")
-public class CuentabancoEntity {
+public class CuentabancoEntity
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_cuenta_banco", nullable = false)
@@ -45,112 +45,163 @@ public class CuentabancoEntity {
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<UsuarioEntity> usuariosByIdCuentaBanco;
 
-    public Integer getIdCuentaBanco() {
+    public Integer getIdCuentaBanco()
+    {
         return idCuentaBanco;
     }
 
-    public void setIdCuentaBanco(Integer idCuentaBanco) {
+    public void setIdCuentaBanco(Integer idCuentaBanco)
+    {
         this.idCuentaBanco = idCuentaBanco;
     }
 
-    public String getNumeroCuenta() {
+    public String getNumeroCuenta()
+    {
         return numeroCuenta;
     }
 
-    public void setNumeroCuenta(String numeroCuenta) {
+    public void setNumeroCuenta(String numeroCuenta)
+    {
         this.numeroCuenta = numeroCuenta;
     }
 
-    public Integer getSaldo() {
+    public Integer getSaldo()
+    {
         return saldo;
     }
 
-    public void setSaldo(Integer saldo) {
+    public void setSaldo(Integer saldo)
+    {
         this.saldo = saldo;
     }
 
-    public Integer getEstadoCuenta() {
+    public Integer getEstadoCuenta()
+    {
         return estadoCuenta;
     }
 
-    public void setEstadoCuenta(Integer estadoCuenta) {
+    public void setEstadoCuenta(Integer estadoCuenta)
+    {
         this.estadoCuenta = estadoCuenta;
     }
 
-    public Date getFechaApertura() {
+    public Date getFechaApertura()
+    {
         return fechaApertura;
     }
 
-    public void setFechaApertura(Date fechaApertura) {
+    public void setFechaApertura(Date fechaApertura)
+    {
         this.fechaApertura = fechaApertura;
     }
 
-    public Date getFechaCierre() {
+    public Date getFechaCierre()
+    {
         return fechaCierre;
     }
 
-    public void setFechaCierre(Date fechaCierre) {
+    public void setFechaCierre(Date fechaCierre)
+    {
         this.fechaCierre = fechaCierre;
     }
 
-    public String getTipoMoneda() {
+    public String getTipoMoneda()
+    {
         return tipoMoneda;
     }
 
-    public void setTipoMoneda(String tipoMoneda) {
+    public void setTipoMoneda(String tipoMoneda)
+    {
         this.tipoMoneda = tipoMoneda;
     }
 
-    public String getIban() {
+    public String getIban()
+    {
         return iban;
     }
 
-    public void setIban(String iban) {
+    public void setIban(String iban)
+    {
         this.iban = iban;
     }
 
-    public String getPais() {
+    public String getPais()
+    {
         return pais;
     }
 
-    public void setPais(String pais) {
+    public void setPais(String pais)
+    {
         this.pais = pais;
     }
 
-    public Byte getSospechoso() {
+    public Byte getSospechoso()
+    {
         return sospechoso;
     }
 
-    public void setSospechoso(Byte sospechoso) {
+    public void setSospechoso(Byte sospechoso)
+    {
         this.sospechoso = sospechoso;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         CuentabancoEntity that = (CuentabancoEntity) o;
-        return Objects.equals(idCuentaBanco, that.idCuentaBanco) && Objects.equals(numeroCuenta, that.numeroCuenta) && Objects.equals(saldo, that.saldo) && Objects.equals(estadoCuenta, that.estadoCuenta) && Objects.equals(fechaApertura, that.fechaApertura) && Objects.equals(fechaCierre, that.fechaCierre) && Objects.equals(tipoMoneda, that.tipoMoneda) && Objects.equals(iban, that.iban) && Objects.equals(pais, that.pais) && Objects.equals(sospechoso, that.sospechoso);
+
+        if (idCuentaBanco != null ? !idCuentaBanco.equals(that.idCuentaBanco) : that.idCuentaBanco != null)
+            return false;
+        if (numeroCuenta != null ? !numeroCuenta.equals(that.numeroCuenta) : that.numeroCuenta != null) return false;
+        if (saldo != null ? !saldo.equals(that.saldo) : that.saldo != null) return false;
+        if (estadoCuenta != null ? !estadoCuenta.equals(that.estadoCuenta) : that.estadoCuenta != null) return false;
+        if (fechaApertura != null ? !fechaApertura.equals(that.fechaApertura) : that.fechaApertura != null)
+            return false;
+        if (fechaCierre != null ? !fechaCierre.equals(that.fechaCierre) : that.fechaCierre != null) return false;
+        if (tipoMoneda != null ? !tipoMoneda.equals(that.tipoMoneda) : that.tipoMoneda != null) return false;
+        if (iban != null ? !iban.equals(that.iban) : that.iban != null) return false;
+        if (pais != null ? !pais.equals(that.pais) : that.pais != null) return false;
+        if (sospechoso != null ? !sospechoso.equals(that.sospechoso) : that.sospechoso != null) return false;
+
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(idCuentaBanco, numeroCuenta, saldo, estadoCuenta, fechaApertura, fechaCierre, tipoMoneda, iban, pais, sospechoso);
+    public int hashCode()
+    {
+        int result = idCuentaBanco != null ? idCuentaBanco.hashCode() : 0;
+        result = 31 * result + (numeroCuenta != null ? numeroCuenta.hashCode() : 0);
+        result = 31 * result + (saldo != null ? saldo.hashCode() : 0);
+        result = 31 * result + (estadoCuenta != null ? estadoCuenta.hashCode() : 0);
+        result = 31 * result + (fechaApertura != null ? fechaApertura.hashCode() : 0);
+        result = 31 * result + (fechaCierre != null ? fechaCierre.hashCode() : 0);
+        result = 31 * result + (tipoMoneda != null ? tipoMoneda.hashCode() : 0);
+        result = 31 * result + (iban != null ? iban.hashCode() : 0);
+        result = 31 * result + (pais != null ? pais.hashCode() : 0);
+        result = 31 * result + (sospechoso != null ? sospechoso.hashCode() : 0);
+        return result;
     }
 
-    public Collection<TransaccionEntity> getTransaccionsByIdCuentaBanco() {
+    public Collection<TransaccionEntity> getTransaccionsByIdCuentaBanco()
+    {
         return transaccionsByIdCuentaBanco;
     }
 
-    public void setTransaccionsByIdCuentaBanco(Collection<TransaccionEntity> transaccionsByIdCuentaBanco) {
+    public void setTransaccionsByIdCuentaBanco(Collection<TransaccionEntity> transaccionsByIdCuentaBanco)
+    {
         this.transaccionsByIdCuentaBanco = transaccionsByIdCuentaBanco;
     }
 
-    public Collection<UsuarioEntity> getUsuariosByIdCuentaBanco() {
+    public Collection<UsuarioEntity> getUsuariosByIdCuentaBanco()
+    {
         return usuariosByIdCuentaBanco;
     }
 
-    public void setUsuariosByIdCuentaBanco(Collection<UsuarioEntity> usuariosByIdCuentaBanco) {
+    public void setUsuariosByIdCuentaBanco(Collection<UsuarioEntity> usuariosByIdCuentaBanco)
+    {
         this.usuariosByIdCuentaBanco = usuariosByIdCuentaBanco;
     }
 }

@@ -3,11 +3,11 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "transaccion", schema = "mydb", catalog = "")
-public class TransaccionEntity {
+public class TransaccionEntity
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_transaccion", nullable = false)
@@ -28,64 +28,90 @@ public class TransaccionEntity {
     @JoinColumn(name = "Pago_id_pago", referencedColumnName = "id_pago", nullable = false)
     private PagoEntity pagoByPagoIdPago;
 
-    public Integer getIdTransaccion() {
+    public Integer getIdTransaccion()
+    {
         return idTransaccion;
     }
 
-    public void setIdTransaccion(Integer idTransaccion) {
+    public void setIdTransaccion(Integer idTransaccion)
+    {
         this.idTransaccion = idTransaccion;
     }
 
-    public Date getFechaInstruccion() {
+    public Date getFechaInstruccion()
+    {
         return fechaInstruccion;
     }
 
-    public void setFechaInstruccion(Date fechaInstruccion) {
+    public void setFechaInstruccion(Date fechaInstruccion)
+    {
         this.fechaInstruccion = fechaInstruccion;
     }
 
-    public Date getFechaEjecucion() {
+    public Date getFechaEjecucion()
+    {
         return fechaEjecucion;
     }
 
-    public void setFechaEjecucion(Date fechaEjecucion) {
+    public void setFechaEjecucion(Date fechaEjecucion)
+    {
         this.fechaEjecucion = fechaEjecucion;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         TransaccionEntity that = (TransaccionEntity) o;
-        return Objects.equals(idTransaccion, that.idTransaccion) && Objects.equals(fechaInstruccion, that.fechaInstruccion) && Objects.equals(fechaEjecucion, that.fechaEjecucion);
+
+        if (idTransaccion != null ? !idTransaccion.equals(that.idTransaccion) : that.idTransaccion != null)
+            return false;
+        if (fechaInstruccion != null ? !fechaInstruccion.equals(that.fechaInstruccion) : that.fechaInstruccion != null)
+            return false;
+        if (fechaEjecucion != null ? !fechaEjecucion.equals(that.fechaEjecucion) : that.fechaEjecucion != null)
+            return false;
+
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(idTransaccion, fechaInstruccion, fechaEjecucion);
+    public int hashCode()
+    {
+        int result = idTransaccion != null ? idTransaccion.hashCode() : 0;
+        result = 31 * result + (fechaInstruccion != null ? fechaInstruccion.hashCode() : 0);
+        result = 31 * result + (fechaEjecucion != null ? fechaEjecucion.hashCode() : 0);
+        return result;
     }
 
-    public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
+    public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco()
+    {
         return cuentabancoByCuentaBancoIdCuentaBanco;
     }
 
-    public void setCuentabancoByCuentaBancoIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco) {
+    public void setCuentabancoByCuentaBancoIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco)
+    {
         this.cuentabancoByCuentaBancoIdCuentaBanco = cuentabancoByCuentaBancoIdCuentaBanco;
     }
 
-    public CambiodivisaEntity getCambiodivisaByCambioDivisaIdCambioDivisa() {
+    public CambiodivisaEntity getCambiodivisaByCambioDivisaIdCambioDivisa()
+    {
         return cambiodivisaByCambioDivisaIdCambioDivisa;
     }
 
-    public void setCambiodivisaByCambioDivisaIdCambioDivisa(CambiodivisaEntity cambiodivisaByCambioDivisaIdCambioDivisa) {
+    public void setCambiodivisaByCambioDivisaIdCambioDivisa(CambiodivisaEntity cambiodivisaByCambioDivisaIdCambioDivisa)
+    {
         this.cambiodivisaByCambioDivisaIdCambioDivisa = cambiodivisaByCambioDivisaIdCambioDivisa;
     }
 
-    public PagoEntity getPagoByPagoIdPago() {
+    public PagoEntity getPagoByPagoIdPago()
+    {
         return pagoByPagoIdPago;
     }
 
-    public void setPagoByPagoIdPago(PagoEntity pagoByPagoIdPago) {
+    public void setPagoByPagoIdPago(PagoEntity pagoByPagoIdPago)
+    {
         this.pagoByPagoIdPago = pagoByPagoIdPago;
     }
 }

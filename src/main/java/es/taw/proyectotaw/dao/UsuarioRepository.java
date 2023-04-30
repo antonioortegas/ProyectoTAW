@@ -24,4 +24,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     public List<UsuarioEntity> buscarUsuariosMismaEmpresa(@Param("idEmpresa")String idEmpresa);
 
     List<UsuarioEntity> findAllByEmpresaByEmpresaIdEmpresa(EmpresaEntity orElse);
+
+    UsuarioEntity findUsuarioByNombre(String usuario);
+
+    UsuarioEntity findUsuarioByNif(String usuario);
 }

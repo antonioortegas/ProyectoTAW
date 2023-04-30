@@ -3,11 +3,11 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 @Table(name = "peticion", schema = "mydb", catalog = "")
-public class PeticionEntity {
+public class PeticionEntity
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_peticion", nullable = false)
@@ -25,56 +25,81 @@ public class PeticionEntity {
     @JoinColumn(name = "Usuario_id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private UsuarioEntity usuarioByUsuarioIdUsuario;
 
-    public Integer getIdPeticion() {
+    public Integer getIdPeticion()
+    {
         return idPeticion;
     }
 
-    public void setIdPeticion(Integer idPeticion) {
+    public void setIdPeticion(Integer idPeticion)
+    {
         this.idPeticion = idPeticion;
     }
 
-    public String getTipoPeticion() {
+    public String getTipoPeticion()
+    {
         return tipoPeticion;
     }
 
-    public void setTipoPeticion(String tipoPeticion) {
+    public void setTipoPeticion(String tipoPeticion)
+    {
         this.tipoPeticion = tipoPeticion;
     }
 
-    public Timestamp getFechaPeticion() {
+    public Timestamp getFechaPeticion()
+    {
         return fechaPeticion;
     }
 
-    public void setFechaPeticion(Timestamp fechaPeticion) {
+    public void setFechaPeticion(Timestamp fechaPeticion)
+    {
         this.fechaPeticion = fechaPeticion;
     }
 
-    public String getEstadoPeticion() {
+    public String getEstadoPeticion()
+    {
         return estadoPeticion;
     }
 
-    public void setEstadoPeticion(String estadoPeticion) {
+    public void setEstadoPeticion(String estadoPeticion)
+    {
         this.estadoPeticion = estadoPeticion;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         PeticionEntity that = (PeticionEntity) o;
-        return Objects.equals(idPeticion, that.idPeticion) && Objects.equals(tipoPeticion, that.tipoPeticion) && Objects.equals(fechaPeticion, that.fechaPeticion) && Objects.equals(estadoPeticion, that.estadoPeticion);
+
+        if (idPeticion != null ? !idPeticion.equals(that.idPeticion) : that.idPeticion != null) return false;
+        if (tipoPeticion != null ? !tipoPeticion.equals(that.tipoPeticion) : that.tipoPeticion != null) return false;
+        if (fechaPeticion != null ? !fechaPeticion.equals(that.fechaPeticion) : that.fechaPeticion != null)
+            return false;
+        if (estadoPeticion != null ? !estadoPeticion.equals(that.estadoPeticion) : that.estadoPeticion != null)
+            return false;
+
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(idPeticion, tipoPeticion, fechaPeticion, estadoPeticion);
+    public int hashCode()
+    {
+        int result = idPeticion != null ? idPeticion.hashCode() : 0;
+        result = 31 * result + (tipoPeticion != null ? tipoPeticion.hashCode() : 0);
+        result = 31 * result + (fechaPeticion != null ? fechaPeticion.hashCode() : 0);
+        result = 31 * result + (estadoPeticion != null ? estadoPeticion.hashCode() : 0);
+        return result;
     }
 
-    public UsuarioEntity getUsuarioByUsuarioIdUsuario() {
+    public UsuarioEntity getUsuarioByUsuarioIdUsuario()
+    {
         return usuarioByUsuarioIdUsuario;
     }
 
-    public void setUsuarioByUsuarioIdUsuario(UsuarioEntity usuarioByUsuarioIdUsuario) {
+    public void setUsuarioByUsuarioIdUsuario(UsuarioEntity usuarioByUsuarioIdUsuario)
+    {
         this.usuarioByUsuarioIdUsuario = usuarioByUsuarioIdUsuario;
     }
 }

@@ -3,11 +3,11 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "direccion", schema = "mydb", catalog = "")
-public class DireccionEntity {
+public class DireccionEntity
+{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_direccion", nullable = false)
@@ -41,104 +41,149 @@ public class DireccionEntity {
     @OneToMany(mappedBy = "direccionByDireccionIdDireccion")
     private Collection<UsuarioEntity> usuariosByIdDireccion;
 
-    public Integer getIdDireccion() {
+    public Integer getIdDireccion()
+    {
         return idDireccion;
     }
 
-    public void setIdDireccion(Integer idDireccion) {
+    public void setIdDireccion(Integer idDireccion)
+    {
         this.idDireccion = idDireccion;
     }
 
-    public String getCalle() {
+    public String getCalle()
+    {
         return calle;
     }
 
-    public void setCalle(String calle) {
+    public void setCalle(String calle)
+    {
         this.calle = calle;
     }
 
-    public String getNumero() {
+    public String getNumero()
+    {
         return numero;
     }
 
-    public void setNumero(String numero) {
+    public void setNumero(String numero)
+    {
         this.numero = numero;
     }
 
-    public String getPuerta() {
+    public String getPuerta()
+    {
         return puerta;
     }
 
-    public void setPuerta(String puerta) {
+    public void setPuerta(String puerta)
+    {
         this.puerta = puerta;
     }
 
-    public String getCiudad() {
+    public String getCiudad()
+    {
         return ciudad;
     }
 
-    public void setCiudad(String ciudad) {
+    public void setCiudad(String ciudad)
+    {
         this.ciudad = ciudad;
     }
 
-    public String getPais() {
+    public String getPais()
+    {
         return pais;
     }
 
-    public void setPais(String pais) {
+    public void setPais(String pais)
+    {
         this.pais = pais;
     }
 
-    public String getCp() {
+    public String getCp()
+    {
         return cp;
     }
 
-    public void setCp(String cp) {
+    public void setCp(String cp)
+    {
         this.cp = cp;
     }
 
-    public String getRegion() {
+    public String getRegion()
+    {
         return region;
     }
 
-    public void setRegion(String region) {
+    public void setRegion(String region)
+    {
         this.region = region;
     }
 
-    public Byte getValida() {
+    public Byte getValida()
+    {
         return valida;
     }
 
-    public void setValida(Byte valida) {
+    public void setValida(Byte valida)
+    {
         this.valida = valida;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         DireccionEntity that = (DireccionEntity) o;
-        return Objects.equals(idDireccion, that.idDireccion) && Objects.equals(calle, that.calle) && Objects.equals(numero, that.numero) && Objects.equals(puerta, that.puerta) && Objects.equals(ciudad, that.ciudad) && Objects.equals(pais, that.pais) && Objects.equals(cp, that.cp) && Objects.equals(region, that.region) && Objects.equals(valida, that.valida);
+
+        if (idDireccion != null ? !idDireccion.equals(that.idDireccion) : that.idDireccion != null) return false;
+        if (calle != null ? !calle.equals(that.calle) : that.calle != null) return false;
+        if (numero != null ? !numero.equals(that.numero) : that.numero != null) return false;
+        if (puerta != null ? !puerta.equals(that.puerta) : that.puerta != null) return false;
+        if (ciudad != null ? !ciudad.equals(that.ciudad) : that.ciudad != null) return false;
+        if (pais != null ? !pais.equals(that.pais) : that.pais != null) return false;
+        if (cp != null ? !cp.equals(that.cp) : that.cp != null) return false;
+        if (region != null ? !region.equals(that.region) : that.region != null) return false;
+        if (valida != null ? !valida.equals(that.valida) : that.valida != null) return false;
+
+        return true;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(idDireccion, calle, numero, puerta, ciudad, pais, cp, region, valida);
+    public int hashCode()
+    {
+        int result = idDireccion != null ? idDireccion.hashCode() : 0;
+        result = 31 * result + (calle != null ? calle.hashCode() : 0);
+        result = 31 * result + (numero != null ? numero.hashCode() : 0);
+        result = 31 * result + (puerta != null ? puerta.hashCode() : 0);
+        result = 31 * result + (ciudad != null ? ciudad.hashCode() : 0);
+        result = 31 * result + (pais != null ? pais.hashCode() : 0);
+        result = 31 * result + (cp != null ? cp.hashCode() : 0);
+        result = 31 * result + (region != null ? region.hashCode() : 0);
+        result = 31 * result + (valida != null ? valida.hashCode() : 0);
+        return result;
     }
 
-    public Collection<EmpresaEntity> getEmpresasByIdDireccion() {
+    public Collection<EmpresaEntity> getEmpresasByIdDireccion()
+    {
         return empresasByIdDireccion;
     }
 
-    public void setEmpresasByIdDireccion(Collection<EmpresaEntity> empresasByIdDireccion) {
+    public void setEmpresasByIdDireccion(Collection<EmpresaEntity> empresasByIdDireccion)
+    {
         this.empresasByIdDireccion = empresasByIdDireccion;
     }
 
-    public Collection<UsuarioEntity> getUsuariosByIdDireccion() {
+    public Collection<UsuarioEntity> getUsuariosByIdDireccion()
+    {
         return usuariosByIdDireccion;
     }
 
-    public void setUsuariosByIdDireccion(Collection<UsuarioEntity> usuariosByIdDireccion) {
+    public void setUsuariosByIdDireccion(Collection<UsuarioEntity> usuariosByIdDireccion)
+    {
         this.usuariosByIdDireccion = usuariosByIdDireccion;
     }
 }
