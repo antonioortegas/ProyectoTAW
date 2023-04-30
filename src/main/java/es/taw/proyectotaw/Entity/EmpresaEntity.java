@@ -12,6 +12,14 @@ public class EmpresaEntity {
     @Id
     @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
+
+    public EmpresaEntity(Integer idEmpresa, String cif, String nombre, DireccionEntity direccionByDireccionIdDireccion) {
+        this.idEmpresa = idEmpresa;
+        this.cif = cif;
+        this.nombre = nombre;
+        this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
+    }
+
     @Basic
     @Column(name = "cif", nullable = false, length = 45)
     private String cif;
@@ -19,10 +27,14 @@ public class EmpresaEntity {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
     @ManyToOne
-    @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
+    @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = true)
     private DireccionEntity direccionByDireccionIdDireccion;
     @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
     private Collection<UsuarioEntity> usuariosByIdEmpresa;
+
+    public EmpresaEntity() {
+
+    }
 
     public Integer getIdEmpresa() {
         return idEmpresa;

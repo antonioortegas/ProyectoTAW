@@ -12,7 +12,7 @@
 <html>
 <%
 
-    List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("empresa");
+   // List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("empresa");
 
 %>
 
@@ -24,8 +24,8 @@
 <h6> Accediendo con el siguiente sessionid: <%= session.getId() %> </h6>
 
 <button> <a href="crearNuevaEmpresa"> NUEVA EMPRESA</a></button><br>
-<button> <a href="crearUsuarioEmpresa"> NUEVO SOCIO</a></button><br>
-<button> <a href=""> INCIAR SESION EMPRESA</a></button><br>
+<!--<button> <a href="crearUsuarioEmpresa"> NUEVO SOCIO</a></button><br>
+<button> <a href=""> INCIAR SESION EMPRESA</a></button><br>-->
 <button> <a href="loginSocio"> INCIAR SESION SOCIO</a></button><br>
 
 
