@@ -31,10 +31,20 @@
         div table th { background-color:#000;color:white; }
         div table td, div table th { padding:5px;border:1px solid #000; }
 
+        button {
+            padding: 10px;
+            margin: 15px;
+        }
     </style>
 </head>
 <body>
     <table class="wrap">
+        <tr>
+            <td>
+                <button> <a href="/gestor/usuarios">Back</a></button><br>
+                <button> <a href="/">Home</a></button><br>
+            </td>
+        </tr>
         <tr>
             <td>
                 <h1>Detalles</h1>

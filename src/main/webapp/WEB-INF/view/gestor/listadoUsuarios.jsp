@@ -30,6 +30,10 @@
         .wrap { -webkit-border-horizontal-spacing: 100px; }
         .wrap tr td { vertical-align: top; }
 
+        button {
+            padding: 5px;
+            margin: 5px;
+        }
     </style>
     <!-- End Styles -->
 
@@ -97,7 +101,9 @@
             <td>
                 <table>
                     <tr>
-                        <td><button> <a href="/">Home</a></button><br></td>
+                        <td>
+                            <button><a href="/">Home</a></button><br>
+                        </td>
                     </tr>
                 </table>
             </td>
