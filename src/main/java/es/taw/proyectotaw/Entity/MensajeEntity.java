@@ -13,14 +13,17 @@ public class MensajeEntity {
     @Column(name = "id_mensaje", nullable = false)
     private Integer idMensaje;
     @Basic
-    @Column(name = "contenido", nullable = true, length = 256)
+    @Column(name = "contenido", nullable = false, length = 256)
     private String contenido;
     @Basic
-    @Column(name = "fecha_envio", nullable = true)
+    @Column(name = "fecha_envio", nullable = false)
     private Timestamp fechaEnvio;
     @ManyToOne
-    @JoinColumn(name = "Chat_id_chat", referencedColumnName = "id_chat", nullable = false)
-    private ChatEntity chatByChatIdChat;
+    @JoinColumn(name = "usuario_destino", referencedColumnName = "id_usuario", nullable = false)
+    private UsuarioEntity usuarioByUsuarioDestino;
+    @ManyToOne
+    @JoinColumn(name = "usuario_origen", referencedColumnName = "id_usuario", nullable = false)
+    private UsuarioEntity usuarioByUsuarioOrigen;
 
     public Integer getIdMensaje() {
         return idMensaje;
@@ -59,11 +62,19 @@ public class MensajeEntity {
         return Objects.hash(idMensaje, contenido, fechaEnvio);
     }
 
-    public ChatEntity getChatByChatIdChat() {
-        return chatByChatIdChat;
+    public UsuarioEntity getUsuarioByUsuarioDestino() {
+        return usuarioByUsuarioDestino;
     }
 
-    public void setChatByChatIdChat(ChatEntity chatByChatIdChat) {
-        this.chatByChatIdChat = chatByChatIdChat;
+    public void setUsuarioByUsuarioDestino(UsuarioEntity usuarioByUsuarioDestino) {
+        this.usuarioByUsuarioDestino = usuarioByUsuarioDestino;
+    }
+
+    public UsuarioEntity getUsuarioByUsuarioOrigen() {
+        return usuarioByUsuarioOrigen;
+    }
+
+    public void setUsuarioByUsuarioOrigen(UsuarioEntity usuarioByUsuarioOrigen) {
+        this.usuarioByUsuarioOrigen = usuarioByUsuarioOrigen;
     }
 }

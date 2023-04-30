@@ -46,10 +46,12 @@ public class UsuarioEntity {
     @Basic
     @Column(name = "tipo_persona_relacionada", nullable = true, length = 45)
     private String tipoPersonaRelacionada;
+    @OneToMany(mappedBy = "usuarioByUsuarioDestino")
+    private Collection<MensajeEntity> mensajesByIdUsuario;
+    @OneToMany(mappedBy = "usuarioByUsuarioOrigen")
+    private Collection<MensajeEntity> mensajesByIdUsuario_0;
     @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
     private Collection<PeticionEntity> peticionsByIdUsuario;
-    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
-    private Collection<ServiciochatEntity> serviciochatsByIdUsuario;
     @ManyToOne
     @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
@@ -169,20 +171,28 @@ public class UsuarioEntity {
         return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio, tipoUsuario, estadoUsuario, tipoPersonaRelacionada);
     }
 
+    public Collection<MensajeEntity> getMensajesByIdUsuario() {
+        return mensajesByIdUsuario;
+    }
+
+    public void setMensajesByIdUsuario(Collection<MensajeEntity> mensajesByIdUsuario) {
+        this.mensajesByIdUsuario = mensajesByIdUsuario;
+    }
+
+    public Collection<MensajeEntity> getMensajesByIdUsuario_0() {
+        return mensajesByIdUsuario_0;
+    }
+
+    public void setMensajesByIdUsuario_0(Collection<MensajeEntity> mensajesByIdUsuario_0) {
+        this.mensajesByIdUsuario_0 = mensajesByIdUsuario_0;
+    }
+
     public Collection<PeticionEntity> getPeticionsByIdUsuario() {
         return peticionsByIdUsuario;
     }
 
     public void setPeticionsByIdUsuario(Collection<PeticionEntity> peticionsByIdUsuario) {
         this.peticionsByIdUsuario = peticionsByIdUsuario;
-    }
-
-    public Collection<ServiciochatEntity> getServiciochatsByIdUsuario() {
-        return serviciochatsByIdUsuario;
-    }
-
-    public void setServiciochatsByIdUsuario(Collection<ServiciochatEntity> serviciochatsByIdUsuario) {
-        this.serviciochatsByIdUsuario = serviciochatsByIdUsuario;
     }
 
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
