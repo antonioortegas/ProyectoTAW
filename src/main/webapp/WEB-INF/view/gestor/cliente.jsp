@@ -141,6 +141,7 @@
                             <td><%= transaccion.getFechaInstruccion() %></td>
 
 
+
                         </tr>
                         <%
                                 }

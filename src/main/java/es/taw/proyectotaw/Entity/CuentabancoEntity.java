@@ -39,7 +39,7 @@ public class CuentabancoEntity {
     private String pais;
     @Basic
     @Column(name = "sospechoso", nullable = false)
-    private Byte sospechoso;
+    private Integer sospechoso;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<TransaccionEntity> transaccionsByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
@@ -117,11 +117,11 @@ public class CuentabancoEntity {
         this.pais = pais;
     }
 
-    public Byte getSospechoso() {
+    public Integer getSospechoso() {
         return sospechoso;
     }
 
-    public void setSospechoso(Byte sospechoso) {
+    public void setSospechoso(Integer sospechoso) {
         this.sospechoso = sospechoso;
     }
 

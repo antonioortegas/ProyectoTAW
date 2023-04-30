@@ -8,5 +8,5 @@ import java.util.List;
 public interface CuentabancoRepository extends JpaRepository<CuentabancoEntity, Integer> {
     List<CuentabancoEntity> findAllByUsuariosByIdCuentaBancoIsEmpty();
 
-
+    List<CuentabancoEntity> findAllBySospechosoEquals(Integer sospechoso);
 }

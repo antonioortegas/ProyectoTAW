@@ -1,6 +1,7 @@
-<%@ page import="java.util.List" %>
-<%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.*" %>
+<%@ page import="java.util.*" %>
+<%@ page import="java.time.MonthDay" %>
+<%@ page import="java.util.concurrent.TimeUnit" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 30/04/2023
@@ -12,7 +13,15 @@
 <%
     List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
     List<EmpresaEntity> listaEmpresas = (List<EmpresaEntity>) request.getAttribute("listaEmpresas");
+    List<CuentabancoEntity> listaCuentasSospechosas = (List<CuentabancoEntity>) request.getAttribute("listaCuentasSospechosas");
+
+    //Date field 30 days before today
+    Calendar cal = Calendar.getInstance();
+    cal.add(Calendar.DATE, -30);
+    Date dateBefore30Days = cal.getTime();
 %>
+
+
 
 <html>
 <head>
@@ -39,6 +48,7 @@
 
 </head>
 <body>
+
     <table class="wrap">
         <tr>
             <td><h1>Usuarios:</h1></td>
@@ -48,7 +58,7 @@
             <td>
                 <table class="tableUsuarios">
                     <tr>
-                        <th>NIF</th>
+                        <th>NIF<%=dateBefore30Days%></th>
                         <th>Nombre</th>
                         <th>Empresa</th>
                         <th>Tipo de Usuario</th>
@@ -84,8 +94,66 @@
 
                         <!-- Posible actions from "gestor" -->
                         <td>
-                            <% if(usuario.getEstadoUsuario().equals("pendiente")) { %>
-                                <button><a href="/gestor/aceptarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Aceptar</a></button>
+                            <% if(usuario.getPeticionsByIdUsuario() != null){ %>
+                                <%
+                                    List<String> listaPeticiones = new ArrayList<>();
+                                    for (PeticionEntity peticionEntity : usuario.getPeticionsByIdUsuario()) {
+                                        if (peticionEntity.getEstadoPeticion().equals("noprocesada")) {
+                                            listaPeticiones.add(peticionEntity.getTipoPeticion());
+                                        }
+                                    }
+                                %>
+
+                                <!-- El usuario ha solicitado el alta en el sistema -->
+                                <% if(usuario.getEstadoUsuario().equals("pendiente")&& listaPeticiones.contains("alta") ) { %>
+                                <button><a href="/gestor/aceptarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Alta</a></button>
+                                <button><a href="/gestor/denegarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Denegar</a></button><br>
+                                <% } %>
+
+                                <!-- Solicitud de activacion estando inactivo -->
+                                <% if(usuario.getEstadoUsuario().equals("inactivo")&&listaPeticiones.contains("activar")) { %>
+                                <button><a href="/gestor/activarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Activar</a></button>
+                                <button><a href="/gestor/denegarActivacionUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Denegar</a></button>
+                                <% } %>
+
+                                <!-- Solicitud de desbloqueo estando bloqueado -->
+                                <% if(usuario.getEstadoUsuario().equals("bloqueado")&&listaPeticiones.contains("desbloqueo")) { %>
+                                <button><a href="/gestor/desbloquearUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Desbloquear</a></button>
+                                <button><a href="/gestor/denegarDesbloqueoUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Denegar</a></button>
+                                <% } %>
+                            <% } %>
+
+                            <%  Boolean sospechoso = false;
+                                Boolean inactivo = false;
+
+
+                                //Iterate over the users of the company to se if any of them has made a transaction to a suspicious account
+
+                                    if(usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null && usuario.getEstadoUsuario().equals("activo")) {
+                                        for (TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
+                                            if (transaccion.getPagoByPagoIdPago() != null) {
+                                                if(transaccion.getFechaInstruccion().before(dateBefore30Days)){
+                                                    inactivo = true;
+                                                }
+                                                for (CuentabancoEntity cuentasospechosa : listaCuentasSospechosas) {
+                                                    if (transaccion.getPagoByPagoIdPago().getBeneficiarioByBeneficiarioIdBeneficiario().getNumeroCuentaBeneficiario()
+                                                            .equals(usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban())) {
+                                                        sospechoso = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                            %>
+
+                            <!-- Bloquear si el usuario es sospechoso -->
+                            <% if(usuario.getEstadoUsuario().equals("activo")&&sospechoso) { %>
+                            <button><a href="/gestor/bloquearUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Bloquear</a></button>
+                            <% } %>
+
+                            <!-- Desactivar si hace >30d desde la ultima transaccion -->
+                            <% if(usuario.getEstadoUsuario().equals("activo")&&inactivo) { %>
+                            <button><a href="/gestor/desactivarUsuario?id_usuario=<%= usuario.getIdUsuario() %>">Desactivar</a></button><br>
                             <% } %>
                         </td>
                     </tr>
@@ -98,6 +166,7 @@
                     <tr>
                         <th>CIF</th>
                         <th>NOMBRE</th>
+                        <th>ACCIONES</th>
                     </tr>
 
                     <% for (EmpresaEntity empresa : listaEmpresas) { %>
@@ -107,6 +176,40 @@
                             <a href="/gestor/empresa?id_empresa=<%= empresa.getIdEmpresa() %>">
                                 <%= empresa.getNombre() %>
                             </a>
+                        </td>
+                        <td>
+                            <%  Boolean sospechoso = false;
+                                Boolean inactivo = false;
+
+                                //Iterate over the active users of the company to se if any of them has made a transaction to a suspicious account
+                                for(UsuarioEntity usuario : empresa.getUsuariosByIdEmpresa()){
+                                    if(usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null && usuario.getEstadoUsuario().equals("activo")) {
+                                        for (TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
+                                            if (transaccion.getPagoByPagoIdPago() != null) {
+                                                if(transaccion.getFechaInstruccion().before(dateBefore30Days)){
+                                                    inactivo = true;
+                                                }
+                                                for (CuentabancoEntity cuentasospechosa : listaCuentasSospechosas) {
+                                                    System.out.println(transaccion.getPagoByPagoIdPago().getBeneficiarioByBeneficiarioIdBeneficiario().getNumeroCuentaBeneficiario());
+                                                    System.out.println(usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban());
+                                                    if (transaccion.getPagoByPagoIdPago().getBeneficiarioByBeneficiarioIdBeneficiario().getNumeroCuentaBeneficiario()
+                                                            .equals(usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban())) {
+                                                        sospechoso = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            %>
+                                <%
+                                if (sospechoso) { %>
+                                    <button><a href="/gestor/bloquearEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Bloquear</a></button>
+                                <% } %>
+                                <%
+                                if (inactivo) { %>
+                                    <button><a href="/gestor/desactivarEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Desactivar</a></button>
+                                <% } %>
                         </td>
                     </tr>
                     <% } %>
