@@ -172,15 +172,19 @@
 
 <%
     UsuarioEntity usuarioLogeado = (UsuarioEntity) request.getAttribute("usuarioLogeado");
+    UsuarioEntity contacto = (UsuarioEntity) request.getAttribute("contacto");
+
     List<MensajeEntity> mensajesPersonales = (List<MensajeEntity>) request.getAttribute("mensajesPersonales");
     List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
-    List<UsuarioEntity> asistentes = new LinkedList<>();
+    listaUsuarios.remove(usuarioLogeado);
+    List<UsuarioEntity> listaAsistentes = new LinkedList<>();
 
     for (UsuarioEntity asistente : listaUsuarios)
     {
-        if (asistente.getTipoUsuario().equals("asistente"))
+        if (asistente.getTipoUsuario().equals("asistente") && asistente.getIdUsuario() != usuarioLogeado.getIdUsuario())
         {
-            asistentes.add(asistente);
+                listaAsistentes.add(asistente);
+                System.out.println("Loading asistente.." + asistente.getNombre());
         }
     }
 
@@ -189,26 +193,46 @@
      <div class="containers">
          <div class="conversations">
              <div class="header">
-                 <h2>Conversations</h2>
+                 <h2>Usuario: <%= usuarioLogeado.getNombre() %>  </h2>
+                 <h2>id: <%= usuarioLogeado.getIdUsuario() %></h2>
+                 <form action="/Asistencia/logout" method="post">
+                     <button type="submit">Logout</button>
+                 </form>
              </div>
-             <% for (UsuarioEntity contacto : listaUsuarios) {
+             <% if (!usuarioLogeado.getTipoUsuario().equals("asistente"))
+             {
+                 System.out.println("loading list of asistentes..");
+                 listaUsuarios = listaAsistentes;
+                 System.out.println("done loading list of asistentes.");
+             }
+
+                 for (UsuarioEntity contactos : listaUsuarios) {
              %>
-             <ul>
-                 <li class="contact" onclick="selectContact('<%= contacto.getNombre() %>')">
-                     <%= contacto.getNombre() %>
+             <a href="/Asistencia/asistente?contactId=<%=contactos.getIdUsuario() %>"><ul>
+                 <li class="contact" onclick="selectContact('<%= contactos.getNombre() %>')">
+                     <%= contactos.getNombre() %> (id: <%= contactos.getIdUsuario() %>)
                  </li>
-             </ul>
+             </ul></a>
 
              <%
                  }
              %>
 
-
-             <br><br><br><br><br><td>${pageContext.session.id}</td>
          </div>
          <div class="chat">
              <div class="header">
-                 <h2>Contact 1</h2>
+                <%
+                    if (contacto.getIdUsuario() == usuarioLogeado.getIdUsuario())
+                    {
+                %>
+                         <h2>Welcome to the assistant</h2>
+                <%
+                    } else {
+                %>
+                        <h2> Chatting with - "<%= contacto.getNombre() %>" </h2>
+                <%
+                    }
+                %>
              </div>
              <div class="messages">
 
@@ -216,13 +240,13 @@
                  <%
                      for (MensajeEntity mensaje : mensajesPersonales)
                      {
-                         if (mensaje.getUsuarioByUsuarioOrigen().getIdUsuario() == 1) {
+                         if (mensaje.getUsuarioByUsuarioDestino().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
                  %>
                  <div class="message received">
 
                      <%
                          }
-                         if (mensaje.getUsuarioByUsuarioDestino().getIdUsuario() != 1) {
+                         if (mensaje.getUsuarioByUsuarioOrigen().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
                      %>
                      <div class="message sent">
                          <%
@@ -238,7 +262,7 @@
                      %>
 
                  </div>
-                 <form action="/Asistencia/asistente/sendMessage" method="POST" onsubmit="return validateForm();">
+                 <form action="/Asistencia/asistente/sendMessage?contactId=<%= contacto.getIdUsuario() %>" method="POST" onsubmit="return validateForm();">
                      <div class="input-container">
                          <input type="text" name="message" id="message" placeholder="Type a message...">
                          <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
@@ -251,7 +275,6 @@
              </div>
          </div>
      </div>
-
  </div>
     <script>
         function validateForm() {

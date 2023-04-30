@@ -5,7 +5,6 @@ import es.taw.proyectotaw.Entity.UsuarioEntity;
 import es.taw.proyectotaw.dao.MensajeRepository;
 import es.taw.proyectotaw.dao.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,19 +24,28 @@ public class MensajeController
     protected UsuarioRepository usuarioRepository;
 
     @GetMapping("/Asistencia/asistente")
-    public String doListarMensajes(Model model, HttpSession httpSession)
+    public String doListarMensajes(@RequestParam(name = "contactId", required = false) Integer contact, Model model, HttpSession httpSession)
     {
-        UsuarioEntity usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("nif");
+        UsuarioEntity usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
+        if (usuarioLogeado == null) return "/Asistencia/loginAyuda";
 
-        if (usuarioLogeado == null)
-            usuarioLogeado = usuarioRepository.getReferenceById(21);
-
-        model.addAttribute("usuaroLogeado", usuarioLogeado);
+        model.addAttribute("usuarioLogeado", usuarioLogeado);
 
         List<UsuarioEntity> listaUsuarios = usuarioRepository.findAll();
         model.addAttribute("listaUsuarios", listaUsuarios);
 
-        List<MensajeEntity> mensajesDelUsuarioAOtro = mensajeRepository.findAllMessagesBetweenTwoUsers(usuarioLogeado.getIdUsuario(), 1);
+        UsuarioEntity contactUser;
+        if (contact == null) contactUser = usuarioLogeado;
+        else
+        {
+            contactUser = usuarioRepository.findById(contact).orElse(null);
+
+        }
+
+        model.addAttribute("contacto", contactUser);
+
+
+        List<MensajeEntity> mensajesDelUsuarioAOtro = mensajeRepository.findAllMessagesBetweenTwoUsersOrderedByDate(usuarioLogeado.getIdUsuario(), contactUser.getIdUsuario());
         model.addAttribute("mensajesPersonales", mensajesDelUsuarioAOtro);
 
         return "/Asistencia/asistente";
@@ -45,20 +53,22 @@ public class MensajeController
 
 
     @PostMapping("/Asistencia/asistente/sendMessage")
-    public String sendMessage(@RequestParam("message") String message, HttpSession httpSession)
+    public String sendMessage(@RequestParam("message") String message, @RequestParam(name = "contactId", required = true) Integer contact, HttpSession httpSession)
     {
+        UsuarioEntity contactUser = usuarioRepository.findById(contact).orElse(null);
+        UsuarioEntity usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
+        List<UsuarioEntity> listaUsuarios = usuarioRepository.findAll();
 
-        if (message != null && !message.isEmpty() && !message.isBlank())
+
+        if (message != null && !message.isEmpty() && !message.isBlank() && contact != usuarioLogeado.getIdUsuario() )
         {
-
             // Retrieve the user information from the session
-            UsuarioEntity usuario = (UsuarioEntity) httpSession.getAttribute("nif");
 
             // Create a new message entity and set its properties
             MensajeEntity mensaje = new MensajeEntity();
             mensaje.setContenido(message);
-            mensaje.setUsuarioByUsuarioOrigen(usuarioRepository.findById(1).orElse(null));
-            mensaje.setUsuarioByUsuarioDestino(usuarioRepository.findById(21).orElse(null));
+            mensaje.setUsuarioByUsuarioOrigen(usuarioRepository.findById(contactUser.getIdUsuario()).orElse(null));
+            mensaje.setUsuarioByUsuarioDestino(usuarioRepository.findById(usuarioLogeado.getIdUsuario()).orElse(null));
             mensaje.setFechaEnvio(new Timestamp(System.currentTimeMillis()));
 
             // Save the message to the database
@@ -67,6 +77,25 @@ public class MensajeController
         }
 
         // Redirect the user back to the chat page
+        return "redirect:/Asistencia/asistente?contactId=" + contactUser.getIdUsuario();
+    }
+
+    @PostMapping("/Asistencia/loginAyuda")
+    public String doLoginCredentials(@RequestParam("nif") String nif,
+                                          @RequestParam("password") String password,
+                                          Model model, HttpSession session)
+    {
+        UsuarioEntity userLogged = usuarioRepository.usuarioByNIFyContrasena(nif, password);
+
+        session.setAttribute("usuario", userLogged);
+        return "redirect:/Asistencia/asistente";
+
+    }
+
+    @PostMapping("/Asistencia/logout")
+    public String doLogoutAndKillSessionID(HttpSession session)
+    {
+        session.invalidate();
         return "redirect:/Asistencia/asistente";
     }
 

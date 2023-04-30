@@ -25,7 +25,4 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
 
     List<UsuarioEntity> findAllByEmpresaByEmpresaIdEmpresa(EmpresaEntity orElse);
 
-    UsuarioEntity findUsuarioByNombre(String usuario);
-
-    UsuarioEntity findUsuarioByNif(String usuario);
 }

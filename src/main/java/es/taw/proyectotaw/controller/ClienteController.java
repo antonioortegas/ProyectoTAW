@@ -42,6 +42,7 @@ public class ClienteController {
             model.addAttribute("error", "Credenciales incorrectas");
         } else {
             model.addAttribute("cliente", usuario);
+            session.setAttribute("usuario", usuario);
             urlTo = "Cliente/indexCliente";
         }
 
