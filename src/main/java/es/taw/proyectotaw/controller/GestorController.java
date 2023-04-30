@@ -164,10 +164,46 @@ public class GestorController {
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping
+    @GetMapping ("/gestor/bloquearEmpresa")
+    public String bloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
+        for(UsuarioEntity usuario : listaUsuarios){
+            usuario.setEstadoUsuario("bloqueado");
+            this.usuarioRepository.save(usuario);
+            List<PeticionEntity> listaPeticionesActivas = buscarPeticionesActivas(usuario, "noprocesada");
+            for(PeticionEntity peticion : listaPeticionesActivas){
+                peticion.setEstadoPeticion("denegada");
+                this.peticionRepository.save(peticion);
+            }
+        }
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
+    @GetMapping ("/gestor/desactivarEmpresa")
+    public String desactivarEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
+        for(UsuarioEntity usuario : listaUsuarios){
+            usuario.setEstadoUsuario("inactivo");
+            this.usuarioRepository.save(usuario);
+            List<PeticionEntity> listaPeticionesActivas = buscarPeticionesActivas(usuario, "noprocesada");
+            for(PeticionEntity peticion : listaPeticionesActivas){
+                peticion.setEstadoPeticion("denegada");
+                this.peticionRepository.save(peticion);
+            }
+        }
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
 
     private List<PeticionEntity> buscarPeticiones(UsuarioEntity user, String estado, String tipo) {
         return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEqualsAndTipoPeticionEquals(user ,estado, tipo);
+    }
+
+    private List<PeticionEntity> buscarPeticionesActivas(UsuarioEntity user, String estado) {
+        return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEquals(user ,estado);
     }
 
     private void aceptarPeticion(PeticionEntity peticion){

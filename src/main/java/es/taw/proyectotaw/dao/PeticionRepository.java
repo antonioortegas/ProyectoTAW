@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PeticionRepository extends JpaRepository<PeticionEntity, Integer> {
+
+    List<PeticionEntity> findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEquals(UsuarioEntity usuario, String estado);
     List<PeticionEntity> findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEqualsAndTipoPeticionEquals(UsuarioEntity usuario, String estado, String tipo);
 }
