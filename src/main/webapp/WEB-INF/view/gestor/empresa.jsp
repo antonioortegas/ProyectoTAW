@@ -56,10 +56,16 @@
                 Dirección: <%= empresa.getDireccionByDireccionIdDireccion().getPais()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCiudad()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCp()
-
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCalle()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getNumero()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getPuerta() %><br>
+                <%
+                    if(empresa.getUsuariosByIdEmpresa() != null){
+                %>
+                Iban de la empresa: <%= empresa.getUsuariosByIdEmpresa().iterator().next().getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %><br>
+                <%
+                    }
+                %>
                 <hr>
                 <h2>Socios / Autorizados</h2>
                 <div>
