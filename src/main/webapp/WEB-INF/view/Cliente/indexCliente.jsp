@@ -22,8 +22,8 @@
 
 <a href="/editarUsuario?id=<%= cliente.getIdUsuario() %>">Modificar mis datos</a><br>
 Realizar una transferencia <br>
-Cambio de divisas <br>
-Historial de operaciones <br>
+<a href="/cambioDeDivisaCliente?id=<%= cliente.getIdUsuario() %>">Realizar un cambio de divisa</a><br>
+<a href="/historialOperaciones?id=<%= cliente.getIdUsuario() %>">Historial de operaciones</a><br>
 Su cuenta se encuentra en estado: <%=cliente.getEstadoUsuario()%>.<br>
 <% if(cliente.getEstadoUsuario().equals("inactivo")){%>
 <a href="/nuevaPeticionInactivo?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar activación.</a>
