@@ -11,23 +11,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-
-   // List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("empresa");
-
+    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
 %>
 
 <head>
     <title>Title</title>
 </head>
 <body>
-<td>${pageContext.session.id}</td><br><br><br>
-<h6> Accediendo con el siguiente sessionid: <%= session.getId() %> </h6>
+<%--@elvariable id="socio" type=""--%>
+<%--@elvariable id="empresa" type=""--%>
+<form:form method="post" modelAttribute="empresa" action="/editarDatosEmpresa" >
+    Nombre: <form:input path="nombre" size="30" maxlength="30"  /><br/>
+    CIF: <form:input path="cif" size="30" maxlength="30"  /><br/>
 
-<button> <a href="crearNuevaEmpresa"> NUEVA EMPRESA</a></button><br>
-<!--<button> <a href="crearUsuarioEmpresa"> NUEVO SOCIO</a></button><br>
-<button> <a href=""> INCIAR SESION EMPRESA</a></button><br>-->
-<button> <a href="loginSocio"> INCIAR SESION SOCIO</a></button><br>
-
+    <form:button>Submit</form:button>
+</form:form>
 
 </body>
 </html>

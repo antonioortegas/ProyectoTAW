@@ -19,29 +19,40 @@
 </head>
 <body>
 <% System.out.println("HOLA");%>
-<h1>HOLA   PAGINA   DE   CREAR   EMPRESAS</h1>
+<h1>HOLA PAGINA DE CREAR EMPRESAS</h1>
 <h1>Formulario de Registro de Empresa</h1>
-<form method="post" action="/crearNuevaEmpresa" modelAttribute="empresa">
+<form method="post" action="/procesarFormularioEmpresa" modelAttribute="empresa">
     <label for="cif">CIF *</label>
     <input type="text" id="cif" name="cif" required>
     <br>
-    <label for="nombreEmpresa">Nombre de la empresa *</label>
-    <input type="text" id="nombreEmpresa" name="nombreEmpresa" required>
+    <label for="nombre">Nombre de la empresa *</label>
+    <input type="text" id="nombre" name="nombre" required>
     <br>
+
+    <label for="contrasena">Contraseña</label>
+    <input type="password" id="contrasena" name="contrasena">
+    <br>
+
+    <label for="repetirContrasena">Repetir Contraseña</label>
+    <input type="password" id="repetirContrasena" name="repetirContrasena">
+    <br>
+    <input type="hidden" id="Direccion_id_direccion" name="Direccion_id_direccion">
+    <input type="submit" value="Registrarse">
+
+
+</form>
+<form method="post" action="/procesarFormularioEmpresa" modelAttribute="direccion">
     <label for="calle">Calle *</label>
     <input type="text" id="calle" name="calle" required>
     <br>
     <label for="numero">Número *</label>
     <input type="text" id="numero" name="numero" required>
     <br>
-    <label for="planta">Planta</label>
-    <input type="text" id="planta" name="planta">
+    <label for="puerta">Puerta</label>
+    <input type="text" id="puerta" name="puerta">
     <br>
-    <label for="region">Región</label>
-    <input type="text" id="region" name="region">
-    <br>
-    <label for="ciudad">Ciudad *</label>
-    <input type="text" id="ciudad" name="ciudad" required>
+    <label for="ciudad">Ciudad</label>
+    <input type="text" id="ciudad" name="ciudad">
     <br>
     <label for="pais">País *</label>
     <input type="text" id="pais" name="pais" required>
@@ -49,13 +60,7 @@
     <label for="cp">Código Postal *</label>
     <input type="text" id="cp" name="cp" required>
     <br>
-    <label for="contrasena">Contraseña</label>
-    <input type="password" id="contrasena" name="contrasena">
-    <br>
-    <label for="repetirContrasena">Repetir Contraseña</label>
-    <input type="password" id="repetirContrasena" name="repetirContrasena">
-    <br>
-    <input type="submit" value="Registrarse">
 </form>
+
 </body>
 </html>
