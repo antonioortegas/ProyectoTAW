@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
     List<UsuarioEntity> listaUsuriosEmpresa = (List<UsuarioEntity>) request.getAttribute("listaUsuriosEmpresa");
 
 %>
@@ -22,8 +22,20 @@
     <%for (UsuarioEntity usuario : listaUsuriosEmpresa) {%>
     <li>
         <span><%= usuario.getNombre()%></span>
-        <span><%=usuario.getEmpresaByEmpresaIdEmpresa().getNombre()%></span>
-        <button onclick="bloquearDesbloquearSocio(1)">Bloquear/Desbloquear</button>
+        <span><%= usuario.getPrimerApellido()%></span>
+        <span><%= usuario.getTipoUsuario()%></span>
+        <span><%= usuario.getTipoPersonaRelacionada()%></span>
+        <!--<span><%=usuario.getEmpresaByEmpresaIdEmpresa().getNombre()%></span>-->
+        <%
+            if (usuario.getTipoPersonaRelacionada()=="bloqueada") {
+        %>
+            <button><a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Desbloquear</a></button>
+        <%
+        } else {%>
+        <button> <a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Bloquear</a></button>
+        <%
+            }
+        %>
     </li>
     <%}%>
     <!-- Añadir más elementos de lista para los demás socios -->

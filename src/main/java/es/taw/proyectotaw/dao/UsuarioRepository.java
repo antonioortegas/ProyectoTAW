@@ -21,8 +21,8 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     @Query("select u from UsuarioEntity u where u.nif = :nif and u.contrasena = :contrasena")
     public UsuarioEntity autenticarUsuarioEmpresa (@Param("nif") String nif, @Param("contrasena")String contrasena);
 
-    @Query("select distinct u.nif, u.nombre from UsuarioEntity u, EmpresaEntity e where  u.empresaByEmpresaIdEmpresa.cif = :idEmpresa")
-    public List<UsuarioEntity> buscarUsuariosMismaEmpresa(@Param("idEmpresa")String idEmpresa);
+    @Query("select u from UsuarioEntity u where  u.empresaByEmpresaIdEmpresa.idEmpresa = :idEmpresa")
+    public List<UsuarioEntity> buscarUsuariosMismaEmpresa(@Param("idEmpresa")Integer idEmpresa);
 
     List<UsuarioEntity> findAllByEmpresaByEmpresaIdEmpresa(EmpresaEntity orElse);
 

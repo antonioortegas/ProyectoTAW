@@ -38,10 +38,10 @@ public class EmpresaController {
     public String procesarFormularioEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion) {
         System.out.println("PETA 1");
         //DireccionEntity direccionEntity = new DireccionEntity(11,"CAlle pilar","33","aa","MALAGA","SPAIN","12341", (byte) 1);
-        DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
-        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
-        this.direccionRepository.save(direccionEntity);
-        this.empresaRepository.save(empresa1);
+        //  DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
+//        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
+        //  this.direccionRepository.save(direccionEntity);
+//        this.empresaRepository.save(empresa1);
         //this.empresaRepository.save(empresa);
         System.out.println(empresa.getNombre());
         System.out.println(empresa.getIdEmpresa());
@@ -66,7 +66,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/loginSocio")
-    public String doAutenticar(@RequestParam("nif") String nif,@RequestParam("contrasena") String contrasena,
+    public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
                                Model model, HttpSession session) {
         String urlTo = "/Empresa/sesionIniciadaEmpresa";
         UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
@@ -78,7 +78,7 @@ public class EmpresaController {
             model.addAttribute("socio", socio);
             session.setAttribute("socio", socio);
             model.addAttribute("empresa", empresa);
-            session.setAttribute("empresa",empresa);
+            session.setAttribute("empresa", empresa);
         }
 
         return urlTo;
@@ -90,20 +90,41 @@ public class EmpresaController {
     }
 
     @GetMapping("/Empresa/bloquearSocios")
-    public String bloquarSocios(Model model, HttpSession httpSession) {
-        UsuarioEntity usuario = (UsuarioEntity) httpSession.getAttribute("nif");
-
-        //List<UsuarioEntity> listaUsuriosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(usuario.getEmpresaByEmpresaIdEmpresa().getIdEmpresa());
-        List<UsuarioEntity> listaUsuriosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa("1");
-        model.addAttribute("listaUsuriosEmpresa", listaUsuriosEmpresa);
+    public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
+        //UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("nif");
+        System.out.println("Solicitamos lista de usuarios de una empresa");
+        List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(id);
+        //List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(1);
+        System.out.println("Añadimos lista de usuarios");
+        model.addAttribute("listaUsuriosEmpresa", listaUsuariosEmpresa);
 
         for (UsuarioEntity u :
-                listaUsuriosEmpresa) {
+                listaUsuariosEmpresa) {
             System.out.println(u.getNombre());
         }
 
         return "Empresa/bloquearSocios";
     }
+
+    @GetMapping("cambiarEstadoSocio")
+    public String socioDesbloqueado(@RequestParam("idCambio") Integer idCambio, Model model, HttpSession httpSession) {
+
+        System.out.println("entro");
+        UsuarioEntity socio = usuarioRepository.getById(idCambio);
+
+        if (socio.getTipoPersonaRelacionada().equals(null)) {
+            socio.setTipoPersonaRelacionada("desbloqueada");
+        } else if (socio.getTipoPersonaRelacionada().equals("bloqueada")) {
+            socio.setTipoPersonaRelacionada("desbloqueada");
+        } else {
+            socio.setTipoPersonaRelacionada("desbloqueada");
+        }
+        this.usuarioRepository.save(socio);
+
+        return "Empresa/bloquearSocios";
+
+    }
+
 
     @GetMapping("/Empresa/editarDatosSocio")
     public String editarCliente(Integer id, Model model, HttpSession session) {
@@ -111,10 +132,11 @@ public class EmpresaController {
         model.addAttribute("socio", socio);
         return "Empresa/editarDatosSocio";
     }
-    @GetMapping("/Empresa/editarDatosEmpresa")
+
+    @RequestMapping("/Empresa/editarDatosEmpresa")
     public String editarEmpresa(Integer id, Model model, HttpSession session) {
-        UsuarioEntity socio = (UsuarioEntity) model.getAttribute("socio");
-        model.addAttribute("socio",socio);
+        UsuarioEntity socio = (UsuarioEntity) session.getAttribute("socio");
+        model.addAttribute("socio", socio);
         System.out.println(1);
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
         System.out.println(2);
@@ -122,7 +144,7 @@ public class EmpresaController {
         System.out.println(3);
         this.empresaRepository.save(empresa);
         System.out.println(4);
-        return "Empresa/sesionIniciadaEmpresa";
+        return "Empresa/editarDatosEmpresa";
     }
 
 

@@ -19,13 +19,13 @@
 <body>
 <h1>Bienvenido a la Aplicación Bancaria</h1>
 <h2>Menú Principal</h2>
-
+<%="Bienvenido" + socio.getNombre()%>
 <%
     if (socio.getTipoUsuario().toLowerCase().equals("socio")) {
 
 %>
     <button><a href="">Dar de alta a nuevo socio</a></button>
-    <button><a href="Empresa/bloquearSocios">Bloquear socios</a></button>
+    <button><a href="Empresa/bloquearSocios?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Bloquear socios</a></button>
     <button><a href="Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>">Modificar datos personales</a></button>
     <button><a href="Empresa/editarDatosEmpresa?id=<%= empresa.getIdEmpresa() %>">Modificar datos Empresa</a></button>
 

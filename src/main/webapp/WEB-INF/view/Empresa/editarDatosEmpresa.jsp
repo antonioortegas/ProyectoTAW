@@ -24,7 +24,7 @@
     Nombre: <form:input path="nombre" size="30" maxlength="30"  /><br/>
     CIF: <form:input path="cif" size="30" maxlength="30"  /><br/>
 
-    <form:button>Submit</form:button>
+    <form:button><a href="loginSocio">Submit</a></form:button>
 </form:form>
 
 </body>
