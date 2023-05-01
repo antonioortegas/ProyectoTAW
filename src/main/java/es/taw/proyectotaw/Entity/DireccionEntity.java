@@ -8,6 +8,22 @@ import java.util.Objects;
 @Entity
 @Table(name = "direccion", schema = "mydb", catalog = "")
 public class DireccionEntity {
+
+    public DireccionEntity() {
+    }
+
+    public DireccionEntity(String calle, String numero, String puerta, String ciudad, String pais, String cp, Byte valida) {
+        this.calle = calle;
+        this.numero = numero;
+        this.puerta = puerta;
+        this.ciudad = ciudad;
+        this.pais = pais;
+        this.cp = cp;
+        this.region = region;
+        this.valida = valida;
+    }
+
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_direccion", nullable = false)
@@ -40,6 +56,7 @@ public class DireccionEntity {
     private Collection<EmpresaEntity> empresasByIdDireccion;
     @OneToMany(mappedBy = "direccionByDireccionIdDireccion")
     private Collection<UsuarioEntity> usuariosByIdDireccion;
+
 
     public Integer getIdDireccion() {
         return idDireccion;

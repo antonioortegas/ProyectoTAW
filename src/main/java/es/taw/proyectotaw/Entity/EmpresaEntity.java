@@ -24,6 +24,16 @@ public class EmpresaEntity {
     @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
     private Collection<UsuarioEntity> usuariosByIdEmpresa;
 
+    public EmpresaEntity() {
+    }
+
+    public EmpresaEntity(Integer idEmpresa,String cif, String nombre, DireccionEntity direccionByDireccionIdDireccion) {
+        this.cif = cif;
+        this.nombre = nombre;
+        this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
+        this.usuariosByIdEmpresa = usuariosByIdEmpresa;
+    }
+
     public Integer getIdEmpresa() {
         return idEmpresa;
     }

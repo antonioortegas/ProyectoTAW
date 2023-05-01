@@ -38,10 +38,10 @@ public class EmpresaController {
     public String procesarFormularioEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion) {
         System.out.println("PETA 1");
         //DireccionEntity direccionEntity = new DireccionEntity(11,"CAlle pilar","33","aa","MALAGA","SPAIN","12341", (byte) 1);
-        //  DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
-//        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
-        //  this.direccionRepository.save(direccionEntity);
-//        this.empresaRepository.save(empresa1);
+        DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
+        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
+        this.direccionRepository.save(direccionEntity);
+        this.empresaRepository.save(empresa1);
         //this.empresaRepository.save(empresa);
         System.out.println(empresa.getNombre());
         System.out.println(empresa.getIdEmpresa());
@@ -66,7 +66,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/loginSocio")
-    public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
+    public String doAutenticar(@RequestParam("nif") String nif,@RequestParam("contrasena") String contrasena,
                                Model model, HttpSession session) {
         String urlTo = "/Empresa/sesionIniciadaEmpresa";
         UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
@@ -78,7 +78,7 @@ public class EmpresaController {
             model.addAttribute("socio", socio);
             session.setAttribute("socio", socio);
             model.addAttribute("empresa", empresa);
-            session.setAttribute("empresa", empresa);
+            session.setAttribute("empresa",empresa);
         }
 
         return urlTo;
@@ -90,7 +90,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/Empresa/bloquearSocios")
-    public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
+    public String bloquarSocios(Integer id,Model model, HttpSession httpSession) {
         //UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("nif");
         System.out.println("Solicitamos lista de usuarios de una empresa");
         List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(id);
@@ -105,18 +105,17 @@ public class EmpresaController {
 
         return "Empresa/bloquearSocios";
     }
-
     @GetMapping("cambiarEstadoSocio")
-    public String socioDesbloqueado(@RequestParam("idCambio") Integer idCambio, Model model, HttpSession httpSession) {
+    public String socioDesbloqueado(@RequestParam("idCambio") Integer idCambio, Model model, HttpSession httpSession){
 
         System.out.println("entro");
         UsuarioEntity socio = usuarioRepository.getById(idCambio);
 
-        if (socio.getTipoPersonaRelacionada().equals(null)) {
+        if(socio.getTipoPersonaRelacionada().equals(null)){
             socio.setTipoPersonaRelacionada("desbloqueada");
-        } else if (socio.getTipoPersonaRelacionada().equals("bloqueada")) {
+        }else if(socio.getTipoPersonaRelacionada().equals("bloqueada")){
             socio.setTipoPersonaRelacionada("desbloqueada");
-        } else {
+        }else {
             socio.setTipoPersonaRelacionada("desbloqueada");
         }
         this.usuarioRepository.save(socio);
@@ -132,11 +131,10 @@ public class EmpresaController {
         model.addAttribute("socio", socio);
         return "Empresa/editarDatosSocio";
     }
-
     @RequestMapping("/Empresa/editarDatosEmpresa")
     public String editarEmpresa(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = (UsuarioEntity) session.getAttribute("socio");
-        model.addAttribute("socio", socio);
+        model.addAttribute("socio",socio);
         System.out.println(1);
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
         System.out.println(2);
