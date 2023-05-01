@@ -24,5 +24,14 @@
 Realizar una transferencia <br>
 Cambio de divisas <br>
 Historial de operaciones <br>
-</body>
+Su cuenta se encuentra en estado: <%=cliente.getEstadoUsuario()%>.<br>
+<% if(cliente.getEstadoUsuario().equals("inactivo")){%>
+<a href="/nuevaPeticionInactivo?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar activación.</a>
+<%} else if(cliente.getEstadoUsuario().equals("bloqueado")){%>
+<a href="/nuevaPeticionBloqueado?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar desbloqueo.</a>
+<%} else if(cliente.getEstadoUsuario().equals("pendiente")){%>
+<a href="/nuevaPeticionAlta?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar desbloqueo.</a>
+<%}%>
+
+    </body>
 </html>

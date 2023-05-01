@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
   User: anton
@@ -12,7 +13,7 @@
 </head>
 <body>
 <h1>Registro de Persona</h1><br>
-<form action="/registroCliente" method="post">
+<form:form method="post" modelAttribute="cliente" action="/registroCliente">
     <a>Datos Personales</a><br>
     <label for="nif">NIF (*) </label>
     <input type="text" id="nif" name="nif" required><br>
@@ -66,7 +67,7 @@
 
     <input type="submit" value="Enviar">
     <input type="reset" value="Reset">
-</form>
+</form:form>
 <br>
 <button onclick="window.location.href='index.html'">Salir</button>
 </form>

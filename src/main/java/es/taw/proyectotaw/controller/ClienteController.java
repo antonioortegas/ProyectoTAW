@@ -1,6 +1,8 @@
 package es.taw.proyectotaw.controller;
 
+import es.taw.proyectotaw.Entity.PeticionEntity;
 import es.taw.proyectotaw.Entity.UsuarioEntity;
+import es.taw.proyectotaw.dao.PeticionRepository;
 import es.taw.proyectotaw.dao.UsuarioRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class ClienteController {
 
     @Autowired
     protected UsuarioRepository usuarioRepository;
+
+    @Autowired
+    protected PeticionRepository peticionRepository;
 
     @GetMapping("/Cliente/crearNuevoCliente")
     public String crearNuevoCliente(){
@@ -55,7 +60,43 @@ public class ClienteController {
         return "Cliente/editarDatosCliente";
     }
 
-    @PostMapping("/editarCliente")
+    @GetMapping("/nuevaPeticionAlta")
+    public String pedirAlta (Integer id,  Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        PeticionEntity peticion = null;
+        peticion.setTipoPeticion("alta");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setUsuarioByUsuarioIdUsuario(cliente);
+        this.peticionRepository.save(peticion);
+        return "Cliente/indexCliente";
+    }
+
+    @GetMapping("/nuevaPeticionInactivo")
+    public String pedirActivo (Integer id, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        PeticionEntity peticion = null;
+        peticion.setTipoPeticion("activar");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setUsuarioByUsuarioIdUsuario(cliente);
+        this.peticionRepository.save(peticion);
+        return "Cliente/indexCliente";
+    }
+
+    @GetMapping("/nuevaPeticionBloqueado")
+    public String pedirDesbloqueo (@RequestParam("idUsuario") Integer id, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        PeticionEntity peticion = new PeticionEntity();
+        peticion.setTipoPeticion("desbloqueo");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setUsuarioByUsuarioIdUsuario(cliente);
+        this.peticionRepository.save(peticion);
+        return "Cliente/indexCliente";
+    }
+
+    @PostMapping("/guardarCliente")
     public String doEditar (@ModelAttribute("cliente") UsuarioEntity cliente) {
         this.usuarioRepository.save(cliente);
         return "Cliente/indexCliente";
