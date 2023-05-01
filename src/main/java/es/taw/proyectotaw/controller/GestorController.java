@@ -8,12 +8,17 @@ import es.taw.proyectotaw.dao.CuentabancoRepository;
 import es.taw.proyectotaw.dao.EmpresaRepository;
 import es.taw.proyectotaw.dao.PeticionRepository;
 import es.taw.proyectotaw.dao.UsuarioRepository;
+import es.taw.proyectotaw.ui.FiltroEmpresas;
+import es.taw.proyectotaw.ui.FiltroUsuarios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -33,13 +38,86 @@ public class GestorController {
 
     @GetMapping("/gestor/usuarios")
     public String listarUsuarios(Model model){
-        List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findAll();
+        if(model.containsAttribute("filtroUsuarios")&&model.containsAttribute("filtroEmpresas")) {
+            if (model.getAttribute("filtroUsuarios") != null && model.getAttribute("filtroEmpresas") != null){
+                return procesarFiltrado(model, (FiltroUsuarios) model.getAttribute("filtroUsuarios"), (FiltroEmpresas) model.getAttribute("filtroEmpresas"));
+            }
+            else {
+                return procesarFiltrado(model, null, null);
+            }
+        }
+        else {
+            return procesarFiltrado(model, null, null);
+        }
+    }
+
+
+
+    @PostMapping("/gestor/filtrarUsuarios")
+public String filtrarUsuarios(Model model, @ModelAttribute("filtroUsuarios") FiltroUsuarios filtroUsuarios, @ModelAttribute("filtroEmpresas") FiltroEmpresas filtroEmpresas){
+        return procesarFiltrado(model, filtroUsuarios, filtroEmpresas);
+    }
+
+    @PostMapping("/gestor/filtrarEmpresas")
+public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") FiltroUsuarios filtroUsuarios, @ModelAttribute("filtroEmpresas") FiltroEmpresas filtroEmpresas){
+        return procesarFiltrado(model, filtroUsuarios, filtroEmpresas);
+    }
+
+    private String procesarFiltrado(Model model, FiltroUsuarios filtroUsuarios, FiltroEmpresas filtroEmpresas) {
+        List<UsuarioEntity> listaUsuarios = null;
+        List<EmpresaEntity> listaEmpresas = null;
+        if(filtroUsuarios == null){
+            filtroUsuarios = new FiltroUsuarios();
+            listaUsuarios = this.usuarioRepository.findAll();
+        }
+        if(filtroUsuarios.getPropiedad().equals("")&&filtroUsuarios.getOrden().equals("nif")){
+            listaUsuarios = this.usuarioRepository.findAll();
+        }
+        if(filtroUsuarios.getPropiedad().equals("Pendiente de alta")&&filtroUsuarios.getOrden().equals("nif")){
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeAlta();
+        }
+        if(filtroUsuarios.getPropiedad().equals("30d")&&filtroUsuarios.getOrden().equals("nif")){
+            Date fecha = new Date();
+            fecha.setDate(fecha.getDate()-30);
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(fecha);
+        }
+        if(filtroUsuarios.getPropiedad().equals("Actividad sospechosa")&&filtroUsuarios.getOrden().equals("nif")){
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConActividadSospechosa();
+        }
+
+
+        if(filtroEmpresas == null){
+            filtroEmpresas = new FiltroEmpresas();
+            listaEmpresas = this.empresaRepository.findAll();
+        }
+        if(filtroEmpresas.getPropiedadE().equals("")&&filtroEmpresas.getOrdenE().equals("cif")){
+            listaEmpresas = this.empresaRepository.findAll();
+        }
+        if(filtroEmpresas.getPropiedadE().equals("Pendiente de alta")&&filtroEmpresas.getOrdenE().equals("cif")){
+            listaEmpresas = this.empresaRepository.buscarEmpresasConSolicitudDeAlta();
+        }
+        if(filtroEmpresas.getPropiedadE().equals("30d")&&filtroEmpresas.getOrdenE().equals("cif")){
+            java.sql.Date fecha = new java.sql.Date(new Date().getTime()-30*24*60*60*1000);
+            listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(fecha);
+        }
+        if(filtroEmpresas.getPropiedadE().equals("Actividad sospechosa")&&filtroEmpresas.getOrdenE().equals("cif")){
+            listaEmpresas = this.empresaRepository.buscarEmpresasConActividadSospechosa();
+        }
+
+
+        if(listaUsuarios == null){
+            listaUsuarios = this.usuarioRepository.findAll();
+        }
+
         model.addAttribute("listaUsuarios", listaUsuarios);
-        List<EmpresaEntity> listaEmpresas = this.empresaRepository.findAll();
         model.addAttribute("listaEmpresas", listaEmpresas);
+
         List<CuentabancoEntity> listaCuentasSospechosas = this.cuentabancoRepository.findAllBySospechosoEquals(1);
         model.addAttribute("listaCuentasSospechosas", listaCuentasSospechosas);
-        return "/gestor/listadoUsuarios";
+
+        model.addAttribute("filtroUsuarios", filtroUsuarios);
+        model.addAttribute("filtroEmpresas", filtroEmpresas);
+        return "gestor/listadoUsuarios";
     }
 
     @GetMapping("/gestor/cliente")
@@ -96,6 +174,7 @@ public class GestorController {
         //Terminar peticion
         this.peticionRepository.save(listaPeticiones.get(0));
         this.usuarioRepository.save(usuario);
+
         return "redirect:/gestor/usuarios";
     }
 

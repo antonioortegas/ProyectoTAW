@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.proyectotaw.Entity.*" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java.time.MonthDay" %>
@@ -51,14 +52,52 @@
 
     <table class="wrap">
         <tr>
-            <td><h1>Usuarios:</h1></td>
-            <td><h1>Empresas:</h1></td>
+            <td>
+                <form:form action="/gestor/filtrarUsuarios" method="post" modelAttribute="filtroUsuarios">
+                    Propiedad:
+                    <form:select path="propiedad">
+                        <form:option value="">-----</form:option>
+                        <form:option value="30d">30d sin actividad</form:option>
+                        <form:option value="Pendiente de alta">Pendiente de alta</form:option>
+                        <form:option value="Actividad sospechosa">Actividad sospechosa</form:option>
+                    </form:select>
+                    Orden:
+                    <form:select path="orden">
+                        <form:option value="nif">NIF</form:option>
+                    </form:select>
+                    <form:button>Filtrar</form:button>
+                </form:form>
+            </td>
+            <td>
+                <form:form action="/gestor/filtrarEmpresas" method="post" modelAttribute="filtroEmpresas">
+                    Propiedad:
+                    <form:select path="propiedadE">
+                        <form:option value="">-----</form:option>
+                        <form:option value="30d">30d sin actividad</form:option>
+                        <form:option value="Pendiente de alta">Pendiente de alta</form:option>
+                        <form:option value="Actividad sospechosa">Actividad sospechosa</form:option>
+                    </form:select>
+                    Orden:
+                    <form:select path="ordenE">
+                        <form:option value="cif">CIF</form:option>
+                    </form:select>
+                    <form:button>Filtrar</form:button>
+                </form:form>
+            </td>
         </tr>
+        <tr>
+            <td><h1>Usuarios:</h1></td>
+
+
+            <td><h1>Empresas:</h1></td>
+
+        </tr>
+
         <tr>
             <td>
                 <table class="tableUsuarios">
                     <tr>
-                        <th>NIF<%=dateBefore30Days%></th>
+                        <th>NIF</th>
                         <th>Nombre</th>
                         <th>Empresa</th>
                         <th>Tipo de Usuario</th>
@@ -190,8 +229,6 @@
                                                     inactivo = true;
                                                 }
                                                 for (CuentabancoEntity cuentasospechosa : listaCuentasSospechosas) {
-                                                    System.out.println(transaccion.getPagoByPagoIdPago().getBeneficiarioByBeneficiarioIdBeneficiario().getNumeroCuentaBeneficiario());
-                                                    System.out.println(usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban());
                                                     if (transaccion.getPagoByPagoIdPago().getBeneficiarioByBeneficiarioIdBeneficiario().getNumeroCuentaBeneficiario()
                                                             .equals(usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban())) {
                                                         sospechoso = true;
