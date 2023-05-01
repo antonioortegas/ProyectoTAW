@@ -74,8 +74,11 @@ public class EmpresaController {
             model.addAttribute("error", "Credenciales incorrectas");
             urlTo = "loginSocio";
         } else {
+            EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
             model.addAttribute("socio", socio);
             session.setAttribute("socio", socio);
+            model.addAttribute("empresa", empresa);
+            session.setAttribute("empresa",empresa);
         }
 
         return urlTo;
@@ -107,6 +110,19 @@ public class EmpresaController {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("socio", socio);
         return "Empresa/editarDatosSocio";
+    }
+    @GetMapping("/Empresa/editarDatosEmpresa")
+    public String editarEmpresa(Integer id, Model model, HttpSession session) {
+        UsuarioEntity socio = (UsuarioEntity) model.getAttribute("socio");
+        model.addAttribute("socio",socio);
+        System.out.println(1);
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
+        System.out.println(2);
+        model.addAttribute("empresa", empresa);
+        System.out.println(3);
+        this.empresaRepository.save(empresa);
+        System.out.println(4);
+        return "Empresa/sesionIniciadaEmpresa";
     }
 
 
