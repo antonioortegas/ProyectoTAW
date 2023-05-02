@@ -9,21 +9,6 @@ import java.util.Objects;
 @Table(name = "direccion", schema = "mydb", catalog = "")
 public class DireccionEntity {
 
-    public DireccionEntity() {
-    }
-
-    public DireccionEntity(String calle, String numero, String puerta, String ciudad, String pais, String cp, Byte valida) {
-        this.calle = calle;
-        this.numero = numero;
-        this.puerta = puerta;
-        this.ciudad = ciudad;
-        this.pais = pais;
-        this.cp = cp;
-        this.region = region;
-        this.valida = valida;
-    }
-
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_direccion", nullable = false)
@@ -56,8 +41,22 @@ public class DireccionEntity {
     private Collection<EmpresaEntity> empresasByIdDireccion;
     @OneToMany(mappedBy = "direccionByDireccionIdDireccion")
     private Collection<UsuarioEntity> usuariosByIdDireccion;
+    public DireccionEntity() {
+    }
+    public DireccionEntity(String calle, String numero, String puerta, String ciudad, String pais, String cp, Byte valida) {
+        this.calle = calle;
+        this.numero = numero;
+        this.puerta = puerta;
+        this.ciudad = ciudad;
+        this.pais = pais;
+        this.cp = cp;
+        this.region = region;
+        this.valida = valida;
+    }
 
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_direccion", nullable = false)
     public Integer getIdDireccion() {
         return idDireccion;
     }
@@ -66,6 +65,8 @@ public class DireccionEntity {
         this.idDireccion = idDireccion;
     }
 
+    @Basic
+    @Column(name = "calle", nullable = false, length = 100)
     public String getCalle() {
         return calle;
     }
@@ -74,6 +75,8 @@ public class DireccionEntity {
         this.calle = calle;
     }
 
+    @Basic
+    @Column(name = "numero", nullable = false, length = 45)
     public String getNumero() {
         return numero;
     }
@@ -82,6 +85,8 @@ public class DireccionEntity {
         this.numero = numero;
     }
 
+    @Basic
+    @Column(name = "puerta", nullable = false, length = 45)
     public String getPuerta() {
         return puerta;
     }
@@ -90,6 +95,8 @@ public class DireccionEntity {
         this.puerta = puerta;
     }
 
+    @Basic
+    @Column(name = "ciudad", nullable = false, length = 45)
     public String getCiudad() {
         return ciudad;
     }
@@ -98,6 +105,8 @@ public class DireccionEntity {
         this.ciudad = ciudad;
     }
 
+    @Basic
+    @Column(name = "pais", nullable = false, length = 45)
     public String getPais() {
         return pais;
     }
@@ -106,6 +115,8 @@ public class DireccionEntity {
         this.pais = pais;
     }
 
+    @Basic
+    @Column(name = "cp", nullable = false, length = 45)
     public String getCp() {
         return cp;
     }
@@ -114,6 +125,8 @@ public class DireccionEntity {
         this.cp = cp;
     }
 
+    @Basic
+    @Column(name = "region", nullable = true, length = 45)
     public String getRegion() {
         return region;
     }
@@ -122,6 +135,8 @@ public class DireccionEntity {
         this.region = region;
     }
 
+    @Basic
+    @Column(name = "valida", nullable = false)
     public Byte getValida() {
         return valida;
     }
@@ -143,6 +158,7 @@ public class DireccionEntity {
         return Objects.hash(idDireccion, calle, numero, puerta, ciudad, pais, cp, region, valida);
     }
 
+    @OneToMany(mappedBy = "direccionByDireccionIdDireccion")
     public Collection<EmpresaEntity> getEmpresasByIdDireccion() {
         return empresasByIdDireccion;
     }
@@ -151,6 +167,7 @@ public class DireccionEntity {
         this.empresasByIdDireccion = empresasByIdDireccion;
     }
 
+    @OneToMany(mappedBy = "direccionByDireccionIdDireccion")
     public Collection<UsuarioEntity> getUsuariosByIdDireccion() {
         return usuariosByIdDireccion;
     }

@@ -36,6 +36,9 @@ public class BeneficiarioEntity {
     @OneToMany(mappedBy = "beneficiarioByBeneficiarioIdBeneficiario")
     private Collection<PagoEntity> pagosByIdBeneficiario;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_beneficiario", nullable = false)
     public Integer getIdBeneficiario() {
         return idBeneficiario;
     }
@@ -44,6 +47,8 @@ public class BeneficiarioEntity {
         this.idBeneficiario = idBeneficiario;
     }
 
+    @Basic
+    @Column(name = "iban_beneficiario", nullable = false, length = 45)
     public String getIbanBeneficiario() {
         return ibanBeneficiario;
     }
@@ -52,6 +57,8 @@ public class BeneficiarioEntity {
         this.ibanBeneficiario = ibanBeneficiario;
     }
 
+    @Basic
+    @Column(name = "nombre_beneficiario", nullable = false, length = 45)
     public String getNombreBeneficiario() {
         return nombreBeneficiario;
     }
@@ -60,6 +67,8 @@ public class BeneficiarioEntity {
         this.nombreBeneficiario = nombreBeneficiario;
     }
 
+    @Basic
+    @Column(name = "apellido_beneficiario", nullable = false, length = 45)
     public String getApellidoBeneficiario() {
         return apellidoBeneficiario;
     }
@@ -68,6 +77,8 @@ public class BeneficiarioEntity {
         this.apellidoBeneficiario = apellidoBeneficiario;
     }
 
+    @Basic
+    @Column(name = "pais_cuenta_beneficiario", nullable = false, length = 45)
     public String getPaisCuentaBeneficiario() {
         return paisCuentaBeneficiario;
     }
@@ -76,6 +87,8 @@ public class BeneficiarioEntity {
         this.paisCuentaBeneficiario = paisCuentaBeneficiario;
     }
 
+    @Basic
+    @Column(name = "moneda_beneficiario", nullable = false, length = 45)
     public String getMonedaBeneficiario() {
         return monedaBeneficiario;
     }
@@ -84,6 +97,8 @@ public class BeneficiarioEntity {
         this.monedaBeneficiario = monedaBeneficiario;
     }
 
+    @Basic
+    @Column(name = "numero_cuenta_beneficiario", nullable = false, length = 45)
     public String getNumeroCuentaBeneficiario() {
         return numeroCuentaBeneficiario;
     }
@@ -92,6 +107,8 @@ public class BeneficiarioEntity {
         this.numeroCuentaBeneficiario = numeroCuentaBeneficiario;
     }
 
+    @Basic
+    @Column(name = "swift", nullable = true, length = 45)
     public String getSwift() {
         return swift;
     }
@@ -113,6 +130,7 @@ public class BeneficiarioEntity {
         return Objects.hash(idBeneficiario, ibanBeneficiario, nombreBeneficiario, apellidoBeneficiario, paisCuentaBeneficiario, monedaBeneficiario, numeroCuentaBeneficiario, swift);
     }
 
+    @OneToMany(mappedBy = "beneficiarioByBeneficiarioIdBeneficiario")
     public Collection<PagoEntity> getPagosByIdBeneficiario() {
         return pagosByIdBeneficiario;
     }

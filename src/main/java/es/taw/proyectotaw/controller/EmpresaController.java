@@ -28,6 +28,15 @@ public class EmpresaController {
     @Autowired
     protected DireccionRepository direccionRepository;
 
+
+    @GetMapping("/goPrincipalEmpresa")
+    public String goPrincipalEmpresa(Model model, HttpSession httpSession) {
+
+
+        return "/Empresa/sesionIniciadaEmpresa";
+    }
+
+
     @GetMapping("/Empresa/crearNuevaEmpresa")
     public String crearNuevaEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa) {
         //this.empresaRepository.save(empresa);
@@ -53,8 +62,10 @@ public class EmpresaController {
         return "/Empresa/crearUsuarioEmpresa";
     }
 
-    @GetMapping("/Empresa/crearUsuarioEmpresa")
-    public String crearNuevoSocio() {
+    @RequestMapping("/Empresa/crearNuevoSocio")
+    public String crearNuevoSocio(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion, Model model) {
+        List<UsuarioEntity> lu = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
+        model.addAttribute("lu", lu);
         return "Empresa/crearUsuarioEmpresa";
     }
 
@@ -66,7 +77,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/loginSocio")
-    public String doAutenticar(@RequestParam("nif") String nif,@RequestParam("contrasena") String contrasena,
+    public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
                                Model model, HttpSession session) {
         String urlTo = "/Empresa/sesionIniciadaEmpresa";
         UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
@@ -78,7 +89,7 @@ public class EmpresaController {
             model.addAttribute("socio", socio);
             session.setAttribute("socio", socio);
             model.addAttribute("empresa", empresa);
-            session.setAttribute("empresa",empresa);
+            session.setAttribute("empresa", empresa);
         }
 
         return urlTo;
@@ -90,7 +101,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/Empresa/bloquearSocios")
-    public String bloquarSocios(Integer id,Model model, HttpSession httpSession) {
+    public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
         //UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("nif");
         System.out.println("Solicitamos lista de usuarios de una empresa");
         List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(id);
@@ -105,20 +116,42 @@ public class EmpresaController {
 
         return "Empresa/bloquearSocios";
     }
-    @GetMapping("cambiarEstadoSocio")
-    public String socioDesbloqueado(@RequestParam("idCambio") Integer idCambio, Model model, HttpSession httpSession){
 
+    @GetMapping("/Empresa/cambiarEstadoSocio")
+    public String cambioEstadoSocio(Integer idCambio, Model model, HttpSession httpSession) {
+        String desbloqueada = "desbloqueada";
+        String bloqueada = "bloqueada";
         System.out.println("entro");
-        UsuarioEntity socio = usuarioRepository.getById(idCambio);
 
-        if(socio.getTipoPersonaRelacionada().equals(null)){
-            socio.setTipoPersonaRelacionada("desbloqueada");
-        }else if(socio.getTipoPersonaRelacionada().equals("bloqueada")){
-            socio.setTipoPersonaRelacionada("desbloqueada");
-        }else {
-            socio.setTipoPersonaRelacionada("desbloqueada");
+        UsuarioEntity socio = usuarioRepository.getById(idCambio);
+        System.out.println(socio.getNombre() + " " + socio.getTipoPersonaRelacionada());
+
+        if (socio.getTipoPersonaRelacionada() == null) {
+            socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
+        } else {
+            if (socio.getTipoPersonaRelacionada().toLowerCase() == bloqueada.toLowerCase()) {
+                socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
+                System.out.println(2);
+                System.out.println(socio.getTipoPersonaRelacionada());
+            } else if (socio.getTipoPersonaRelacionada().toLowerCase() == desbloqueada.toLowerCase()) {
+                socio.setTipoPersonaRelacionada(bloqueada.toLowerCase());
+                System.out.println(3);
+                System.out.println(socio.getTipoPersonaRelacionada());
+            }
+
         }
+
         this.usuarioRepository.save(socio);
+
+        Integer id = socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa();
+        List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(id);
+        for (
+                UsuarioEntity u :
+                listaUsuariosEmpresa) {
+            System.out.println(u.getNombre() + " " + u.getTipoPersonaRelacionada());
+        }
+        model.addAttribute("listaUsuriosEmpresa", listaUsuariosEmpresa);
+
 
         return "Empresa/bloquearSocios";
 
@@ -126,15 +159,24 @@ public class EmpresaController {
 
 
     @GetMapping("/Empresa/editarDatosSocio")
-    public String editarCliente(Integer id, Model model, HttpSession session) {
+    public String editarSocio(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("socio", socio);
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa());
+        model.addAttribute("empresa", empresa);
         return "Empresa/editarDatosSocio";
     }
+    @PostMapping("/guardarSocio")
+    public String guardarSocio (@ModelAttribute("socio") UsuarioEntity socio) {
+        this.usuarioRepository.save(socio);
+        return "Empresa/sesionIniciadaEmpresa";
+    }
+
+
     @RequestMapping("/Empresa/editarDatosEmpresa")
     public String editarEmpresa(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = (UsuarioEntity) session.getAttribute("socio");
-        model.addAttribute("socio",socio);
+        model.addAttribute("socio", socio);
         System.out.println(1);
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
         System.out.println(2);

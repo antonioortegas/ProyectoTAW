@@ -25,6 +25,9 @@ public class PeticionEntity {
     @JoinColumn(name = "Usuario_id_usuario", referencedColumnName = "id_usuario", nullable = false)
     private UsuarioEntity usuarioByUsuarioIdUsuario;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_peticion", nullable = false)
     public Integer getIdPeticion() {
         return idPeticion;
     }
@@ -33,6 +36,8 @@ public class PeticionEntity {
         this.idPeticion = idPeticion;
     }
 
+    @Basic
+    @Column(name = "tipo_peticion", nullable = false, length = 45)
     public String getTipoPeticion() {
         return tipoPeticion;
     }
@@ -41,6 +46,8 @@ public class PeticionEntity {
         this.tipoPeticion = tipoPeticion;
     }
 
+    @Basic
+    @Column(name = "fecha_peticion", nullable = true)
     public Timestamp getFechaPeticion() {
         return fechaPeticion;
     }
@@ -49,6 +56,8 @@ public class PeticionEntity {
         this.fechaPeticion = fechaPeticion;
     }
 
+    @Basic
+    @Column(name = "estado_peticion", nullable = false, length = 45)
     public String getEstadoPeticion() {
         return estadoPeticion;
     }
@@ -70,6 +79,8 @@ public class PeticionEntity {
         return Objects.hash(idPeticion, tipoPeticion, fechaPeticion, estadoPeticion);
     }
 
+    @ManyToOne
+    @JoinColumn(name = "Usuario_id_usuario", referencedColumnName = "id_usuario", nullable = false)
     public UsuarioEntity getUsuarioByUsuarioIdUsuario() {
         return usuarioByUsuarioIdUsuario;
     }

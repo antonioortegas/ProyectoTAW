@@ -62,6 +62,9 @@ public class UsuarioEntity {
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     private DireccionEntity direccionByDireccionIdDireccion;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_usuario", nullable = false)
     public Integer getIdUsuario() {
         return idUsuario;
     }
@@ -70,6 +73,8 @@ public class UsuarioEntity {
         this.idUsuario = idUsuario;
     }
 
+    @Basic
+    @Column(name = "nif", nullable = false, length = 45)
     public String getNif() {
         return nif;
     }
@@ -78,6 +83,8 @@ public class UsuarioEntity {
         this.nif = nif;
     }
 
+    @Basic
+    @Column(name = "nombre", nullable = false, length = 45)
     public String getNombre() {
         return nombre;
     }
@@ -86,6 +93,8 @@ public class UsuarioEntity {
         this.nombre = nombre;
     }
 
+    @Basic
+    @Column(name = "segundo_nombre", nullable = true, length = 45)
     public String getSegundoNombre() {
         return segundoNombre;
     }
@@ -94,6 +103,8 @@ public class UsuarioEntity {
         this.segundoNombre = segundoNombre;
     }
 
+    @Basic
+    @Column(name = "primer_apellido", nullable = false, length = 45)
     public String getPrimerApellido() {
         return primerApellido;
     }
@@ -102,6 +113,8 @@ public class UsuarioEntity {
         this.primerApellido = primerApellido;
     }
 
+    @Basic
+    @Column(name = "segundo_apellido", nullable = true, length = 45)
     public String getSegundoApellido() {
         return segundoApellido;
     }
@@ -110,6 +123,8 @@ public class UsuarioEntity {
         this.segundoApellido = segundoApellido;
     }
 
+    @Basic
+    @Column(name = "fecha_nacimiento", nullable = false)
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -118,6 +133,8 @@ public class UsuarioEntity {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    @Basic
+    @Column(name = "contrasena", nullable = false, length = 45)
     public String getContrasena() {
         return contrasena;
     }
@@ -126,6 +143,8 @@ public class UsuarioEntity {
         this.contrasena = contrasena;
     }
 
+    @Basic
+    @Column(name = "fecha_inicio", nullable = false)
     public Date getFechaInicio() {
         return fechaInicio;
     }
@@ -134,6 +153,8 @@ public class UsuarioEntity {
         this.fechaInicio = fechaInicio;
     }
 
+    @Basic
+    @Column(name = "tipo_usuario", nullable = false, length = 45)
     public String getTipoUsuario() {
         return tipoUsuario;
     }
@@ -142,6 +163,8 @@ public class UsuarioEntity {
         this.tipoUsuario = tipoUsuario;
     }
 
+    @Basic
+    @Column(name = "estado_usuario", nullable = false, length = 45)
     public String getEstadoUsuario() {
         return estadoUsuario;
     }
@@ -150,6 +173,8 @@ public class UsuarioEntity {
         this.estadoUsuario = estadoUsuario;
     }
 
+    @Basic
+    @Column(name = "tipo_persona_relacionada", nullable = true, length = 45)
     public String getTipoPersonaRelacionada() {
         return tipoPersonaRelacionada;
     }
@@ -171,6 +196,7 @@ public class UsuarioEntity {
         return Objects.hash(idUsuario, nif, nombre, segundoNombre, primerApellido, segundoApellido, fechaNacimiento, contrasena, fechaInicio, tipoUsuario, estadoUsuario, tipoPersonaRelacionada);
     }
 
+    @OneToMany(mappedBy = "usuarioByUsuarioDestino")
     public Collection<MensajeEntity> getMensajesByIdUsuario() {
         return mensajesByIdUsuario;
     }
@@ -179,6 +205,7 @@ public class UsuarioEntity {
         this.mensajesByIdUsuario = mensajesByIdUsuario;
     }
 
+    @OneToMany(mappedBy = "usuarioByUsuarioOrigen")
     public Collection<MensajeEntity> getMensajesByIdUsuario_0() {
         return mensajesByIdUsuario_0;
     }
@@ -187,6 +214,7 @@ public class UsuarioEntity {
         this.mensajesByIdUsuario_0 = mensajesByIdUsuario_0;
     }
 
+    @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
     public Collection<PeticionEntity> getPeticionsByIdUsuario() {
         return peticionsByIdUsuario;
     }
@@ -195,6 +223,8 @@ public class UsuarioEntity {
         this.peticionsByIdUsuario = peticionsByIdUsuario;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
         return cuentabancoByCuentaBancoIdCuentaBanco;
     }
@@ -203,6 +233,8 @@ public class UsuarioEntity {
         this.cuentabancoByCuentaBancoIdCuentaBanco = cuentabancoByCuentaBancoIdCuentaBanco;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa")
     public EmpresaEntity getEmpresaByEmpresaIdEmpresa() {
         return empresaByEmpresaIdEmpresa;
     }
@@ -211,6 +243,8 @@ public class UsuarioEntity {
         this.empresaByEmpresaIdEmpresa = empresaByEmpresaIdEmpresa;
     }
 
+    @ManyToOne
+    @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     public DireccionEntity getDireccionByDireccionIdDireccion() {
         return direccionByDireccionIdDireccion;
     }

@@ -44,7 +44,11 @@ public class CuentabancoEntity {
     private Collection<TransaccionEntity> transaccionsByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<UsuarioEntity> usuariosByIdCuentaBanco;
+    private Collection<EmpresaEntity> empresasByIdCuentaBanco;
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @Column(name = "id_cuenta_banco", nullable = false)
     public Integer getIdCuentaBanco() {
         return idCuentaBanco;
     }
@@ -53,6 +57,8 @@ public class CuentabancoEntity {
         this.idCuentaBanco = idCuentaBanco;
     }
 
+    @Basic
+    @Column(name = "numero_cuenta", nullable = false, length = 45)
     public String getNumeroCuenta() {
         return numeroCuenta;
     }
@@ -61,6 +67,8 @@ public class CuentabancoEntity {
         this.numeroCuenta = numeroCuenta;
     }
 
+    @Basic
+    @Column(name = "saldo", nullable = false)
     public Integer getSaldo() {
         return saldo;
     }
@@ -69,6 +77,8 @@ public class CuentabancoEntity {
         this.saldo = saldo;
     }
 
+    @Basic
+    @Column(name = "estado_cuenta", nullable = false)
     public Integer getEstadoCuenta() {
         return estadoCuenta;
     }
@@ -77,6 +87,8 @@ public class CuentabancoEntity {
         this.estadoCuenta = estadoCuenta;
     }
 
+    @Basic
+    @Column(name = "fecha_apertura", nullable = false)
     public Date getFechaApertura() {
         return fechaApertura;
     }
@@ -85,6 +97,8 @@ public class CuentabancoEntity {
         this.fechaApertura = fechaApertura;
     }
 
+    @Basic
+    @Column(name = "fecha_cierre", nullable = true)
     public Date getFechaCierre() {
         return fechaCierre;
     }
@@ -93,6 +107,8 @@ public class CuentabancoEntity {
         this.fechaCierre = fechaCierre;
     }
 
+    @Basic
+    @Column(name = "tipo_moneda", nullable = false, length = 45)
     public String getTipoMoneda() {
         return tipoMoneda;
     }
@@ -101,6 +117,8 @@ public class CuentabancoEntity {
         this.tipoMoneda = tipoMoneda;
     }
 
+    @Basic
+    @Column(name = "iban", nullable = false, length = 45)
     public String getIban() {
         return iban;
     }
@@ -109,6 +127,8 @@ public class CuentabancoEntity {
         this.iban = iban;
     }
 
+    @Basic
+    @Column(name = "pais", nullable = false, length = 45)
     public String getPais() {
         return pais;
     }
@@ -117,8 +137,14 @@ public class CuentabancoEntity {
         this.pais = pais;
     }
 
+    @Basic
+    @Column(name = "sospechoso", nullable = false)
     public Integer getSospechoso() {
         return sospechoso;
+    }
+
+    public void setSospechoso(Byte sospechoso) {
+        this.sospechoso = Integer.valueOf(sospechoso);
     }
 
     public void setSospechoso(Integer sospechoso) {
@@ -138,6 +164,7 @@ public class CuentabancoEntity {
         return Objects.hash(idCuentaBanco, numeroCuenta, saldo, estadoCuenta, fechaApertura, fechaCierre, tipoMoneda, iban, pais, sospechoso);
     }
 
+    @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     public Collection<TransaccionEntity> getTransaccionsByIdCuentaBanco() {
         return transaccionsByIdCuentaBanco;
     }
@@ -146,11 +173,21 @@ public class CuentabancoEntity {
         this.transaccionsByIdCuentaBanco = transaccionsByIdCuentaBanco;
     }
 
+    @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     public Collection<UsuarioEntity> getUsuariosByIdCuentaBanco() {
         return usuariosByIdCuentaBanco;
     }
 
     public void setUsuariosByIdCuentaBanco(Collection<UsuarioEntity> usuariosByIdCuentaBanco) {
         this.usuariosByIdCuentaBanco = usuariosByIdCuentaBanco;
+    }
+
+    @OneToMany(mappedBy = "cuentabancoByCuentaEmpresaIdCuentaBanco")
+    public Collection<EmpresaEntity> getEmpresasByIdCuentaBanco() {
+        return empresasByIdCuentaBanco;
+    }
+
+    public void setEmpresasByIdCuentaBanco(Collection<EmpresaEntity> empresasByIdCuentaBanco) {
+        this.empresasByIdCuentaBanco = empresasByIdCuentaBanco;
     }
 }
