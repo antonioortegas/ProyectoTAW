@@ -192,9 +192,8 @@ public class ClienteController {
         cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setTipoMoneda(cd.getMonedaCompra());
         this.usuarioRepository.save(cliente);
         TransaccionEntity transaccion = new TransaccionEntity();
-        transaccion.setFechaEjecucion(Date.valueOf(LocalDate.now()));
+        transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
         transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
-        transaccion.setFechaEjecucion(transaccion.getFechaInstruccion());
         transaccion.setCambiodivisaByCambioDivisaIdCambioDivisa(cd);
         this.transaccionRepository.save(transaccion);
         model.addAttribute("cliente", cliente);
