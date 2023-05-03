@@ -18,9 +18,9 @@
 </head>
 <body>
 <h1>Lista de Socios</h1>
-<button><a href=""> Mostrar Socios</a></button>
-<button><a href=""> Mostrar Autorizadas</a></button>
-<button><a href="">Mostrar Todos</a></button>
+<button><a href="mostrarSoloSocios?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Socios</a></button>
+<button><a href="mostrarSoloAutorizados?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Autorizadas</a></button>
+<button><a href="mostrarTodos?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Mostrar Todos</a></button>
 
 <ul id="listaSocios">
     <%for (UsuarioEntity usuario : listaUsuriosEmpresa) {%>
