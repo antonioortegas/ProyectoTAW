@@ -8,7 +8,8 @@
 <html>
 <%
     UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
-    List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
+    CambiodivisaEntity cd = (CambiodivisaEntity) request.getAttribute("cambioDivisa");
+    int pasta = (Integer.parseInt(cd.getCantidadVenta())/Integer.parseInt(cd.getCantidadCompra()))*cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();
 %>
 
 <head>
@@ -16,17 +17,8 @@
 </head>
 <body>
 La cuenta tiene un saldo de <%cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();  cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda();%><br>
-<form:form method="post" action="verificarCambioDivisa" >
-    La conversión será de <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()%> a:
-    <label for="cambio">--Selecciona la moneda de cambio--</label>
-    <select id="cambio" name="cambio">
-        <% for(CambiodivisaEntity cd : cambioDivisa){%>
-        <option value="<%=cd.getMonedaVenta()%>"></option>
-        <%}%>
-    </select><br>
-
-    <form:button>Realizar cambio</form:button>
-</form:form>
-
+Y pasará a tener <%=pasta%> <% cd.getMonedaCompra();%><br>
+<button onclick="/realizarCambio?id=<%=cliente.getIdUsuario()%>&cambioDivisa=<%=cd.getIdCambioDivisa()%>">Verificar cambio</button>
+<button onclick="/volverIndex?id=<%=cliente.getIdUsuario()%>">Cancelar operacion</button>
 </body>
 </html>

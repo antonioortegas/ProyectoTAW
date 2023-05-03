@@ -1,13 +1,7 @@
 package es.taw.proyectotaw.controller;
 
-import es.taw.proyectotaw.Entity.CambiodivisaEntity;
-import es.taw.proyectotaw.Entity.DireccionEntity;
-import es.taw.proyectotaw.Entity.PeticionEntity;
-import es.taw.proyectotaw.Entity.UsuarioEntity;
-import es.taw.proyectotaw.dao.CambiodivisaRepository;
-import es.taw.proyectotaw.dao.DireccionRepository;
-import es.taw.proyectotaw.dao.PeticionRepository;
-import es.taw.proyectotaw.dao.UsuarioRepository;
+import es.taw.proyectotaw.Entity.*;
+import es.taw.proyectotaw.dao.*;
 import es.taw.proyectotaw.ui.FormularioRegistroCliente;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
+
+import static java.lang.System.*;
 
 @Controller
 public class ClienteController {
@@ -37,6 +35,9 @@ public class ClienteController {
 
     @Autowired
     protected CambiodivisaRepository cambiodivisaRepository;
+
+    @Autowired
+    protected CuentabancoRepository cuentabancoRepository;
 
     @GetMapping("/Cliente/crearNuevoCliente")
     public String crearNuevoCliente(){
@@ -81,13 +82,19 @@ public class ClienteController {
         return "Cliente/historialOperaciones";
     }
 
+    @GetMapping("/volverIndex")
+    public String volverIndexCliente (Integer id, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        return "Cliente/indexCliente";
+    }
+
     @GetMapping("/cambioDeDivisaCliente")
     public String cambioDivisa (Integer id, Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("cliente", cliente);
-        List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.findAll();
+        List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
         model.addAttribute("cambioDivisa", cambioDivisa);
-
 
         return "Cliente/cambioDivisaCliente";
     }
@@ -96,9 +103,10 @@ public class ClienteController {
     public String pedirAlta (Integer id,  Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("cliente", cliente);
-        PeticionEntity peticion = null;
+        PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("alta");
         peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
         peticion.setUsuarioByUsuarioIdUsuario(cliente);
         this.peticionRepository.save(peticion);
         return "Cliente/indexCliente";
@@ -108,9 +116,10 @@ public class ClienteController {
     public String pedirActivo (Integer id, Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("cliente", cliente);
-        PeticionEntity peticion = null;
+        PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("activar");
         peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
         peticion.setUsuarioByUsuarioIdUsuario(cliente);
         this.peticionRepository.save(peticion);
         return "Cliente/indexCliente";
@@ -123,14 +132,34 @@ public class ClienteController {
         PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("desbloqueo");
         peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
         peticion.setUsuarioByUsuarioIdUsuario(cliente);
         this.peticionRepository.save(peticion);
         return "Cliente/indexCliente";
     }
 
     @PostMapping("/guardarCliente")
-    public String doEditar (@ModelAttribute("cliente") UsuarioEntity cliente) {
+    public String doGuardar (@ModelAttribute("cliente") UsuarioEntity cliente) {
         this.usuarioRepository.save(cliente);
+        return "Cliente/indexCliente";
+    }
+
+    @PostMapping("/verificarCambioDivisa")
+    public String doVerificarCambioDivisa (@RequestParam("cambio") String cambio, Model model) {
+        UsuarioEntity cliente = (UsuarioEntity) model.getAttribute("cliente");
+        CambiodivisaEntity cd = this.cambiodivisaRepository.miCambioDivisa(cambio, cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
+        model.addAttribute("cambioDivisa", cd);
+        model.addAttribute("cliente", cliente);
+        return "Cliente/verificarCambioDivisaCliente";
+    }
+
+    @GetMapping("/realizarCambio")
+    public String realizarCambio (Integer id,Integer cambioDivisa, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        CambiodivisaEntity cd = this.cambiodivisaRepository.getReferenceById(cambioDivisa);
+        int pasta = (Integer.parseInt(cd.getCantidadVenta())/Integer.parseInt(cd.getCantidadCompra()))*cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();
+
+        model.addAttribute("cliente", cliente);
         return "Cliente/indexCliente";
     }
 
