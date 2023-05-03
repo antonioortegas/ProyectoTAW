@@ -102,13 +102,13 @@ public class EmpresaController {
 
     @GetMapping("/Empresa/bloquearSocios")
     public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
-        //UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("nif");
+        UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
         System.out.println("Solicitamos lista de usuarios de una empresa");
         List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(id);
         //List<UsuarioEntity> listaUsuariosEmpresa = this.usuarioRepository.buscarUsuariosMismaEmpresa(1);
         System.out.println("Añadimos lista de usuarios");
         model.addAttribute("listaUsuriosEmpresa", listaUsuariosEmpresa);
-
+        model.addAttribute("socio",socio);
         for (UsuarioEntity u :
                 listaUsuariosEmpresa) {
             System.out.println(u.getNombre());
@@ -123,17 +123,18 @@ public class EmpresaController {
         String bloqueada = "bloqueada";
         System.out.println("entro");
 
+
         UsuarioEntity socio = usuarioRepository.getById(idCambio);
         System.out.println(socio.getNombre() + " " + socio.getTipoPersonaRelacionada());
 
         if (socio.getTipoPersonaRelacionada() == null) {
             socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
         } else {
-            if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals( bloqueada.toString().toLowerCase())) {
+            if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals(bloqueada.toString().toLowerCase())) {
                 socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
                 System.out.println(2);
                 System.out.println(socio.getTipoPersonaRelacionada());
-            } else if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals( desbloqueada.toString().toLowerCase())) {
+            } else if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals(desbloqueada.toString().toLowerCase())) {
                 socio.setTipoPersonaRelacionada(bloqueada.toLowerCase());
                 System.out.println(3);
                 System.out.println(socio.getTipoPersonaRelacionada());
@@ -157,6 +158,40 @@ public class EmpresaController {
 
     }
 
+    @GetMapping("/Empresa/mostrarSoloSocios")
+    public String mostrarSoloSocios(Integer idEmpresa, Model model, HttpSession httpSession) {
+        UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
+
+        List<UsuarioEntity> listaSocios = this.empresaRepository.buscarSocios(idEmpresa);
+
+        model.addAttribute("listaUsuriosEmpresa",listaSocios);
+        model.addAttribute("socio",socio);
+        httpSession.setAttribute("socio",socio);
+        httpSession.setAttribute("listaUsuariosEmpresa",listaSocios);
+        return "Empresa/bloquearSocios";
+
+    }
+    @GetMapping("/Empresa/mostrarSoloAutorizados")
+    public String mostrarSoloAutorizados(Integer idEmpresa, Model model, HttpSession httpSession) {
+        UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
+        List<UsuarioEntity> listaSocios = this.empresaRepository.buscarAutorizados(idEmpresa);
+        model.addAttribute("listaUsuriosEmpresa",listaSocios);
+        model.addAttribute("socio",socio);
+        httpSession.setAttribute("socio",socio);
+        httpSession.setAttribute("listaUsuariosEmpresa",listaSocios);
+        return "Empresa/bloquearSocios";
+
+    }   @GetMapping("/Empresa/mostrarTodos")
+    public String mostrarTodos(Integer idEmpresa, Model model, HttpSession httpSession) {
+        UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
+        List<UsuarioEntity> listaSocios = this.usuarioRepository.buscarUsuariosMismaEmpresa(idEmpresa);        model.addAttribute("listaUsuriosEmpresa",listaSocios);
+        model.addAttribute("socio",socio);
+        httpSession.setAttribute("socio",socio);
+        httpSession.setAttribute("listaUsuariosEmpresa",listaSocios);
+        return "Empresa/bloquearSocios";
+
+    }
+
 
     @GetMapping("/Empresa/editarDatosSocio")
     public String editarSocio(Integer id, Model model, HttpSession session) {
@@ -166,8 +201,9 @@ public class EmpresaController {
         model.addAttribute("empresa", empresa);
         return "Empresa/editarDatosSocio";
     }
+
     @PostMapping("/guardarSocio")
-    public String guardarSocio (@ModelAttribute("socio") UsuarioEntity socio) {
+    public String guardarSocio(@ModelAttribute("socio") UsuarioEntity socio) {
         this.usuarioRepository.save(socio);
         return "Empresa/sesionIniciadaEmpresa";
     }
