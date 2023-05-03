@@ -2,7 +2,6 @@ package es.taw.proyectotaw.controller;
 
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
-import es.taw.proyectotaw.ui.FormularioRegistroCliente;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -62,7 +61,13 @@ public class ClienteController {
 
         if (usuario == null) {
             model.addAttribute("error", "Credenciales incorrectas");
-        } else {
+        } else if(usuario.getEstadoUsuario().equals("bloqueado")){
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarDesbloqueo";
+        }else if(usuario.getEstadoUsuario().equals("pendiente")){
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarVerificado";
+        }else {
             model.addAttribute("cliente", usuario);
             urlTo = "Cliente/indexCliente";
         }
@@ -176,6 +181,9 @@ public class ClienteController {
                                    @RequestParam String ciudad, @RequestParam(required = false) String region,
                                    @RequestParam String pais, @RequestParam String cp, @RequestParam boolean valida,
                                    @RequestParam String contrasena, Model model) {
+        UsuarioEntity us = this.usuarioRepository.usuarioByNIF(nif);
+        String urlTo = "Cliente/usuarioExistente";
+        if(us==null){
         Byte val = 0;
         if(valida){
             val=1;
@@ -204,8 +212,10 @@ public class ClienteController {
         usuario.setDireccionByDireccionIdDireccion(direccion);
         this.usuarioRepository.save(usuario);
         model.addAttribute("cliente", usuario);
+        urlTo ="Cliente/esperarVerificado";
+        }
 
-        return "Cliente/esperarVerificado";
+        return urlTo;
     }
 
 }

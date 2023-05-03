@@ -38,7 +38,7 @@
 <body>
 <div class="mensaje">
     <h1>Bienvenido <%=cliente.getNombre()%></h1>
-    <p>Su cuenta está esperando a ser verificada por uno de nuestros gestores, disculpe las molestias.</p>
+    <p>Su cuenta está bloqueada.Si quiere solicitar su desbloqueo pulse <a href="/nuevaPeticionBloqueado?idUsuario=<%=cliente.getIdUsuario()%>">aquí</a>.</p>
 </div>
 </body>
 

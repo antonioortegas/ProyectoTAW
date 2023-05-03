@@ -18,6 +18,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     @Query("select u from UsuarioEntity u where u.nif = :nif and u.contrasena = :contrasena")
     public UsuarioEntity usuarioByNIFyContrasena (@Param("nif") String nif, @Param("contrasena")String contrasena);
 
+    @Query("select u from UsuarioEntity u where u.nif = :nif")
+    public UsuarioEntity usuarioByNIF (@Param("nif") String nif);
+
     @Query("select u from UsuarioEntity u where u.nif = :nif and u.contrasena = :contrasena")
     public UsuarioEntity autenticarUsuarioEmpresa (@Param("nif") String nif, @Param("contrasena")String contrasena);
 

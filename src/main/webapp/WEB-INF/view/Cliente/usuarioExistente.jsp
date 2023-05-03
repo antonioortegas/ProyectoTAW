@@ -6,12 +6,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
-<%
-    UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
-%>
 
 <head>
-    <title>Banco ABC</title>
+    <title>Title</title>
     <style>
         body {
             background-color: #f0f0f0;
@@ -37,8 +34,7 @@
 
 <body>
 <div class="mensaje">
-    <h1>Bienvenido <%=cliente.getNombre()%></h1>
-    <p>Su cuenta está esperando a ser verificada por uno de nuestros gestores, disculpe las molestias.</p>
+    <p>Este nif ya está asociado a un cliente.<br> <a href="Cliente/clientePrincipal">Volver al menú principal.</a></p>
 </div>
 </body>
 
