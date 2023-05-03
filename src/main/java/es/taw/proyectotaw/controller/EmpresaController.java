@@ -129,11 +129,11 @@ public class EmpresaController {
         if (socio.getTipoPersonaRelacionada() == null) {
             socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
         } else {
-            if (socio.getTipoPersonaRelacionada().toLowerCase() == bloqueada.toLowerCase()) {
+            if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals( bloqueada.toString().toLowerCase())) {
                 socio.setTipoPersonaRelacionada(desbloqueada.toLowerCase());
                 System.out.println(2);
                 System.out.println(socio.getTipoPersonaRelacionada());
-            } else if (socio.getTipoPersonaRelacionada().toLowerCase() == desbloqueada.toLowerCase()) {
+            } else if (socio.getTipoPersonaRelacionada().toString().toLowerCase().equals( desbloqueada.toString().toLowerCase())) {
                 socio.setTipoPersonaRelacionada(bloqueada.toLowerCase());
                 System.out.println(3);
                 System.out.println(socio.getTipoPersonaRelacionada());
