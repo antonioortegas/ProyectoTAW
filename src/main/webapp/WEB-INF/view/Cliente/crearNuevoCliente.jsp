@@ -2,43 +2,64 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <html>
-    <%
-    FormularioRegistroCliente formularioRegistroCliente =  new FormularioRegistroCliente();
-    %>
 <head>
-    <title>Formulario de Registro</title>
+    <title>Registrar Cliente</title>
 </head>
 <body>
-<h1>Registro de Persona</h1><br>
-<%--@elvariable id="FormularioRegistroCliente" type=""--%>
-<form method="post" th:object="${formularioRegistroCliente}" action="/registroCliente">
-    <a>Datos Personales</a><br>
-
-    NIF*:<input type="text" th:field="*{usuario.nif}" required/><br>
-    Nombre*:<input type="text" th:field="*{usuario.nombre}" required/><br>
-    Segundo Nombre:<input type="text" th:field="*{usuario.segundoNombre}"/><br>
-    Primer Apellido*:<input type="text" th:field="*{usuario.primerApellido}" required/><br>
-    Segundo Apellido:<input type="text" th:field="*{usuario.segundoApellido}" /><br>
-    Fecha Nacimiento*:<input type="date" th:field="*{usuario.fechaNacimiento}" required/><br>
-
-    <a>Dirección</a><br>
-
-    Calle (*):<input type="text" th:field="*{direccion.calle}" required/><br>
-    Número de Vivienda (*):<input type="text" th:field="*{direccion.numero}" required/><br>
-    Planta (*):<input type="text" th:field="*{direccion.puerta}" required/><br>
-    Ciudad (*):<input type="text" th:field="*{direccion.ciudad}" required/><br>
-    Región:<input type="text" th:field="*{direccion.region}" /><br>
-    País (*):<input type="text" th:field="*{direccion.pais}" required/><br>
-    CP (*):<input type="text" th:field="*{direccion.cp}" required/><br>
-    Valida (*): <input type="checkbox" th:field="*{direccion.valida}" required><br>
-
-    Contraseña (*):<input type="password" th:field="*{usuario.contrasena}" required/><br>
-
-    <input type="submit" value="Enviar">
-    <input type="reset" value="Reset">
+<h1>Registrar Cliente</h1>
+<form action="/registrarCliente" method="post">
+    <label for="nif">NIF*:</label>
+    <input type="text" id="nif" name="nif" required>
+    <br>
+    <label for="nombre">Nombre*:</label>
+    <input type="text" id="nombre" name="nombre" required>
+    <br>
+    <label for="segundoNombre">Segundo Nombre:</label>
+    <input type="text" id="segundoNombre" name="segundoNombre">
+    <br>
+    <label for="apellido1">Primer Apellido*:</label>
+    <input type="text" id="apellido1" name="apellido1" required>
+    <br>
+    <label for="apellido2">Segundo Apellido:</label>
+    <input type="text" id="apellido2" name="apellido2">
+    <br>
+    <label for="fechaNacimiento">Fecha Nacimiento*:</label>
+    <input type="date" id="fechaNacimiento" name="fechaNacimiento" required>
+    <br>
+    <label>Dirección:</label><br>
+    <label for="calle">Calle*:</label>
+    <input type="text" id="calle" name="calle" required>
+    <br>
+    <label for="numeroVivienda">Número de Vivienda*:</label>
+    <input type="text" id="numeroVivienda" name="numeroVivienda" required>
+    <br>
+    <label for="planta">Planta*:</label>
+    <input type="text" id="planta" name="planta" required>
+    <br>
+    <label for="ciudad">Ciudad*:</label>
+    <input type="text" id="ciudad" name="ciudad" required>
+    <br>
+    <label for="region">Región:</label>
+    <input type="text" id="region" name="region">
+    <br>
+    <label for="pais">País*:</label>
+    <input type="text" id="pais" name="pais" required>
+    <br>
+    <label for="cp">CP*:</label>
+    <input type="text" id="cp" name="cp" required>
+    <br>
+    <label for="valida">Valida*:</label>
+    <input type="checkbox" id="valida" name="valida" value="1" required>
+    <br>
+    <label for="contrasena">Contraseña*:</label>
+    <input type="password" id="contrasena" name="contrasena" required>
+    <br>
+    <input type="submit" value="Registrar">
+    <input type="reset" value="Limpiar">
 </form>
 <br>
-<button onclick="window.location.href='index.html'">Salir</button>
-</form>
 </body>
+</html>

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -158,26 +159,46 @@ public class ClienteController {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
         CambiodivisaEntity cd = this.cambiodivisaRepository.getReferenceById(cambioDivisa);
         int pasta = (Integer.parseInt(cd.getCantidadVenta())/Integer.parseInt(cd.getCantidadCompra()))*cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();
-
+        cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setSaldo(pasta);
+        cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setTipoMoneda(cd.getMonedaCompra());
+        this.usuarioRepository.save(cliente);
         model.addAttribute("cliente", cliente);
         return "Cliente/indexCliente";
     }
 
-    @PostMapping("/registroCliente")
-    public String registroCliente(@Valid @ModelAttribute("formularioRegistroCliente") FormularioRegistroCliente formularioRegistroCliente, BindingResult bindingResult, Model model) {
-        if (bindingResult.hasErrors()) {
-            return "formularioRegistroCliente";
-        } else {
-            UsuarioEntity cliente = formularioRegistroCliente.getUsuario();
-            DireccionEntity direccion = formularioRegistroCliente.getDireccion();
-            cliente.setDireccionByDireccionIdDireccion(direccion);
-            this.usuarioRepository.save(cliente);
-            this.direccionRepository.save(direccion);
-            model.addAttribute("cliente", cliente);
-            return "Cliente/indexCliente";
+
+    @PostMapping("/registrarCliente")
+    public String registrarCliente(@RequestParam String nif, @RequestParam String nombre,
+                                   @RequestParam(required = false) String segundoNombre, @RequestParam String apellido1,
+                                   @RequestParam(required = false) String apellido2, @RequestParam Date fechaNacimiento,
+                                   @RequestParam String calle, @RequestParam String numeroVivienda, @RequestParam String planta,
+                                   @RequestParam String ciudad, @RequestParam(required = false) String region,
+                                   @RequestParam String pais, @RequestParam String cp, @RequestParam boolean valida,
+                                   @RequestParam String contrasena) {
+        Byte val = 0;
+        if(valida){
+            val=1;
         }
+        UsuarioEntity usuario = new UsuarioEntity();
+        usuario.setContrasena(contrasena);
+        usuario.setFechaNacimiento(fechaNacimiento);
+        usuario.setNif(nif);
+        usuario.setNombre(nombre);
+        usuario.setSegundoNombre(segundoNombre);
+        usuario.setPrimerApellido(apellido1);
+        usuario.setSegundoApellido(apellido2);
+        DireccionEntity direccion = new DireccionEntity();
+        direccion.setCalle(calle);
+        direccion.setCiudad(ciudad);
+        direccion.setNumero(numeroVivienda);
+        direccion.setCp(cp);
+        direccion.setPais(pais);
+        direccion.setRegion(region);
+        direccion.setPuerta(planta);
+        direccion.setValida(val);
+        usuario.setDireccionByDireccionIdDireccion(direccion);
+        this.usuarioRepository.save(usuario);
+        return "redirect:/pagina-de-exito"; // Si quieres redirigir al usuario a otra página después de haber registrado al cliente
     }
-
-
 
 }
