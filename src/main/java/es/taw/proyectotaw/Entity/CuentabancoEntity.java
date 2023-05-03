@@ -44,6 +44,7 @@ public class CuentabancoEntity {
     private Collection<TransaccionEntity> transaccionsByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<UsuarioEntity> usuariosByIdCuentaBanco;
+    @OneToMany(mappedBy = "cuentabancoByCuentaEmpresaIdCuentaBanco")
     private Collection<EmpresaEntity> empresasByIdCuentaBanco;
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
