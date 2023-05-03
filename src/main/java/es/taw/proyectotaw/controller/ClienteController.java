@@ -2,7 +2,6 @@ package es.taw.proyectotaw.controller;
 
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
-import es.taw.proyectotaw.ui.FormularioRegistroCliente;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
@@ -17,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +61,13 @@ public class ClienteController {
 
         if (usuario == null) {
             model.addAttribute("error", "Credenciales incorrectas");
-        } else {
+        } else if(usuario.getEstadoUsuario().equals("bloqueado")){
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarDesbloqueo";
+        }else if(usuario.getEstadoUsuario().equals("pendiente")){
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarVerificado";
+        }else {
             model.addAttribute("cliente", usuario);
             urlTo = "Cliente/indexCliente";
         }
@@ -174,12 +180,16 @@ public class ClienteController {
                                    @RequestParam String calle, @RequestParam String numeroVivienda, @RequestParam String planta,
                                    @RequestParam String ciudad, @RequestParam(required = false) String region,
                                    @RequestParam String pais, @RequestParam String cp, @RequestParam boolean valida,
-                                   @RequestParam String contrasena) {
+                                   @RequestParam String contrasena, Model model) {
+        UsuarioEntity us = this.usuarioRepository.usuarioByNIF(nif);
+        String urlTo = "Cliente/usuarioExistente";
+        if(us==null){
         Byte val = 0;
         if(valida){
             val=1;
         }
         UsuarioEntity usuario = new UsuarioEntity();
+        usuario.setTipoUsuario("cliente");
         usuario.setContrasena(contrasena);
         usuario.setFechaNacimiento(fechaNacimiento);
         usuario.setNif(nif);
@@ -187,6 +197,8 @@ public class ClienteController {
         usuario.setSegundoNombre(segundoNombre);
         usuario.setPrimerApellido(apellido1);
         usuario.setSegundoApellido(apellido2);
+        usuario.setEstadoUsuario("pendiente");
+        usuario.setFechaInicio(Date.valueOf(LocalDate.now()));
         DireccionEntity direccion = new DireccionEntity();
         direccion.setCalle(calle);
         direccion.setCiudad(ciudad);
@@ -196,9 +208,14 @@ public class ClienteController {
         direccion.setRegion(region);
         direccion.setPuerta(planta);
         direccion.setValida(val);
+        this.direccionRepository.save(direccion);
         usuario.setDireccionByDireccionIdDireccion(direccion);
         this.usuarioRepository.save(usuario);
-        return "redirect:/pagina-de-exito"; // Si quieres redirigir al usuario a otra página después de haber registrado al cliente
+        model.addAttribute("cliente", usuario);
+        urlTo ="Cliente/esperarVerificado";
+        }
+
+        return urlTo;
     }
 
 }
