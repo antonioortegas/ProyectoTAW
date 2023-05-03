@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,9 @@ public class ClienteController {
 
     @Autowired
     protected CuentabancoRepository cuentabancoRepository;
+
+    @Autowired
+    protected TransaccionRepository transaccionRepository;
 
     @GetMapping("/Cliente/crearNuevoCliente")
     public String crearNuevoCliente(){
@@ -96,16 +100,6 @@ public class ClienteController {
         return "Cliente/indexCliente";
     }
 
-    @GetMapping("/cambioDeDivisaCliente")
-    public String cambioDivisa (Integer id, Model model, HttpSession session) {
-        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
-        model.addAttribute("cliente", cliente);
-        List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
-        model.addAttribute("cambioDivisa", cambioDivisa);
-
-        return "Cliente/cambioDivisaCliente";
-    }
-
     @GetMapping("/nuevaPeticionAlta")
     public String pedirAlta (Integer id,  Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
@@ -151,23 +145,58 @@ public class ClienteController {
         return "Cliente/indexCliente";
     }
 
-    @PostMapping("/verificarCambioDivisa")
-    public String doVerificarCambioDivisa (@RequestParam("cambio") String cambio, Model model) {
-        UsuarioEntity cliente = (UsuarioEntity) model.getAttribute("cliente");
-        CambiodivisaEntity cd = this.cambiodivisaRepository.miCambioDivisa(cambio, cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
-        model.addAttribute("cambioDivisa", cd);
+    @GetMapping("/pagoCliente")
+    public String pagoCliente (Integer id, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("cliente", cliente);
+        List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
+        model.addAttribute("cambioDivisa", cambioDivisa);
+
+        return "Cliente/pagoCliente";
+    }
+
+    @PostMapping("/verificarTransferencia")
+    public String doVerificarTransferencia (@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad,@RequestParam("iban") String iban, Model model) {
+        UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
         model.addAttribute("cliente", cliente);
         return "Cliente/verificarCambioDivisaCliente";
     }
 
-    @GetMapping("/realizarCambio")
-    public String realizarCambio (Integer id,Integer cambioDivisa, Model model, HttpSession session) {
+    @GetMapping("/cambioDeDivisaCliente")
+    public String cambioDivisa (Integer id, Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
-        CambiodivisaEntity cd = this.cambiodivisaRepository.getReferenceById(cambioDivisa);
-        int pasta = (Integer.parseInt(cd.getCantidadVenta())/Integer.parseInt(cd.getCantidadCompra()))*cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();
+        model.addAttribute("cliente", cliente);
+        List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
+        model.addAttribute("cambioDivisa", cambioDivisa);
+
+        return "Cliente/cambioDivisaCliente";
+    }
+
+    @PostMapping("/verificarCambioDivisa")
+    public String doVerificarCambioDivisa (@RequestParam("id") Integer id, @RequestParam("cambio") Integer cambio, Model model) {
+        UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
+        CambiodivisaEntity cd = this.cambiodivisaRepository.findById(cambio).orElse(null);
+        model.addAttribute("cambioDivisa", cd);
+        model.addAttribute("cliente", cliente);
+        float f = Float.valueOf(cd.getCantidadVenta()).floatValue()/Float.valueOf(cd.getCantidadCompra()).floatValue()*cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo();
+        int pasta = Float.valueOf(f).intValue();
+        model.addAttribute("pasta", pasta);
+        return "Cliente/verificarCambioDivisaCliente";
+    }
+
+    @GetMapping("/realizarCambio")
+    public String realizarCambio (Integer id,Integer cambioDivisa, Integer pasta, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
+        CambiodivisaEntity cd = this.cambiodivisaRepository.findById(cambioDivisa).orElse(null);
         cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setSaldo(pasta);
         cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setTipoMoneda(cd.getMonedaCompra());
         this.usuarioRepository.save(cliente);
+        TransaccionEntity transaccion = new TransaccionEntity();
+        transaccion.setFechaEjecucion(Date.valueOf(LocalDate.now()));
+        transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
+        transaccion.setFechaEjecucion(transaccion.getFechaInstruccion());
+        transaccion.setCambiodivisaByCambioDivisaIdCambioDivisa(cd);
+        this.transaccionRepository.save(transaccion);
         model.addAttribute("cliente", cliente);
         return "Cliente/indexCliente";
     }

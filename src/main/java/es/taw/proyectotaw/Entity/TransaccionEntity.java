@@ -28,9 +28,6 @@ public class TransaccionEntity {
     @JoinColumn(name = "Pago_id_pago", referencedColumnName = "id_pago", nullable = false)
     private PagoEntity pagoByPagoIdPago;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_transaccion", nullable = false)
     public Integer getIdTransaccion() {
         return idTransaccion;
     }
@@ -39,8 +36,6 @@ public class TransaccionEntity {
         this.idTransaccion = idTransaccion;
     }
 
-    @Basic
-    @Column(name = "fecha_instruccion", nullable = false)
     public Date getFechaInstruccion() {
         return fechaInstruccion;
     }
@@ -49,8 +44,6 @@ public class TransaccionEntity {
         this.fechaInstruccion = fechaInstruccion;
     }
 
-    @Basic
-    @Column(name = "fecha_ejecucion", nullable = true)
     public Date getFechaEjecucion() {
         return fechaEjecucion;
     }
@@ -72,8 +65,6 @@ public class TransaccionEntity {
         return Objects.hash(idTransaccion, fechaInstruccion, fechaEjecucion);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {
         return cuentabancoByCuentaBancoIdCuentaBanco;
     }
@@ -82,8 +73,6 @@ public class TransaccionEntity {
         this.cuentabancoByCuentaBancoIdCuentaBanco = cuentabancoByCuentaBancoIdCuentaBanco;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "cambio_divisa_id_cambio_divisa", referencedColumnName = "id_cambio_divisa", nullable = false)
     public CambiodivisaEntity getCambiodivisaByCambioDivisaIdCambioDivisa() {
         return cambiodivisaByCambioDivisaIdCambioDivisa;
     }
@@ -92,8 +81,6 @@ public class TransaccionEntity {
         this.cambiodivisaByCambioDivisaIdCambioDivisa = cambiodivisaByCambioDivisaIdCambioDivisa;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "Pago_id_pago", referencedColumnName = "id_pago", nullable = false)
     public PagoEntity getPagoByPagoIdPago() {
         return pagoByPagoIdPago;
     }

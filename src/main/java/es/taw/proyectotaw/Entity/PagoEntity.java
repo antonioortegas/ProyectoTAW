@@ -24,9 +24,6 @@ public class PagoEntity {
     @OneToMany(mappedBy = "pagoByPagoIdPago")
     private Collection<TransaccionEntity> transaccionsByIdPago;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_pago", nullable = false)
     public Integer getIdPago() {
         return idPago;
     }
@@ -35,8 +32,6 @@ public class PagoEntity {
         this.idPago = idPago;
     }
 
-    @Basic
-    @Column(name = "moneda", nullable = false, length = 45)
     public String getMoneda() {
         return moneda;
     }
@@ -45,8 +40,6 @@ public class PagoEntity {
         this.moneda = moneda;
     }
 
-    @Basic
-    @Column(name = "cantidad", nullable = false)
     public Integer getCantidad() {
         return cantidad;
     }
@@ -68,8 +61,6 @@ public class PagoEntity {
         return Objects.hash(idPago, moneda, cantidad);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "Beneficiario_id_beneficiario", referencedColumnName = "id_beneficiario", nullable = false)
     public BeneficiarioEntity getBeneficiarioByBeneficiarioIdBeneficiario() {
         return beneficiarioByBeneficiarioIdBeneficiario;
     }
@@ -78,7 +69,6 @@ public class PagoEntity {
         this.beneficiarioByBeneficiarioIdBeneficiario = beneficiarioByBeneficiarioIdBeneficiario;
     }
 
-    @OneToMany(mappedBy = "pagoByPagoIdPago")
     public Collection<TransaccionEntity> getTransaccionsByIdPago() {
         return transaccionsByIdPago;
     }

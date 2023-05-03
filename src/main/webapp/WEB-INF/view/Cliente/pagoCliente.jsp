@@ -6,12 +6,11 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%
+    <%
     UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
-    CambiodivisaEntity cd = (CambiodivisaEntity) request.getAttribute("cambioDivisa");
-    int pasta = (int) request.getAttribute("pasta");
+    List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
 %>
-
+<html>
 <head>
     <title>Title</title>
     <style>
@@ -28,8 +27,22 @@
         h1 {
             text-align: center;
         }
-        a {
-            display: inline-block;
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        label {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        select {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
@@ -37,19 +50,24 @@
             color: #fff;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
+            cursor: pointer;
         }
-        a:hover {
+        button:hover {
             background-color: #0062cc;
         }
     </style>
 </head>
 <body>
 <div id="container">
+    <h1>Transferencia bancaria</h1>
     <div>La cuenta tiene un saldo de <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%> <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()%></div>
-    <div>Y pasará a tener <%=pasta%> <%=cd.getMonedaCompra()%></div>
-    <a href="/volverIndex?id=<%=cliente.getIdUsuario()%>">Cancelar operación</a>
-    <a href="/realizarCambio?id=<%=cliente.getIdUsuario()%>&cambioDivisa=<%=cd.getIdCambioDivisa()%>&pasta=<%=pasta%>">Verificar cambio</a>
+    <form method="post" action="/verificarTransferencia">
+        <input type="hidden" name="id" value="<%=cliente.getIdUsuario()%>">
+        Cantidad:<input type="number" name="cantidad" max="<%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%>">
+        IBAN Beneficiario:<input type="text" name="iban">
+        <button>Realizar transferencia</button>
+    </form>
 </div>
 </body>
 </html>
+

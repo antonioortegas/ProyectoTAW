@@ -11,7 +11,7 @@
 %>
 
 <head>
-    <title>Banco ABC</title>
+    <title>Title</title>
     <style>
         body {
             background-color: #f0f0f0;

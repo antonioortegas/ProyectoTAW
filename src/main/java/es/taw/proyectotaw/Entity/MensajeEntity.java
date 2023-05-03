@@ -25,9 +25,6 @@ public class MensajeEntity {
     @JoinColumn(name = "usuario_origen", referencedColumnName = "id_usuario", nullable = false)
     private UsuarioEntity usuarioByUsuarioOrigen;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_mensaje", nullable = false)
     public Integer getIdMensaje() {
         return idMensaje;
     }
@@ -36,8 +33,6 @@ public class MensajeEntity {
         this.idMensaje = idMensaje;
     }
 
-    @Basic
-    @Column(name = "contenido", nullable = false, length = 256)
     public String getContenido() {
         return contenido;
     }
@@ -46,8 +41,6 @@ public class MensajeEntity {
         this.contenido = contenido;
     }
 
-    @Basic
-    @Column(name = "fecha_envio", nullable = false)
     public Timestamp getFechaEnvio() {
         return fechaEnvio;
     }
@@ -69,8 +62,6 @@ public class MensajeEntity {
         return Objects.hash(idMensaje, contenido, fechaEnvio);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_destino", referencedColumnName = "id_usuario", nullable = false)
     public UsuarioEntity getUsuarioByUsuarioDestino() {
         return usuarioByUsuarioDestino;
     }
@@ -79,8 +70,6 @@ public class MensajeEntity {
         this.usuarioByUsuarioDestino = usuarioByUsuarioDestino;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "usuario_origen", referencedColumnName = "id_usuario", nullable = false)
     public UsuarioEntity getUsuarioByUsuarioOrigen() {
         return usuarioByUsuarioOrigen;
     }

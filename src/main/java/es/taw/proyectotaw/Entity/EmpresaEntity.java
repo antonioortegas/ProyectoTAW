@@ -21,23 +21,12 @@ public class EmpresaEntity {
     @ManyToOne
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     private DireccionEntity direccionByDireccionIdDireccion;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_empresa_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
+    private CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco;
     @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
     private Collection<UsuarioEntity> usuariosByIdEmpresa;
-    private CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco;
 
-    public EmpresaEntity() {
-    }
-
-    public EmpresaEntity(Integer idEmpresa,String cif, String nombre, DireccionEntity direccionByDireccionIdDireccion) {
-        this.cif = cif;
-        this.nombre = nombre;
-        this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
-        this.usuariosByIdEmpresa = usuariosByIdEmpresa;
-    }
-
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_empresa", nullable = false)
     public Integer getIdEmpresa() {
         return idEmpresa;
     }
@@ -46,8 +35,6 @@ public class EmpresaEntity {
         this.idEmpresa = idEmpresa;
     }
 
-    @Basic
-    @Column(name = "cif", nullable = false, length = 45)
     public String getCif() {
         return cif;
     }
@@ -56,8 +43,6 @@ public class EmpresaEntity {
         this.cif = cif;
     }
 
-    @Basic
-    @Column(name = "nombre", nullable = false, length = 100)
     public String getNombre() {
         return nombre;
     }
@@ -79,8 +64,6 @@ public class EmpresaEntity {
         return Objects.hash(idEmpresa, cif, nombre);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     public DireccionEntity getDireccionByDireccionIdDireccion() {
         return direccionByDireccionIdDireccion;
     }
@@ -89,22 +72,19 @@ public class EmpresaEntity {
         this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
     }
 
-    @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
-    public Collection<UsuarioEntity> getUsuariosByIdEmpresa() {
-        return usuariosByIdEmpresa;
-    }
-
-    public void setUsuariosByIdEmpresa(Collection<UsuarioEntity> usuariosByIdEmpresa) {
-        this.usuariosByIdEmpresa = usuariosByIdEmpresa;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "cuenta_empresa_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     public CuentabancoEntity getCuentabancoByCuentaEmpresaIdCuentaBanco() {
         return cuentabancoByCuentaEmpresaIdCuentaBanco;
     }
 
     public void setCuentabancoByCuentaEmpresaIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco) {
         this.cuentabancoByCuentaEmpresaIdCuentaBanco = cuentabancoByCuentaEmpresaIdCuentaBanco;
+    }
+
+    public Collection<UsuarioEntity> getUsuariosByIdEmpresa() {
+        return usuariosByIdEmpresa;
+    }
+
+    public void setUsuariosByIdEmpresa(Collection<UsuarioEntity> usuariosByIdEmpresa) {
+        this.usuariosByIdEmpresa = usuariosByIdEmpresa;
     }
 }

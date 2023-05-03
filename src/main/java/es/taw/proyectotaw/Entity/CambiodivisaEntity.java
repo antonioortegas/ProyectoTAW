@@ -19,17 +19,14 @@ public class CambiodivisaEntity {
     @Column(name = "moneda_compra", nullable = false, length = 45)
     private String monedaCompra;
     @Basic
-    @Column(name = "cantidad_compra", nullable = false, length = 45)
-    private String cantidadCompra;
+    @Column(name = "cantidad_compra", nullable = false)
+    private Integer cantidadCompra;
     @Basic
-    @Column(name = "cantidad_venta", nullable = false, length = 45)
-    private String cantidadVenta;
+    @Column(name = "cantidad_venta", nullable = false)
+    private Integer cantidadVenta;
     @OneToMany(mappedBy = "cambiodivisaByCambioDivisaIdCambioDivisa")
     private Collection<TransaccionEntity> transaccionsByIdCambioDivisa;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_cambio_divisa", nullable = false)
     public Integer getIdCambioDivisa() {
         return idCambioDivisa;
     }
@@ -38,8 +35,6 @@ public class CambiodivisaEntity {
         this.idCambioDivisa = idCambioDivisa;
     }
 
-    @Basic
-    @Column(name = "moneda_venta", nullable = false, length = 45)
     public String getMonedaVenta() {
         return monedaVenta;
     }
@@ -48,8 +43,6 @@ public class CambiodivisaEntity {
         this.monedaVenta = monedaVenta;
     }
 
-    @Basic
-    @Column(name = "moneda_compra", nullable = false, length = 45)
     public String getMonedaCompra() {
         return monedaCompra;
     }
@@ -58,23 +51,19 @@ public class CambiodivisaEntity {
         this.monedaCompra = monedaCompra;
     }
 
-    @Basic
-    @Column(name = "cantidad_compra", nullable = false, length = 45)
-    public String getCantidadCompra() {
+    public Integer getCantidadCompra() {
         return cantidadCompra;
     }
 
-    public void setCantidadCompra(String cantidadCompra) {
+    public void setCantidadCompra(Integer cantidadCompra) {
         this.cantidadCompra = cantidadCompra;
     }
 
-    @Basic
-    @Column(name = "cantidad_venta", nullable = false, length = 45)
-    public String getCantidadVenta() {
+    public Integer getCantidadVenta() {
         return cantidadVenta;
     }
 
-    public void setCantidadVenta(String cantidadVenta) {
+    public void setCantidadVenta(Integer cantidadVenta) {
         this.cantidadVenta = cantidadVenta;
     }
 
@@ -91,7 +80,6 @@ public class CambiodivisaEntity {
         return Objects.hash(idCambioDivisa, monedaVenta, monedaCompra, cantidadCompra, cantidadVenta);
     }
 
-    @OneToMany(mappedBy = "cambiodivisaByCambioDivisaIdCambioDivisa")
     public Collection<TransaccionEntity> getTransaccionsByIdCambioDivisa() {
         return transaccionsByIdCambioDivisa;
     }
