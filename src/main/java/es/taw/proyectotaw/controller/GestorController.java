@@ -74,12 +74,12 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
             listaUsuarios = this.usuarioRepository.findAll();
         }
         if(filtroUsuarios.getPropiedad().equals("Pendiente de alta")&&filtroUsuarios.getOrden().equals("nif")){
-            listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeAlta();
+            //listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeAlta();
         }
         if(filtroUsuarios.getPropiedad().equals("30d")&&filtroUsuarios.getOrden().equals("nif")){
             Date fecha = new Date();
             fecha.setDate(fecha.getDate()-30);
-            listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(fecha);
+            //listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(fecha);
         }
         if(filtroUsuarios.getPropiedad().equals("Actividad sospechosa")&&filtroUsuarios.getOrden().equals("nif")){
             //ARREGLARlistaUsuarios = this.usuarioRepository.buscarUsuariosConActividadSospechosa();
@@ -164,9 +164,9 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
             }
             //if not first user of the company
             else{
-                List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findByCuentabancoByCuentaBancoIdCuentaBancoIsNotNullAndEmpresaByEmpresaIdEmpresaEquals(usuario.getEmpresaByEmpresaIdEmpresa());
-                usuario.setCuentabancoByCuentaBancoIdCuentaBanco(listaUsuarios.get(0).getCuentabancoByCuentaBancoIdCuentaBanco());
-                listaPeticiones.get(0).setEstadoPeticion("aceptada");
+                //List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findByCuentabancoByCuentaBancoIdCuentaBancoIsNotNullAndEmpresaByEmpresaIdEmpresaEquals(usuario.getEmpresaByEmpresaIdEmpresa());
+                //usuario.setCuentabancoByCuentaBancoIdCuentaBanco(listaUsuarios.get(0).getCuentabancoByCuentaBancoIdCuentaBanco());
+                //listaPeticiones.get(0).setEstadoPeticion("aceptada");
             }
             setActivo(usuario);
         }
