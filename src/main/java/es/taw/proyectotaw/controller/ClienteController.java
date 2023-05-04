@@ -78,8 +78,9 @@ public class ClienteController {
             model.addAttribute("cliente", usuario);
             urlTo = "Cliente/indexCliente";
         }
-
+//
         return urlTo;
+
     }
 
     @GetMapping("/editarUsuario")
