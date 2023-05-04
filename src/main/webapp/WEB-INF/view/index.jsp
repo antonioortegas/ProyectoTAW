@@ -20,6 +20,6 @@
 <button> <a href="Empresa/empresaPrincipal">Empresa</a>  </button> <br>
 <button> <a href="Cliente/clientePrincipal">Cliente</a></button> <br>
 <button> <a href="gestor/usuarios" >Gestor </a></button><br>
-<button> <a href="" >Asistente </a></button><br>
+<button> <a href="Asistencia/asistente" >Asistente </a></button><br>
 </body>
 </html>

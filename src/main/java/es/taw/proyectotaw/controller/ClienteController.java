@@ -76,6 +76,7 @@ public class ClienteController {
             urlTo = "Cliente/esperarVerificado";
         }else {
             model.addAttribute("cliente", usuario);
+            session.setAttribute("usuario", usuario);
             urlTo = "Cliente/indexCliente";
         }
 //
