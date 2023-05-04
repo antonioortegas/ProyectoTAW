@@ -40,6 +40,8 @@ public class CuentabancoEntity
     @Basic
     @Column(name = "sospechoso", nullable = false)
     private Byte sospechoso;
+    @OneToMany(mappedBy = "cuentabancoByCuentaEmpresaIdCuentaBanco")
+    private Collection<EmpresaEntity> empresasByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<TransaccionEntity> transaccionsByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
@@ -183,6 +185,16 @@ public class CuentabancoEntity
         result = 31 * result + (pais != null ? pais.hashCode() : 0);
         result = 31 * result + (sospechoso != null ? sospechoso.hashCode() : 0);
         return result;
+    }
+
+    public Collection<EmpresaEntity> getEmpresasByIdCuentaBanco()
+    {
+        return empresasByIdCuentaBanco;
+    }
+
+    public void setEmpresasByIdCuentaBanco(Collection<EmpresaEntity> empresasByIdCuentaBanco)
+    {
+        this.empresasByIdCuentaBanco = empresasByIdCuentaBanco;
     }
 
     public Collection<TransaccionEntity> getTransaccionsByIdCuentaBanco()

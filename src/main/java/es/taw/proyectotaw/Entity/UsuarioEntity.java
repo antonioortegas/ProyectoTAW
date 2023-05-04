@@ -53,10 +53,10 @@ public class UsuarioEntity
     @OneToMany(mappedBy = "usuarioByUsuarioIdUsuario")
     private Collection<PeticionEntity> peticionsByIdUsuario;
     @ManyToOne
-    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
+    @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
     @ManyToOne
-    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa", nullable = false)
+    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa")
     private EmpresaEntity empresaByEmpresaIdEmpresa;
     @ManyToOne
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)

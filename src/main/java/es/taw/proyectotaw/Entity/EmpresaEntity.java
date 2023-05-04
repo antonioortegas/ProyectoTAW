@@ -21,6 +21,9 @@ public class EmpresaEntity
     @ManyToOne
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     private DireccionEntity direccionByDireccionIdDireccion;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_empresa_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
+    private CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco;
     @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
     private Collection<UsuarioEntity> usuariosByIdEmpresa;
 
@@ -86,6 +89,16 @@ public class EmpresaEntity
     public void setDireccionByDireccionIdDireccion(DireccionEntity direccionByDireccionIdDireccion)
     {
         this.direccionByDireccionIdDireccion = direccionByDireccionIdDireccion;
+    }
+
+    public CuentabancoEntity getCuentabancoByCuentaEmpresaIdCuentaBanco()
+    {
+        return cuentabancoByCuentaEmpresaIdCuentaBanco;
+    }
+
+    public void setCuentabancoByCuentaEmpresaIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco)
+    {
+        this.cuentabancoByCuentaEmpresaIdCuentaBanco = cuentabancoByCuentaEmpresaIdCuentaBanco;
     }
 
     public Collection<UsuarioEntity> getUsuariosByIdEmpresa()

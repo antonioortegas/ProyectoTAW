@@ -18,9 +18,9 @@ public class PagoEntity
     @Basic
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
-    @ManyToOne
-    @JoinColumn(name = "Beneficiario_id_beneficiario", referencedColumnName = "id_beneficiario", nullable = false)
-    private BeneficiarioEntity beneficiarioByBeneficiarioIdBeneficiario;
+    @Basic
+    @Column(name = "iban_beneficiario", nullable = true, length = 45)
+    private String ibanBeneficiario;
     @OneToMany(mappedBy = "pagoByPagoIdPago")
     private Collection<TransaccionEntity> transaccionsByIdPago;
 
@@ -54,6 +54,16 @@ public class PagoEntity
         this.cantidad = cantidad;
     }
 
+    public String getIbanBeneficiario()
+    {
+        return ibanBeneficiario;
+    }
+
+    public void setIbanBeneficiario(String ibanBeneficiario)
+    {
+        this.ibanBeneficiario = ibanBeneficiario;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -65,6 +75,8 @@ public class PagoEntity
         if (idPago != null ? !idPago.equals(that.idPago) : that.idPago != null) return false;
         if (moneda != null ? !moneda.equals(that.moneda) : that.moneda != null) return false;
         if (cantidad != null ? !cantidad.equals(that.cantidad) : that.cantidad != null) return false;
+        if (ibanBeneficiario != null ? !ibanBeneficiario.equals(that.ibanBeneficiario) : that.ibanBeneficiario != null)
+            return false;
 
         return true;
     }
@@ -75,17 +87,8 @@ public class PagoEntity
         int result = idPago != null ? idPago.hashCode() : 0;
         result = 31 * result + (moneda != null ? moneda.hashCode() : 0);
         result = 31 * result + (cantidad != null ? cantidad.hashCode() : 0);
+        result = 31 * result + (ibanBeneficiario != null ? ibanBeneficiario.hashCode() : 0);
         return result;
-    }
-
-    public BeneficiarioEntity getBeneficiarioByBeneficiarioIdBeneficiario()
-    {
-        return beneficiarioByBeneficiarioIdBeneficiario;
-    }
-
-    public void setBeneficiarioByBeneficiarioIdBeneficiario(BeneficiarioEntity beneficiarioByBeneficiarioIdBeneficiario)
-    {
-        this.beneficiarioByBeneficiarioIdBeneficiario = beneficiarioByBeneficiarioIdBeneficiario;
     }
 
     public Collection<TransaccionEntity> getTransaccionsByIdPago()

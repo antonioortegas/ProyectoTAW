@@ -19,11 +19,11 @@ public class CambiodivisaEntity
     @Column(name = "moneda_compra", nullable = false, length = 45)
     private String monedaCompra;
     @Basic
-    @Column(name = "cantidad_compra", nullable = false, length = 45)
-    private String cantidadCompra;
+    @Column(name = "cantidad_compra", nullable = false)
+    private Integer cantidadCompra;
     @Basic
-    @Column(name = "cantidad_venta", nullable = false, length = 45)
-    private String cantidadVenta;
+    @Column(name = "cantidad_venta", nullable = false)
+    private Integer cantidadVenta;
     @OneToMany(mappedBy = "cambiodivisaByCambioDivisaIdCambioDivisa")
     private Collection<TransaccionEntity> transaccionsByIdCambioDivisa;
 
@@ -57,22 +57,22 @@ public class CambiodivisaEntity
         this.monedaCompra = monedaCompra;
     }
 
-    public String getCantidadCompra()
+    public Integer getCantidadCompra()
     {
         return cantidadCompra;
     }
 
-    public void setCantidadCompra(String cantidadCompra)
+    public void setCantidadCompra(Integer cantidadCompra)
     {
         this.cantidadCompra = cantidadCompra;
     }
 
-    public String getCantidadVenta()
+    public Integer getCantidadVenta()
     {
         return cantidadVenta;
     }
 
-    public void setCantidadVenta(String cantidadVenta)
+    public void setCantidadVenta(Integer cantidadVenta)
     {
         this.cantidadVenta = cantidadVenta;
     }

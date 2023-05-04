@@ -22,10 +22,10 @@ public class TransaccionEntity
     @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
     @ManyToOne
-    @JoinColumn(name = "cambio_divisa_id_cambio_divisa", referencedColumnName = "id_cambio_divisa", nullable = false)
+    @JoinColumn(name = "cambio_divisa_id_cambio_divisa", referencedColumnName = "id_cambio_divisa")
     private CambiodivisaEntity cambiodivisaByCambioDivisaIdCambioDivisa;
     @ManyToOne
-    @JoinColumn(name = "Pago_id_pago", referencedColumnName = "id_pago", nullable = false)
+    @JoinColumn(name = "Pago_id_pago", referencedColumnName = "id_pago")
     private PagoEntity pagoByPagoIdPago;
 
     public Integer getIdTransaccion()
