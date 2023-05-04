@@ -39,7 +39,9 @@ public class CuentabancoEntity {
     private String pais;
     @Basic
     @Column(name = "sospechoso", nullable = false)
-    private Integer sospechoso;
+    private Byte sospechoso;
+    @OneToMany(mappedBy = "cuentabancoByCuentaEmpresaIdCuentaBanco")
+    private Collection<EmpresaEntity> empresasByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
     private Collection<TransaccionEntity> transaccionsByIdCuentaBanco;
     @OneToMany(mappedBy = "cuentabancoByCuentaBancoIdCuentaBanco")
@@ -117,11 +119,11 @@ public class CuentabancoEntity {
         this.pais = pais;
     }
 
-    public Integer getSospechoso() {
+    public Byte getSospechoso() {
         return sospechoso;
     }
 
-    public void setSospechoso(Integer sospechoso) {
+    public void setSospechoso(Byte sospechoso) {
         this.sospechoso = sospechoso;
     }
 
@@ -136,6 +138,14 @@ public class CuentabancoEntity {
     @Override
     public int hashCode() {
         return Objects.hash(idCuentaBanco, numeroCuenta, saldo, estadoCuenta, fechaApertura, fechaCierre, tipoMoneda, iban, pais, sospechoso);
+    }
+
+    public Collection<EmpresaEntity> getEmpresasByIdCuentaBanco() {
+        return empresasByIdCuentaBanco;
+    }
+
+    public void setEmpresasByIdCuentaBanco(Collection<EmpresaEntity> empresasByIdCuentaBanco) {
+        this.empresasByIdCuentaBanco = empresasByIdCuentaBanco;
     }
 
     public Collection<TransaccionEntity> getTransaccionsByIdCuentaBanco() {

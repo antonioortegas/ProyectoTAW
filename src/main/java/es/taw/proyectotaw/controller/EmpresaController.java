@@ -38,10 +38,10 @@ public class EmpresaController {
     public String procesarFormularioEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion) {
         System.out.println("PETA 1");
         //DireccionEntity direccionEntity = new DireccionEntity(11,"CAlle pilar","33","aa","MALAGA","SPAIN","12341", (byte) 1);
-        DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
-        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
-        this.direccionRepository.save(direccionEntity);
-        this.empresaRepository.save(empresa1);
+        //DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
+        //EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
+        //this.direccionRepository.save(direccionEntity);
+        //this.empresaRepository.save(empresa1);
         //this.empresaRepository.save(empresa);
         System.out.println(empresa.getNombre());
         System.out.println(empresa.getIdEmpresa());
