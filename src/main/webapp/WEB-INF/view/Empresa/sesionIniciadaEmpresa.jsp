@@ -11,6 +11,7 @@
 
 <%
     UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
+
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
 %>
 <head>
@@ -25,26 +26,26 @@
 
 %>
     <button><a href="Empresa/crearNuevoSocio">Dar de alta a nuevo socio</a></button>
-    <button><a href="Empresa/bloquearSocios?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Bloquear socios</a></button>
+    <button><a href="Empresa/bloquearSocios?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Lista de socios</a></button>
     <button><a href="/Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>">Modificar datos personales</a></button>
-    <button><a href="Empresa/editarDatosEmpresa?id=<%= empresa.getIdEmpresa() %>">Modificar datos Empresa</a></button>
+    <button><a href="Empresa/editarDatosEmpresa?id=<%= socio.getIdUsuario() %>">Modificar datos Empresa</a></button>
 
 <%
     }
 %>
 
 <br>
-<%=empresa.getNombre()%>
+<%=socio.getEmpresaByEmpresaIdEmpresa().getNombre()%>
 <br>
 <button><a href="">Transferencia bancaria</a></button>
 <button><a href="">Cambio de divisas</a></button>
-<button><a href="">Ver historial de operaciones</a></button>
+<button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
 <button><a href="">Estado de la cuenta</a></button>
 <button><a href="">Salir</a></button>
 <br>
 <br>
 <br>
-<a>IBAN: </a><%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
-<a>SALDO:</a><%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>
+<a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
+<a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>
 </body>
 </html>

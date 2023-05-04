@@ -47,10 +47,10 @@ public class EmpresaController {
     public String procesarFormularioEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion) {
         System.out.println("PETA 1");
         //DireccionEntity direccionEntity = new DireccionEntity(11,"CAlle pilar","33","aa","MALAGA","SPAIN","12341", (byte) 1);
-        DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
-        EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
-        this.direccionRepository.save(direccionEntity);
-        this.empresaRepository.save(empresa1);
+        //DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
+        //EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
+        //this.direccionRepository.save(direccionEntity);
+        //this.empresaRepository.save(empresa1);
         //this.empresaRepository.save(empresa);
         System.out.println(empresa.getNombre());
         System.out.println(empresa.getIdEmpresa());
@@ -197,7 +197,7 @@ public class EmpresaController {
     public String editarSocio(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("socio", socio);
-        EmpresaEntity empresa = this.empresaRepository.getReferenceById(socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa());
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
         model.addAttribute("empresa", empresa);
         return "Empresa/editarDatosSocio";
     }
@@ -209,18 +209,28 @@ public class EmpresaController {
     }
 
 
-    @RequestMapping("/Empresa/editarDatosEmpresa")
+    @GetMapping("/Empresa/editarDatosEmpresa")
     public String editarEmpresa(Integer id, Model model, HttpSession session) {
-        UsuarioEntity socio = (UsuarioEntity) session.getAttribute("socio");
-        model.addAttribute("socio", socio);
-        System.out.println(1);
-        EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
-        System.out.println(2);
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
         model.addAttribute("empresa", empresa);
-        System.out.println(3);
-        this.empresaRepository.save(empresa);
-        System.out.println(4);
+        model.addAttribute("socio",socio);
+
         return "Empresa/editarDatosEmpresa";
+    }
+
+    @PostMapping("/guardarEmpresa")
+    public String guardarEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa) {
+        this.empresaRepository.save(empresa);
+        //Añadir socio al modelo??
+        return "Empresa/sesionIniciadaEmpresa";
+    }
+
+    @GetMapping("/historialOperacionesEmpresa")
+    public String mostrarHistorial (Integer id, Model model, HttpSession session) {
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+        model.addAttribute("socio", socio);
+        return "Empresa/historialOperacionesEmpresa";
     }
 
 

@@ -20,11 +20,14 @@
 <body>
 <%--@elvariable id="socio" type=""--%>
 <%--@elvariable id="empresa" type=""--%>
-<form:form method="post" modelAttribute="empresa" action="/editarDatosEmpresa" >
+<form:form method="post" modelAttribute="empresa" action="/guardarEmpresa" >
     Nombre: <form:input path="nombre" size="30" maxlength="30"  /><br/>
     CIF: <form:input path="cif" size="30" maxlength="30"  /><br/>
+    <form:hidden path="idEmpresa"></form:hidden>
+    <form:hidden path="direccionByDireccionIdDireccion"></form:hidden>
+    <form:hidden path="cuentabancoByCuentaEmpresaIdCuentaBanco"></form:hidden>
 
-    <form:button><a href="loginSocio">Submit</a></form:button>
+    <form:button>Submit</form:button>
 </form:form>
 
 </body>
