@@ -44,6 +44,9 @@ public class ClienteController {
     @Autowired
     protected TransaccionRepository transaccionRepository;
 
+    @Autowired
+    protected PagoRepository pagoRepository;
+
     @GetMapping("/Cliente/crearNuevoCliente")
     public String crearNuevoCliente(){
         return "/Cliente/crearNuevoCliente";
@@ -157,7 +160,7 @@ public class ClienteController {
 
     @PostMapping("/verificarTransferencia")
     public String doVerificarPago (@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad, @RequestParam("iban") String iban, Model model) {
-        String UrlTo = "Cliente/verificarCambioDivisaCliente";
+        String UrlTo = "Cliente/verificarPagoCliente";
         UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
         CuentabancoEntity cb = this.cuentabancoRepository.cuentaDestinatario(iban);
         PagoEntity pago = new PagoEntity();
@@ -165,13 +168,14 @@ public class ClienteController {
         pago.setMoneda(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
         pago.setIbanBeneficiario(iban);
         if(cb!=null){//si la cuenta es de nuestro banco le sumamos el dinero si posee el mismo tipo de moneda
-            if(cb.getTipoMoneda()==cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()){
+            if(cb.getTipoMoneda().equals(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda())){
                 cb.setSaldo(cb.getSaldo()+cantidad);
                 cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setSaldo(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()-cantidad);
                 this.usuarioRepository.save(cliente);
                 TransaccionEntity transaccion = new TransaccionEntity();
                 transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
                 transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
+                this.pagoRepository.save(pago);
                 transaccion.setPagoByPagoIdPago(pago);
                 this.transaccionRepository.save(transaccion);
             } else {
@@ -184,6 +188,7 @@ public class ClienteController {
             TransaccionEntity transaccion = new TransaccionEntity();
             transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
             transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
+            this.pagoRepository.save(pago);
             transaccion.setPagoByPagoIdPago(pago);
             this.transaccionRepository.save(transaccion);
         }
