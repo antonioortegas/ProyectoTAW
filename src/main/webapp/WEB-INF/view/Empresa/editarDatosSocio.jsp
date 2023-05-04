@@ -19,7 +19,7 @@
 </head>
 <body>
 <%--@elvariable id="socio" type=""--%>
-<form:form method="post" modelAttribute="socio" action="/editarDatosSocio" >
+<form:form method="post" modelAttribute="socio" action="/guardarSocio" >
     Nombre: <form:input path="nombre" size="30" maxlength="30"  /><br/>
     Segundo nombre: <form:input path="segundoNombre" size="30" maxlength="30"  /><br/>
     Primer apellido: <form:input path="primerApellido" size="30" maxlength="30"  /><br/>
@@ -31,7 +31,10 @@
     <form:hidden path="fechaInicio"/>
     <form:hidden path="cuentabancoByCuentaBancoIdCuentaBanco"/>
     <form:hidden path="empresaByEmpresaIdEmpresa"/>
+    <form:hidden path="tipoPersonaRelacionada"/>
     <form:hidden path="direccionByDireccionIdDireccion"/>
+    <form:hidden path="estadoUsuario"/>
+    <form:hidden path="tipoUsuario"/>
     <form:button>Submit</form:button>
 </form:form>
 

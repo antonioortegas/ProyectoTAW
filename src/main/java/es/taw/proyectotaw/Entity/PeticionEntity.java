@@ -61,8 +61,8 @@ public class PeticionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PeticionEntity that = (PeticionEntity) o;
-        return Objects.equals(idPeticion, that.idPeticion) && Objects.equals(tipoPeticion, that.tipoPeticion) && Objects.equals(fechaPeticion, that.fechaPeticion) && Objects.equals(estadoPeticion, that.estadoPeticion);
+        PeticionEntity peticion = (PeticionEntity) o;
+        return Objects.equals(idPeticion, peticion.idPeticion) && Objects.equals(tipoPeticion, peticion.tipoPeticion) && Objects.equals(fechaPeticion, peticion.fechaPeticion) && Objects.equals(estadoPeticion, peticion.estadoPeticion);
     }
 
     @Override

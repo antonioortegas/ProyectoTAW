@@ -82,7 +82,7 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
             listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(fecha);
         }
         if(filtroUsuarios.getPropiedad().equals("Actividad sospechosa")&&filtroUsuarios.getOrden().equals("nif")){
-            listaUsuarios = this.usuarioRepository.buscarUsuariosConActividadSospechosa();
+            //ARREGLARlistaUsuarios = this.usuarioRepository.buscarUsuariosConActividadSospechosa();
         }
 
 
@@ -101,7 +101,7 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
             listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(fecha);
         }
         if(filtroEmpresas.getPropiedadE().equals("Actividad sospechosa")&&filtroEmpresas.getOrdenE().equals("cif")){
-            listaEmpresas = this.empresaRepository.buscarEmpresasConActividadSospechosa();
+           //ARREGLAR listaEmpresas = this.empresaRepository.buscarEmpresasConActividadSospechosa();
         }
 
 

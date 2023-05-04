@@ -11,6 +11,7 @@
 
 <%
     UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
+
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
 %>
 <head>
@@ -19,25 +20,32 @@
 <body>
 <h1>Bienvenido a la Aplicación Bancaria</h1>
 <h2>Menú Principal</h2>
-
+<%="Bienvenido " + socio.getNombre()%> <br>
 <%
     if (socio.getTipoUsuario().toLowerCase().equals("socio")) {
 
 %>
-    <button><a href="">Dar de alta a nuevo socio</a></button>
-    <button><a href="Empresa/bloquearSocios">Bloquear socios</a></button>
-    <button><a href="Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>">Modificar datos personales</a></button>
-    <button><a href="Empresa/editarDatosEmpresa?id=<%= empresa.getIdEmpresa() %>">Modificar datos Empresa</a></button>
+    <button><a href="Empresa/crearNuevoSocio">Dar de alta a nuevo socio</a></button>
+    <button><a href="Empresa/bloquearSocios?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Lista de socios</a></button>
+    <button><a href="/Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>">Modificar datos personales</a></button>
+    <button><a href="Empresa/editarDatosEmpresa?id=<%= socio.getIdUsuario() %>">Modificar datos Empresa</a></button>
 
 <%
     }
 %>
-<%=empresa.getNombre()%>
+
+<br>
+<%=socio.getEmpresaByEmpresaIdEmpresa().getNombre()%>
+<br>
 <button><a href="">Transferencia bancaria</a></button>
 <button><a href="">Cambio de divisas</a></button>
-<button><a href="">Ver historial de operaciones</a></button>
+<button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
 <button><a href="">Estado de la cuenta</a></button>
 <button><a href="">Salir</a></button>
-
+<br>
+<br>
+<br>
+<a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
+<a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>
 </body>
 </html>

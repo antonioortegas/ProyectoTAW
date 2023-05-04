@@ -18,9 +18,9 @@ public class PagoEntity {
     @Basic
     @Column(name = "cantidad", nullable = false)
     private Integer cantidad;
-    @ManyToOne
-    @JoinColumn(name = "Beneficiario_id_beneficiario", referencedColumnName = "id_beneficiario", nullable = false)
-    private BeneficiarioEntity beneficiarioByBeneficiarioIdBeneficiario;
+    @Basic
+    @Column(name = "iban_beneficiario", nullable = true, length = 45)
+    private String ibanBeneficiario;
     @OneToMany(mappedBy = "pagoByPagoIdPago")
     private Collection<TransaccionEntity> transaccionsByIdPago;
 
@@ -48,25 +48,25 @@ public class PagoEntity {
         this.cantidad = cantidad;
     }
 
+    public String getIbanBeneficiario() {
+        return ibanBeneficiario;
+    }
+
+    public void setIbanBeneficiario(String ibanBeneficiario) {
+        this.ibanBeneficiario = ibanBeneficiario;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PagoEntity that = (PagoEntity) o;
-        return Objects.equals(idPago, that.idPago) && Objects.equals(moneda, that.moneda) && Objects.equals(cantidad, that.cantidad);
+        return Objects.equals(idPago, that.idPago) && Objects.equals(moneda, that.moneda) && Objects.equals(cantidad, that.cantidad) && Objects.equals(ibanBeneficiario, that.ibanBeneficiario);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idPago, moneda, cantidad);
-    }
-
-    public BeneficiarioEntity getBeneficiarioByBeneficiarioIdBeneficiario() {
-        return beneficiarioByBeneficiarioIdBeneficiario;
-    }
-
-    public void setBeneficiarioByBeneficiarioIdBeneficiario(BeneficiarioEntity beneficiarioByBeneficiarioIdBeneficiario) {
-        this.beneficiarioByBeneficiarioIdBeneficiario = beneficiarioByBeneficiarioIdBeneficiario;
+        return Objects.hash(idPago, moneda, cantidad, ibanBeneficiario);
     }
 
     public Collection<TransaccionEntity> getTransaccionsByIdPago() {

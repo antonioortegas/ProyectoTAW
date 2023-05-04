@@ -117,8 +117,8 @@ public class DireccionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        DireccionEntity that = (DireccionEntity) o;
-        return Objects.equals(idDireccion, that.idDireccion) && Objects.equals(calle, that.calle) && Objects.equals(numero, that.numero) && Objects.equals(puerta, that.puerta) && Objects.equals(ciudad, that.ciudad) && Objects.equals(pais, that.pais) && Objects.equals(cp, that.cp) && Objects.equals(region, that.region) && Objects.equals(valida, that.valida);
+        DireccionEntity direccion = (DireccionEntity) o;
+        return Objects.equals(idDireccion, direccion.idDireccion) && Objects.equals(calle, direccion.calle) && Objects.equals(numero, direccion.numero) && Objects.equals(puerta, direccion.puerta) && Objects.equals(ciudad, direccion.ciudad) && Objects.equals(pais, direccion.pais) && Objects.equals(cp, direccion.cp) && Objects.equals(region, direccion.region) && Objects.equals(valida, direccion.valida);
     }
 
     @Override

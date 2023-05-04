@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
     List<UsuarioEntity> listaUsuriosEmpresa = (List<UsuarioEntity>) request.getAttribute("listaUsuriosEmpresa");
 
 %>
@@ -18,14 +18,33 @@
 </head>
 <body>
 <h1>Lista de Socios</h1>
+<button><a href="mostrarSoloSocios?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Socios</a></button>
+<button><a href="mostrarSoloAutorizados?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Autorizadas</a></button>
+<button><a href="mostrarTodos?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Mostrar Todos</a></button>
+
 <ul id="listaSocios">
     <%for (UsuarioEntity usuario : listaUsuriosEmpresa) {%>
     <li>
         <span><%= usuario.getNombre()%></span>
-        <span><%=usuario.getEmpresaByEmpresaIdEmpresa().getNombre()%></span>
-        <button onclick="bloquearDesbloquearSocio(1)">Bloquear/Desbloquear</button>
+        <span><%= usuario.getPrimerApellido()%></span>
+        <span><%= usuario.getTipoUsuario()%></span>
+        <span><%= usuario.getTipoPersonaRelacionada()%></span>
+        <!--<span><%=usuario.getEmpresaByEmpresaIdEmpresa().getNombre()%></span>-->
+        <%
+            if (usuario.getTipoPersonaRelacionada() == "bloqueada") {
+        %>
+        <button><a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Desbloquear</a></button>
+        <%
+        } else {%>
+        <button><a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Bloquear</a></button>
+        <%
+            }
+        %>
+
     </li>
+
     <%}%>
+    <button><a href="goEmpresaPrincipal">SALIR</a></button>
     <!-- Añadir más elementos de lista para los demás socios -->
 </ul>
 
