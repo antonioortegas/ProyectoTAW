@@ -78,9 +78,7 @@ public class ClienteController {
             model.addAttribute("cliente", usuario);
             urlTo = "Cliente/indexCliente";
         }
-//
         return urlTo;
-
     }
 
     @GetMapping("/editarUsuario")
@@ -244,39 +242,41 @@ public class ClienteController {
                                    @RequestParam String calle, @RequestParam String numeroVivienda, @RequestParam String planta,
                                    @RequestParam String ciudad, @RequestParam(required = false) String region,
                                    @RequestParam String pais, @RequestParam String cp, @RequestParam boolean valida,
-                                   @RequestParam String contrasena, Model model) {
+                                   @RequestParam String contrasena, @RequestParam String repcontrasena, Model model) {
         UsuarioEntity us = this.usuarioRepository.usuarioByNIF(nif);
         String urlTo = "Cliente/usuarioExistente";
-        if(us==null){
-        Byte val = 0;
-        if(valida){
-            val=1;
-        }
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setTipoUsuario("cliente");
-        usuario.setContrasena(contrasena);
-        usuario.setFechaNacimiento(fechaNacimiento);
-        usuario.setNif(nif);
-        usuario.setNombre(nombre);
-        usuario.setSegundoNombre(segundoNombre);
-        usuario.setPrimerApellido(apellido1);
-        usuario.setSegundoApellido(apellido2);
-        usuario.setEstadoUsuario("pendiente");
-        usuario.setFechaInicio(Date.valueOf(LocalDate.now()));
-        DireccionEntity direccion = new DireccionEntity();
-        direccion.setCalle(calle);
-        direccion.setCiudad(ciudad);
-        direccion.setNumero(numeroVivienda);
-        direccion.setCp(cp);
-        direccion.setPais(pais);
-        direccion.setRegion(region);
-        direccion.setPuerta(planta);
-        direccion.setValida(val);
-        this.direccionRepository.save(direccion);
-        usuario.setDireccionByDireccionIdDireccion(direccion);
-        this.usuarioRepository.save(usuario);
-        model.addAttribute("cliente", usuario);
-        urlTo ="Cliente/esperarVerificado";
+        if(us==null && contrasena.equals(repcontrasena)) {
+            Byte val = 0;
+            if (valida) {
+                val = 1;
+            }
+            UsuarioEntity usuario = new UsuarioEntity();
+            usuario.setTipoUsuario("cliente");
+            usuario.setContrasena(contrasena);
+            usuario.setFechaNacimiento(fechaNacimiento);
+            usuario.setNif(nif);
+            usuario.setNombre(nombre);
+            usuario.setSegundoNombre(segundoNombre);
+            usuario.setPrimerApellido(apellido1);
+            usuario.setSegundoApellido(apellido2);
+            usuario.setEstadoUsuario("pendiente");
+            usuario.setFechaInicio(Date.valueOf(LocalDate.now()));
+            DireccionEntity direccion = new DireccionEntity();
+            direccion.setCalle(calle);
+            direccion.setCiudad(ciudad);
+            direccion.setNumero(numeroVivienda);
+            direccion.setCp(cp);
+            direccion.setPais(pais);
+            direccion.setRegion(region);
+            direccion.setPuerta(planta);
+            direccion.setValida(val);
+            this.direccionRepository.save(direccion);
+            usuario.setDireccionByDireccionIdDireccion(direccion);
+            this.usuarioRepository.save(usuario);
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarVerificado";
+        }else{
+            urlTo = "/Cliente/crearNuevoCliente";
         }
 
         return urlTo;
