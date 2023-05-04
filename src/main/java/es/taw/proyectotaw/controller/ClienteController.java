@@ -156,10 +156,40 @@ public class ClienteController {
     }
 
     @PostMapping("/verificarTransferencia")
-    public String doVerificarTransferencia (@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad,@RequestParam("iban") String iban, Model model) {
+    public String doVerificarPago (@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad, @RequestParam("iban") String iban, Model model) {
+        String UrlTo = "Cliente/verificarCambioDivisaCliente";
         UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
+        CuentabancoEntity cb = this.cuentabancoRepository.cuentaDestinatario(iban);
+        PagoEntity pago = new PagoEntity();
+        pago.setCantidad(cantidad);
+        pago.setMoneda(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda());
+        pago.setIbanBeneficiario(iban);
+        if(cb!=null){//si la cuenta es de nuestro banco le sumamos el dinero si posee el mismo tipo de moneda
+            if(cb.getTipoMoneda()==cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()){
+                cb.setSaldo(cb.getSaldo()+cantidad);
+                cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setSaldo(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()-cantidad);
+                this.usuarioRepository.save(cliente);
+                TransaccionEntity transaccion = new TransaccionEntity();
+                transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
+                transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
+                transaccion.setPagoByPagoIdPago(pago);
+                this.transaccionRepository.save(transaccion);
+            } else {
+                UrlTo = "Cliente/errorMonedaDistinta";
+            }
+        }else{
+
+            cliente.getCuentabancoByCuentaBancoIdCuentaBanco().setSaldo(cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()-cantidad);
+            this.usuarioRepository.save(cliente);
+            TransaccionEntity transaccion = new TransaccionEntity();
+            transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
+            transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(cliente.getCuentabancoByCuentaBancoIdCuentaBanco());
+            transaccion.setPagoByPagoIdPago(pago);
+            this.transaccionRepository.save(transaccion);
+        }
         model.addAttribute("cliente", cliente);
-        return "Cliente/verificarCambioDivisaCliente";
+
+        return UrlTo;
     }
 
     @GetMapping("/cambioDeDivisaCliente")

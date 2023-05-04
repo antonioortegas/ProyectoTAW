@@ -23,11 +23,12 @@
     <%
         if (cliente.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
     %>
-    <h2>Transacciones del cliente :</h2>
+    <h2>Historial de transacciones:</h2>
     <tr>
         <th>Nombre</th>
         <th>IBAN</th>
         <th>Fecha de Instruccion</th>
+        <th>Tipo</th>
     </tr>
 
 
@@ -48,7 +49,12 @@
         </td>
         <td><%= cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
         <td><%= transaccion.getFechaInstruccion() %></td>
-
+        <td><%if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa()!=null){ %>
+            Cambio de divisa
+        <%}else{%>
+            Pago
+            <%}%>
+        </td>
 
 
     </tr>

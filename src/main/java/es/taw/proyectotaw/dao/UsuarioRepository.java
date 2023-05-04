@@ -35,8 +35,9 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     @Query("select u from UsuarioEntity u inner join PeticionEntity p on u=p.usuarioByUsuarioIdUsuario where p.estadoPeticion like 'noprocesada' and p.tipoPeticion like 'alta'")
      public List<UsuarioEntity> buscarUsuariosConSolicitudDeAlta();
 
-    @Query("select u from UsuarioEntity u inner join CuentabancoEntity c on u.cuentabancoByCuentaBancoIdCuentaBanco=c inner join TransaccionEntity t on t.cuentabancoByCuentaBancoIdCuentaBanco=c inner join PagoEntity p on t.pagoByPagoIdPago=p inner join BeneficiarioEntity b on p.beneficiarioByBeneficiarioIdBeneficiario=b where b.numeroCuentaBeneficiario like c.iban and c.sospechoso=1")
-    public List<UsuarioEntity> buscarUsuariosConActividadSospechosa();
+    //ARREGLAR
+    //@Query("select u from UsuarioEntity u inner join CuentabancoEntity c on u.cuentabancoByCuentaBancoIdCuentaBanco=c inner join TransaccionEntity t on t.cuentabancoByCuentaBancoIdCuentaBanco=c inner join PagoEntity p on t.pagoByPagoIdPago=p inner join BeneficiarioEntity b on p.beneficiarioByBeneficiarioIdBeneficiario=b where b.numeroCuentaBeneficiario like c.iban and c.sospechoso=1")
+    //public List<UsuarioEntity> buscarUsuariosConActividadSospechosa();
 
     @Query("select u from UsuarioEntity u where u not in (select u from UsuarioEntity u inner join CuentabancoEntity c on u.cuentabancoByCuentaBancoIdCuentaBanco=c inner join TransaccionEntity t on t.cuentabancoByCuentaBancoIdCuentaBanco=c where t.fechaInstruccion > :fecha or c.transaccionsByIdCuentaBanco is empty)")
     public List<UsuarioEntity> buscarUsuariosConInactividadDe30Dias(Date fecha);
