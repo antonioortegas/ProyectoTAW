@@ -48,7 +48,7 @@
                 }
             %>
         </td>
-        <td><%= socio.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
+        <td><%= cuentaBanco.getIban() %></td>
         <td><%= transaccion.getFechaInstruccion() %></td>
 
 

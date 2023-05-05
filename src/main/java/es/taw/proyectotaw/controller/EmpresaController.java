@@ -4,6 +4,7 @@ package es.taw.proyectotaw.controller;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
+import es.taw.proyectotaw.ui.FEditarEmpresa;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,7 @@ public class EmpresaController {
         //this.empresaRepository.save(empresa);
         return "Empresa/crearNuevaEmpresa";
     }
+
     @GetMapping("/Empresa/SalirEmpresa")
     public String salirEmpresa(Model model) {
 
@@ -228,19 +230,28 @@ public class EmpresaController {
 
 
     @GetMapping("/Empresa/editarDatosEmpresa")
-    public String editarEmpresa(Integer id, Model model, HttpSession session) {
+    public String editarEmpresa(Integer id, Model model, HttpSession httpSession) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
-        model.addAttribute("empresa", empresa);
-        model.addAttribute("socio", socio);
+
+        FEditarEmpresa fEditarEmpresa = new FEditarEmpresa(empresa.getNombre(), empresa.getCif(), empresa.getIdEmpresa(), empresa.getDireccionByDireccionIdDireccion().getIdDireccion(), empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIdCuentaBanco(), socio.getIdUsuario());
+
+        model.addAttribute("fEditarEmpresa", fEditarEmpresa);
+
 
         return "Empresa/editarDatosEmpresa";
     }
 
     @PostMapping("/guardarEmpresa")
-    public String guardarEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa) {
+    public String guardarEmpresa(@ModelAttribute("fEditarEmpresa") FEditarEmpresa fEditarEmpresa,Model model) {
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(fEditarEmpresa.getIdEmpresa());
+        empresa.setCif(fEditarEmpresa.getCif());
+        empresa.setNombre(fEditarEmpresa.getNombre());
         this.empresaRepository.save(empresa);
-        //Añadir socio al modelo??
+
+        model.addAttribute("empresa",empresa);
+        model.addAttribute("socio",this.usuarioRepository.getReferenceById(fEditarEmpresa.getIdSocio()));
+
         return "Empresa/sesionIniciadaEmpresa";
     }
 
@@ -261,6 +272,7 @@ public class EmpresaController {
 
         return "Empresa/pagoEmpresa";
     }
+
 
     @PostMapping("/verificarTransferenciaEmpresa")
     public String doVerificarPago(@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad, @RequestParam("iban") String iban, Model model) {
@@ -303,9 +315,8 @@ public class EmpresaController {
     }
 
 
-
     @GetMapping("/cambioDeDivisaEmpresa")
-    public String cambioDivisa (Integer id, Model model, HttpSession session) {
+    public String cambioDivisa(Integer id, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
         model.addAttribute("empresa", empresa);
         List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda());
@@ -313,13 +324,14 @@ public class EmpresaController {
 
         return "Empresa/cambioDivisaEmpresa";
     }
+
     @PostMapping("/verificarCambioDivisaEmpresa")
-    public String doVerificarCambioDivisa (@RequestParam("id") Integer id, @RequestParam("cambio") Integer cambio, Model model) {
+    public String doVerificarCambioDivisa(@RequestParam("id") Integer id, @RequestParam("cambio") Integer cambio, Model model) {
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         CambiodivisaEntity cd = this.cambiodivisaRepository.findById(cambio).orElse(null);
         model.addAttribute("cambioDivisa", cd);
         model.addAttribute("empresa", empresa);
-        float f = Float.valueOf(cd.getCantidadVenta()).floatValue()/Float.valueOf(cd.getCantidadCompra()).floatValue()*empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo();
+        float f = Float.valueOf(cd.getCantidadVenta()).floatValue() / Float.valueOf(cd.getCantidadCompra()).floatValue() * empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo();
         int pasta = Float.valueOf(f).intValue();
         model.addAttribute("pasta", pasta);
         return "Empresa/verificarCambioDivisaEmpresa";
