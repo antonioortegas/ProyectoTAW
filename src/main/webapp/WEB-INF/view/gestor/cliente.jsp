@@ -116,9 +116,10 @@
                         %>
                         <h2>Transacciones del cliente :</h2>
                         <tr>
-                            <th>Nombre</th>
-                            <th>IBAN</th>
-                            <th>Fecha de Instruccion</th>
+                            <th>TIPO</th>
+                            <th>Fecha de instruccion</th>
+                            <th>IBAN destino</th>
+                            <th>Cambio de divisa</th>
                         </tr>
 
 
@@ -127,18 +128,29 @@
                         %>
                         <tr>
                             <td>
-                                <%= usuario.getNombre() %>
-                                <%= usuario.getPrimerApellido() %>
                                 <%
-                                    if(usuario.getSegundoApellido() != null) {
+                                    if(transaccion.getPagoByPagoIdPago() != null){
                                 %>
-                                <%= usuario.getSegundoApellido() %>
+                                <%= "Pago" %>
                                 <%
-                                    }
+                                } else {
                                 %>
+                                <%= "Cambio de divisa" %>
+                                <% } %>
                             </td>
-                            <td><%= usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
                             <td><%= transaccion.getFechaInstruccion() %></td>
+                            <td>
+                                <%
+                                    if(transaccion.getPagoByPagoIdPago() != null){
+                                %>
+                                <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario()%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null){ %>
+                                <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() + " -> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
+                                <% } %>
+                            </td>
 
 
 

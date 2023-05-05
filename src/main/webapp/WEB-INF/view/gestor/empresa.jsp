@@ -59,13 +59,7 @@
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCalle()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getNumero()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getPuerta() %><br>
-                <%
-                    if(empresa.getUsuariosByIdEmpresa() != null){
-                %>
-                Iban de la empresa: <%= empresa.getUsuariosByIdEmpresa().iterator().next().getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %><br>
-                <%
-                    }
-                %>
+                Iban de la empresa: <%= empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban() %><br>
                 <hr>
                 <h2>Socios / Autorizados</h2>
                 <div>
@@ -124,8 +118,10 @@
 
                         <tr>
                             <th>Nombre</th>
-                            <th>IBAN</th>
+                            <th>TIPO</th>
                             <th>Fecha de instruccion</th>
+                            <th>IBAN destino</th>
+                            <th>Cambio de divisa</th>
                         </tr>
 
                         <%
@@ -145,8 +141,31 @@
                                     }
                                 %>
                             </td>
-                            <td><%= u.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
+                            <td>
+                                <%
+                                if(transaccion.getPagoByPagoIdPago() != null){
+                                %>
+                                <%= "Pago" %>
+                                <%
+                                } else {
+                                %>
+                                    <%= "Cambio de divisa" %>
+                                <% } %>
+                            </td>
                             <td><%= transaccion.getFechaInstruccion() %></td>
+                            <td>
+                            <%
+                                if(transaccion.getPagoByPagoIdPago() != null){
+                            %>
+                                    <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario()%>
+                            <% } %>
+                            </td>
+                            <td>
+                            <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null){ %>
+                                    <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() + " -> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
+                            <% } %>
+                            </td>
+
 
 
                         </tr>

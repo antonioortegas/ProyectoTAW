@@ -1,9 +1,6 @@
 package es.taw.proyectotaw.controller;
 
-import es.taw.proyectotaw.Entity.CuentabancoEntity;
-import es.taw.proyectotaw.Entity.EmpresaEntity;
-import es.taw.proyectotaw.Entity.PeticionEntity;
-import es.taw.proyectotaw.Entity.UsuarioEntity;
+import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.CuentabancoRepository;
 import es.taw.proyectotaw.dao.EmpresaRepository;
 import es.taw.proyectotaw.dao.PeticionRepository;
@@ -18,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +34,8 @@ public class GestorController {
     @Autowired
     private PeticionRepository peticionRepository;
 
+
+    //LISTADO DE USUARIOS
     @GetMapping("/gestor/usuarios")
     public String listarUsuarios(Model model){
         if(model.containsAttribute("filtroUsuarios")&&model.containsAttribute("filtroEmpresas")) {
@@ -51,38 +51,37 @@ public class GestorController {
         }
     }
 
-
-
-    @PostMapping("/gestor/filtrarUsuarios")
-public String filtrarUsuarios(Model model, @ModelAttribute("filtroUsuarios") FiltroUsuarios filtroUsuarios, @ModelAttribute("filtroEmpresas") FiltroEmpresas filtroEmpresas){
-        return procesarFiltrado(model, filtroUsuarios, filtroEmpresas);
-    }
-
-    @PostMapping("/gestor/filtrarEmpresas")
-public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") FiltroUsuarios filtroUsuarios, @ModelAttribute("filtroEmpresas") FiltroEmpresas filtroEmpresas){
+    //FILTROS
+    @PostMapping("/gestor/filtrar")
+    public String filtrarUsuarios(Model model, @ModelAttribute("filtroUsuarios") FiltroUsuarios filtroUsuarios, @ModelAttribute("filtroEmpresas") FiltroEmpresas filtroEmpresas){
         return procesarFiltrado(model, filtroUsuarios, filtroEmpresas);
     }
 
     private String procesarFiltrado(Model model, FiltroUsuarios filtroUsuarios, FiltroEmpresas filtroEmpresas) {
+        List<CuentabancoEntity> listaCuentasSospechosas = this.cuentabancoRepository.findAllBySospechosoEquals(1);
+        model.addAttribute("listaCuentasSospechosas", listaCuentasSospechosas);
+
         List<UsuarioEntity> listaUsuarios = null;
         List<EmpresaEntity> listaEmpresas = null;
         if(filtroUsuarios == null){
             filtroUsuarios = new FiltroUsuarios();
             listaUsuarios = this.usuarioRepository.findAll();
         }
-        if(filtroUsuarios.getPropiedad().equals("")&&filtroUsuarios.getOrden().equals("nif")){
+        if(filtroUsuarios.getPropiedadU().equals("")&&filtroUsuarios.getOrdenU().equals("nif")){
             listaUsuarios = this.usuarioRepository.findAll();
         }
-        if(filtroUsuarios.getPropiedad().equals("Pendiente de alta")&&filtroUsuarios.getOrden().equals("nif")){
-            //listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeAlta();
+        if(filtroUsuarios.getPropiedadU().equals("Pendiente de alta")&&filtroUsuarios.getOrdenU().equals("nif")){
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeTipo("alta");
         }
-        if(filtroUsuarios.getPropiedad().equals("30d")&&filtroUsuarios.getOrden().equals("nif")){
-            Date fecha = new Date();
-            fecha.setDate(fecha.getDate()-30);
-            //listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(fecha);
+        if(filtroUsuarios.getPropiedadU().equals("30d")&&filtroUsuarios.getOrdenU().equals("nif")){
+            LocalDate date = LocalDate.now().minusDays(30);
+            Date dateBefore30Days = java.sql.Date.valueOf(date);
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(dateBefore30Days);
+            System.out.println(listaUsuarios.size());
         }
-        if(filtroUsuarios.getPropiedad().equals("Actividad sospechosa")&&filtroUsuarios.getOrden().equals("nif")){
-            //ARREGLARlistaUsuarios = this.usuarioRepository.buscarUsuariosConActividadSospechosa();
+        if(filtroUsuarios.getPropiedadU().equals("Actividad sospechosa")&&filtroUsuarios.getOrdenU().equals("nif")){
+            List<UsuarioEntity> listaUsuariosCompleta = this.usuarioRepository.findAll();
+
         }
 
 
@@ -94,32 +93,28 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
             listaEmpresas = this.empresaRepository.findAll();
         }
         if(filtroEmpresas.getPropiedadE().equals("Pendiente de alta")&&filtroEmpresas.getOrdenE().equals("cif")){
-            listaEmpresas = this.empresaRepository.buscarEmpresasConSolicitudDeAlta();
+            listaEmpresas = this.empresaRepository.buscarEmpresasConSolicitudDeTipo("alta");
         }
         if(filtroEmpresas.getPropiedadE().equals("30d")&&filtroEmpresas.getOrdenE().equals("cif")){
-            java.sql.Date fecha = new java.sql.Date(new Date().getTime()-30*24*60*60*1000);
-            listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(fecha);
+            LocalDate date = LocalDate.now().minusDays(30);
+            Date dateBefore30Days = java.sql.Date.valueOf(date);
+            listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(dateBefore30Days);
         }
         if(filtroEmpresas.getPropiedadE().equals("Actividad sospechosa")&&filtroEmpresas.getOrdenE().equals("cif")){
-           //ARREGLAR listaEmpresas = this.empresaRepository.buscarEmpresasConActividadSospechosa();
-        }
-
-
-        if(listaUsuarios == null){
-            listaUsuarios = this.usuarioRepository.findAll();
+            listaEmpresas = this.empresaRepository.findAll();
         }
 
         model.addAttribute("listaUsuarios", listaUsuarios);
         model.addAttribute("listaEmpresas", listaEmpresas);
 
-        List<CuentabancoEntity> listaCuentasSospechosas = this.cuentabancoRepository.findAllBySospechosoEquals(1);
-        model.addAttribute("listaCuentasSospechosas", listaCuentasSospechosas);
+
 
         model.addAttribute("filtroUsuarios", filtroUsuarios);
         model.addAttribute("filtroEmpresas", filtroEmpresas);
         return "gestor/listadoUsuarios";
     }
 
+    //DETALLES DE UN CLIENTE
     @GetMapping("/gestor/cliente")
     public String verDetallesCliente(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
@@ -127,6 +122,7 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
         return "gestor/cliente";
     }
 
+    //DETALLES DE UNA EMPRESA
     @GetMapping("/gestor/empresa")
     public String verDetallesEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
@@ -135,154 +131,165 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
         return "gestor/empresa";
     }
 
-    @GetMapping("/gestor/aceptarUsuario")
+    //=====
+    //ACCIONES DE GESTOR SOBRE USUARIOS
+    //=====
+
+    //ACEPTAR ALTA DE USUARIO
+    @GetMapping("/gestor/aceptarAltaUsuario")
     public String aceptarUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "alta");
-        //if persona fisica
-        if(usuario.getTipoUsuario().equals("cliente")){
-            if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().size() > 0){
-                CuentabancoEntity cuenta = this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().get(0);
-                usuario.setCuentabancoByCuentaBancoIdCuentaBanco(cuenta);
-                setActivo(usuario);
-                listaPeticiones.get(0).setEstadoPeticion("aceptada");
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "alta");
+        if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().size() > 0){
+            CuentabancoEntity cuenta = null;
+            if(usuario.getTipoUsuario().equals("cliente")){
+                cuenta = this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().get(0);
+            } else if((usuario.getTipoUsuario().equals("socio") || usuario.getTipoUsuario().equals("autorizado"))&& usuario.getEmpresaByEmpresaIdEmpresa().getEstadoEmpresa().equals("activo")){
+                cuenta = usuario.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco();
             } else{
-                System.out.println("No hay cuentas disponibles");
+                System.out.println("La empresa no está activa");
             }
+            usuario.setCuentabancoByCuentaBancoIdCuentaBanco(cuenta);
+            setEstadoUsuario(usuario, "activo");
+            for(PeticionEntity peticion : listaPeticiones){
+                aceptarPeticion(peticion);
+            }
+            this.usuarioRepository.save(usuario);
+        } else{
+            System.out.println("No hay cuentas disponibles");
         }
-        //if socio o autorizado
-        if(usuario.getTipoUsuario().equals("socio")||usuario.getTipoUsuario().equals("autorizado")){
-            //if first user of the company
-            if(usuario.getEmpresaByEmpresaIdEmpresa().getUsuariosByIdEmpresa().size() == 1){
-                if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().size() > 0){
-                    CuentabancoEntity cuenta = this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().get(0);
-                    usuario.setCuentabancoByCuentaBancoIdCuentaBanco(cuenta);
-                    listaPeticiones.get(0).setEstadoPeticion("aceptada");
-                } else{
-                    System.out.println("No hay cuentas disponibles");
-                }
-            }
-            //if not first user of the company
-            else{
-                //List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findByCuentabancoByCuentaBancoIdCuentaBancoIsNotNullAndEmpresaByEmpresaIdEmpresaEquals(usuario.getEmpresaByEmpresaIdEmpresa());
-                //usuario.setCuentabancoByCuentaBancoIdCuentaBanco(listaUsuarios.get(0).getCuentabancoByCuentaBancoIdCuentaBanco());
-                //listaPeticiones.get(0).setEstadoPeticion("aceptada");
-            }
-            setActivo(usuario);
-        }
-
-        //Terminar peticion
-        this.peticionRepository.save(listaPeticiones.get(0));
-        this.usuarioRepository.save(usuario);
-
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping("/gestor/denegarUsuario")
+    //DENEGAR ALTA DE USUARIO
+    @GetMapping("/gestor/denegarAltaUsuario")
     public String denegarUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "alta");
-        rechazarPeticion(listaPeticiones.get(0));
-        usuario.setEstadoUsuario("pendiente");
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "alta");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
         this.usuarioRepository.save(usuario);
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping("/gestor/bloquearUsuario")
-    public String bloquearUsuario(Model model, @RequestParam("id_usuario") Integer id){
-        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        usuario.setEstadoUsuario("bloqueado");
-        this.usuarioRepository.save(usuario);
-        return "redirect:/gestor/usuarios";
-    }
-
-    @GetMapping("/gestor/activarUsuario")
+    //ACEPTAR ACTIVACION DE USUARIO
+    @GetMapping("/gestor/aceptarActivarUsuario")
     public String activarUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        setActivo(usuario);
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "activar");
-        aceptarPeticion(listaPeticiones.get(0));
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "activar");
+        for (PeticionEntity peticion: listaPeticiones) {
+            aceptarPeticion(peticion);
+        }
+        setEstadoUsuario(usuario, "activo");
         this.usuarioRepository.save(usuario);
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping("/gestor/denegarActivacionUsuario")
+    //DENEGAR ACTIVACION DE USUARIO
+    @GetMapping("/gestor/denegarActivarUsuario")
     public String denegarActivacionUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        usuario.setEstadoUsuario("inactivo");
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "activar");
-        rechazarPeticion(listaPeticiones.get(0));
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "activar");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
         this.usuarioRepository.save(usuario);
         return "redirect:/gestor/usuarios";
     }
 
+    //ACEPTAR DESBLOQUEO DE USUARIO
+    @GetMapping("/gestor/aceptarDesbloquearUsuario")
+    public String desbloquearUsuario(Model model, @RequestParam("id_usuario") Integer id){
+        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "desbloqueo");
+        for (PeticionEntity peticion: listaPeticiones) {
+            aceptarPeticion(peticion);
+        }
+        setEstadoUsuario(usuario, "activo");
+        this.usuarioRepository.save(usuario);
+        return "redirect:/gestor/usuarios";
+    }
+
+    //DENEGAR DESBLOQUEO DE USUARIO
+    @GetMapping("/gestor/denegarDesbloquearUsuario")
+    public String denegarDesbloqueoUsuario(Model model, @RequestParam("id_usuario") Integer id){
+        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "desbloqueo");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
+        this.usuarioRepository.save(usuario);
+        return "redirect:/gestor/usuarios";
+    }
+
+    //DESACTIVAR USUARIO POR INACTIVIDAD
     @GetMapping("/gestor/desactivarUsuario")
     public String desactivarUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        usuario.setEstadoUsuario("inactivo");
+        rechazarPeticionesUsuario(usuario);
+        setEstadoUsuario(usuario, "inactivo");
         this.usuarioRepository.save(usuario);
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping("/gestor/desbloquearUsuario")
-    public String desbloquearUsuario(Model model, @RequestParam("id_usuario") Integer id){
+    //BLOQUEAR USUARIO POR ACTIVIDAD SOSPECHOSA
+    @GetMapping("/gestor/bloquearUsuario")
+    public String bloquearUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        usuario.setEstadoUsuario("activo");
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "desbloqueo");
-        aceptarPeticion(listaPeticiones.get(0));
+        rechazarPeticionesUsuario(usuario);
+        setEstadoUsuario(usuario, "bloqueado");
         this.usuarioRepository.save(usuario);
         return "redirect:/gestor/usuarios";
     }
 
-    @GetMapping("/gestor/denegarDesbloqueoUsuario")
-    public String denegarDesbloqueoUsuario(Model model, @RequestParam("id_usuario") Integer id){
-        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
-        List<PeticionEntity> listaPeticiones = buscarPeticiones(usuario, "noprocesada", "desbloqueo");
-        rechazarPeticion(listaPeticiones.get(0));
-        this.usuarioRepository.save(usuario);
+    //=====
+    //ACCIONES DE GESTOR SOBRE EMPRESAS
+    //=====
+
+    //ACEPTAR ALTA DE EMPRESA
+    @GetMapping("/gestor/aceptarAltaEmpresa")
+    public String aceptarAltaEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "alta");
+        for (PeticionEntity peticion: listaPeticiones) {
+            aceptarPeticion(peticion);
+        }
+        setEstadoEmpresa(empresa, "activo");
+        this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
 
+    //DENEGAR ALTA DE EMPRESA
+    @GetMapping("/gestor/denegarAltaEmpresa")
+    public String denegarAltaEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "alta");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
+    //BLOQUEAR EMPRESA POR ACTIVIDAD SOSPECHOSA
     @GetMapping ("/gestor/bloquearEmpresa")
     public String bloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
-        List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
-        for(UsuarioEntity usuario : listaUsuarios){
-            usuario.setEstadoUsuario("bloqueado");
-            this.usuarioRepository.save(usuario);
-            List<PeticionEntity> listaPeticionesActivas = buscarPeticionesActivas(usuario, "noprocesada");
-            for(PeticionEntity peticion : listaPeticionesActivas){
-                peticion.setEstadoPeticion("denegada");
-                this.peticionRepository.save(peticion);
-            }
-        }
+        rechazarPeticionesEmpresa(empresa);
+        setEstadoEmpresa(empresa, "bloqueado");
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
 
+    //DESACTIVAR EMPRESA POR INACTIVIDAD
     @GetMapping ("/gestor/desactivarEmpresa")
     public String desactivarEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
-        List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
-        for(UsuarioEntity usuario : listaUsuarios){
-            usuario.setEstadoUsuario("inactivo");
-            this.usuarioRepository.save(usuario);
-            List<PeticionEntity> listaPeticionesActivas = buscarPeticionesActivas(usuario, "noprocesada");
-            for(PeticionEntity peticion : listaPeticionesActivas){
-                peticion.setEstadoPeticion("denegada");
-                this.peticionRepository.save(peticion);
-            }
-        }
+        rechazarPeticionesEmpresa(empresa);
+        setEstadoEmpresa(empresa, "inactivo");
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
-    }
-
-    private List<PeticionEntity> buscarPeticiones(UsuarioEntity user, String estado, String tipo) {
-        return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEqualsAndTipoPeticionEquals(user ,estado, tipo);
-    }
-
-    private List<PeticionEntity> buscarPeticionesActivas(UsuarioEntity user, String estado) {
-        return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEquals(user ,estado);
     }
 
     private void aceptarPeticion(PeticionEntity peticion){
@@ -295,9 +302,70 @@ public String filtrarEmpresas(Model model, @ModelAttribute("filtroUsuarios") Fil
         this.peticionRepository.save(peticion);
     }
 
-    public void setActivo(UsuarioEntity usuario){
-        usuario.setEstadoUsuario("activo");
+    private void rechazarPeticionesUsuario(UsuarioEntity usuario){
+        List<PeticionEntity> listaPeticiones = buscarPeticionesActivasUsuario(usuario, "noprocesada");
+        for(PeticionEntity peticion : listaPeticiones){
+            peticion.setEstadoPeticion("denegada");
+            this.peticionRepository.save(peticion);
+        }
     }
 
+    private void rechazarPeticionesEmpresa(EmpresaEntity empresa){
+        List<PeticionEntity> listaPeticiones = buscarPeticionesActivasEmpresa(empresa, "noprocesada");
+        for(PeticionEntity peticion : listaPeticiones){
+            peticion.setEstadoPeticion("denegada");
+            this.peticionRepository.save(peticion);
+        }
+    }
+
+    private List<PeticionEntity> buscarPeticionesUsuarioPorTipo(UsuarioEntity user, String estado, String tipo) {
+        return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEqualsAndTipoPeticionEquals(user ,estado, tipo);
+    }
+
+    private List<PeticionEntity> buscarPeticionesEmpresaPorTipo(EmpresaEntity empresa, String estado, String tipo) {
+        return this.peticionRepository.findAllByEmpresaByEmpresaIdEmpresaEqualsAndEstadoPeticionEqualsAndTipoPeticionEquals(empresa ,estado, tipo);
+    }
+
+    private List<PeticionEntity> buscarPeticionesActivasUsuario(UsuarioEntity user, String estado) {
+        return this.peticionRepository.findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEquals(user ,estado);
+    }
+
+    private List<PeticionEntity> buscarPeticionesActivasEmpresa(EmpresaEntity empresa, String estado) {
+        return this.peticionRepository.findAllByEmpresaByEmpresaIdEmpresaEqualsAndEstadoPeticionEquals(empresa ,estado);
+    }
+
+    public void setEstadoUsuario(UsuarioEntity usuario, String nuevoEstado){
+        if(nuevoEstado.equals("activo")){
+            usuario.setEstadoUsuario("activo");
+        }else if (usuario.getEstadoUsuario().equals("activo")){
+            if (nuevoEstado.equals("bloqueado")){
+                usuario.setEstadoUsuario("bloqueado");
+            }else if(nuevoEstado.equals("inactivo")){
+                usuario.setEstadoUsuario("inactivo");
+            }else if(nuevoEstado.equals("pendiente")){
+                usuario.setEstadoUsuario("pendiente");
+            }
+        } else {
+            System.out.println("El usuario " + usuario.getNif() + " ya no estaba activa");
+        }
+        this.usuarioRepository.save(usuario);
+    }
+
+    public void setEstadoEmpresa(EmpresaEntity empresa, String nuevoEstado){
+        if(nuevoEstado.equals("activo")){
+            empresa.setEstadoEmpresa("activo");
+        }else if (empresa.getEstadoEmpresa().equals("activo")){
+            if (nuevoEstado.equals("bloqueado")){
+                empresa.setEstadoEmpresa("bloqueado");
+            }else if(nuevoEstado.equals("inactivo")){
+                empresa.setEstadoEmpresa("inactivo");
+            }else if(nuevoEstado.equals("pendiente")){
+                empresa.setEstadoEmpresa("pendiente");
+            }
+        } else {
+            System.out.println("La empresa " + empresa.getNombre() + " ya no estaba activa");
+        }
+        this.empresaRepository.save(empresa);
+    }
 
 }

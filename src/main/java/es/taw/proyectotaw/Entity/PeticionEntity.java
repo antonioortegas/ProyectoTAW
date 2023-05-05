@@ -22,8 +22,11 @@ public class PeticionEntity {
     @Column(name = "estado_peticion", nullable = false, length = 45)
     private String estadoPeticion;
     @ManyToOne
-    @JoinColumn(name = "Usuario_id_usuario", referencedColumnName = "id_usuario", nullable = false)
+    @JoinColumn(name = "Usuario_id_usuario", referencedColumnName = "id_usuario")
     private UsuarioEntity usuarioByUsuarioIdUsuario;
+    @ManyToOne
+    @JoinColumn(name = "Empresa_id_empresa", referencedColumnName = "id_empresa")
+    private EmpresaEntity empresaByEmpresaIdEmpresa;
 
     public Integer getIdPeticion() {
         return idPeticion;
@@ -76,5 +79,13 @@ public class PeticionEntity {
 
     public void setUsuarioByUsuarioIdUsuario(UsuarioEntity usuarioByUsuarioIdUsuario) {
         this.usuarioByUsuarioIdUsuario = usuarioByUsuarioIdUsuario;
+    }
+
+    public EmpresaEntity getEmpresaByEmpresaIdEmpresa() {
+        return empresaByEmpresaIdEmpresa;
+    }
+
+    public void setEmpresaByEmpresaIdEmpresa(EmpresaEntity empresaByEmpresaIdEmpresa) {
+        this.empresaByEmpresaIdEmpresa = empresaByEmpresaIdEmpresa;
     }
 }

@@ -27,7 +27,14 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     @Query("select u from UsuarioEntity u where  u.empresaByEmpresaIdEmpresa.idEmpresa = :idEmpresa")
     public List<UsuarioEntity> buscarUsuariosMismaEmpresa(@Param("idEmpresa")Integer idEmpresa);
 
+
+    //Antonio vvv
     List<UsuarioEntity> findAllByEmpresaByEmpresaIdEmpresa(EmpresaEntity orElse);
 
+    @Query("select u from UsuarioEntity u inner join PeticionEntity p on u.idUsuario = p.usuarioByUsuarioIdUsuario.idUsuario where p.estadoPeticion = 'noprocesada' and p.tipoPeticion = :tipo")
+    public List<UsuarioEntity> buscarUsuariosConSolicitudDeTipo(String tipo);
 
+    @Query("SELECT u FROM UsuarioEntity u WHERE u NOT IN (SELECT DISTINCT  u FROM UsuarioEntity u JOIN u.cuentabancoByCuentaBancoIdCuentaBanco c JOIN c.transaccionsByIdCuentaBanco t WHERE t.fechaInstruccion >= :fecha)")
+    public List<UsuarioEntity> buscarUsuariosConInactividadDe30Dias(Date fecha);
+    //Antonio ^^^
 }
