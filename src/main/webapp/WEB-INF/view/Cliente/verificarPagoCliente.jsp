@@ -7,8 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
-
+    UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
 %>
 
 <head>
@@ -19,17 +18,14 @@
             margin: 0;
             padding: 0;
         }
-
         #container {
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
         }
-
         h1 {
             text-align: center;
         }
-
         a {
             display: inline-block;
             margin-top: 20px;
@@ -41,7 +37,6 @@
             border-radius: 5px;
             text-decoration: none;
         }
-
         a:hover {
             background-color: #0062cc;
         }
@@ -50,10 +45,8 @@
 <body>
 <div id="container">
     <div>Pago realizado satisfactoriamente.</div>
-    <div>La cuenta actualmente tiene un saldo total
-        de <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%> <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%>
-    </div>
-    <a href="/volverIndex?id=<%=empresa.getIdEmpresa()%>">Volver al menú de inicio</a>
+    <div>La cuenta actualmente tiene un saldo total de <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%> <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()%></div>
+    <a href="/volverIndex?id=<%=cliente.getIdUsuario()%>">Volver al menú de inicio</a>
 </div>
 </body>
 </html>
