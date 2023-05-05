@@ -22,6 +22,14 @@
 <h2>Menú Principal</h2>
 <%="Bienvenido " + socio.getNombre()%> <br>
 <%
+    if (socio.getTipoPersonaRelacionada().toLowerCase().equals("bloqueada")) {
+%>
+<a>Estas bloqueado/a por la empresa, contacata con tu superior</a>
+
+<%
+    }else{
+%>
+<%
     if (socio.getTipoUsuario().toLowerCase().equals("socio")) {
 
 %>
@@ -37,8 +45,8 @@
 <br>
 <%=socio.getEmpresaByEmpresaIdEmpresa().getNombre()%>
 <br>
-<button><a href="">Transferencia bancaria</a></button>
-<button><a href="">Cambio de divisas</a></button>
+<button><a href="/pagoEmpresa?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Transferencia bancaria</a></button>
+<button><a href="/cambioDeDivisaEmpresa?id=<%= socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa() %>">Cambio de divisas</a></button>
 <button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
 <button><a href="">Estado de la cuenta</a></button>
 <button><a href="">Salir</a></button>
@@ -47,5 +55,11 @@
 <br>
 <a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
 <a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>
+<%
+    }
+%>
+
+<button><a href="/SalirEmpresa">Salir Empresa</a></button>
+
 </body>
 </html>

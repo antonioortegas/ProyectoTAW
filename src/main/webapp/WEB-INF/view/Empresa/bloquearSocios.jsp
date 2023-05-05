@@ -18,9 +18,12 @@
 </head>
 <body>
 <h1>Lista de Socios</h1>
-<button><a href="mostrarSoloSocios?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Socios</a></button>
-<button><a href="mostrarSoloAutorizados?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar Autorizadas</a></button>
-<button><a href="mostrarTodos?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Mostrar Todos</a></button>
+<button><a href="mostrarSoloSocios?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar
+    Socios</a></button>
+<button><a href="mostrarSoloAutorizados?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>"> Mostrar
+    Autorizadas</a></button>
+<button><a href="mostrarTodos?idEmpresa=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Mostrar Todos</a>
+</button>
 
 <ul id="listaSocios">
     <%for (UsuarioEntity usuario : listaUsuriosEmpresa) {%>
@@ -31,6 +34,10 @@
         <span><%= usuario.getTipoPersonaRelacionada()%></span>
         <!--<span><%=usuario.getEmpresaByEmpresaIdEmpresa().getNombre()%></span>-->
         <%
+            if (usuario.getIdUsuario() != socio.getIdUsuario()) {
+        %>
+
+        <%
             if (usuario.getTipoPersonaRelacionada() == "bloqueada") {
         %>
         <button><a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Desbloquear</a></button>
@@ -40,7 +47,9 @@
         <%
             }
         %>
-
+        <%
+            }
+        %>
     </li>
 
     <%}%>

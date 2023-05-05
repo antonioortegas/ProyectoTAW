@@ -6,11 +6,12 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%
+    <%
+
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
-
+    List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
 %>
-
+<html>
 <head>
     <title>Title</title>
     <style>
@@ -30,8 +31,25 @@
             text-align: center;
         }
 
-        a {
-            display: inline-block;
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        label {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        select {
+            margin-top: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+
+        button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
@@ -39,21 +57,28 @@
             color: #fff;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
+            cursor: pointer;
         }
 
-        a:hover {
+        button:hover {
             background-color: #0062cc;
         }
     </style>
 </head>
 <body>
 <div id="container">
-    <div>Pago realizado satisfactoriamente.</div>
-    <div>La cuenta actualmente tiene un saldo total
+    <h1>Transferencia bancaria</h1>
+    <div>La cuenta tiene un saldo
         de <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%> <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%>
     </div>
-    <a href="/volverIndex?id=<%=empresa.getIdEmpresa()%>">Volver al menú de inicio</a>
+    <form method="post" action="/verificarTransferenciaEmpresa">
+        <input type="hidden" name="id" value="<%=empresa.getIdEmpresa()%>">
+        Cantidad:<input type="number" name="cantidad"
+                        max="<%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>">
+        IBAN Beneficiario:<input type="text" name="iban">
+        <button>Realizar transferencia</button>
+    </form>
 </div>
 </body>
 </html>
+
