@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
+//import javax.validation.Valid;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -66,7 +66,7 @@ public class ClienteController {
         String urlTo = "Cliente/loginCliente";
         UsuarioEntity usuario = this.usuarioRepository.usuarioByNIFyContrasena(nif, contrasena);
 
-        if (usuario == null) {
+        if (usuario == null || !usuario.getTipoUsuario().equals("cliente")) {
             model.addAttribute("error", "Credenciales incorrectas");
         } else if(usuario.getEstadoUsuario().equals("bloqueado")){
             model.addAttribute("cliente", usuario);
@@ -74,14 +74,15 @@ public class ClienteController {
         }else if(usuario.getEstadoUsuario().equals("pendiente")){
             model.addAttribute("cliente", usuario);
             urlTo = "Cliente/esperarVerificado";
+        }else if(usuario.getEstadoUsuario().equals("inactivo")){
+            model.addAttribute("cliente", usuario);
+            urlTo = "Cliente/esperarActivacion";
         }else {
             model.addAttribute("cliente", usuario);
             session.setAttribute("usuario", usuario);
             urlTo = "Cliente/indexCliente";
         }
-//
         return urlTo;
-
     }
 
     @GetMapping("/editarUsuario")
@@ -115,34 +116,33 @@ public class ClienteController {
         peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
         peticion.setUsuarioByUsuarioIdUsuario(cliente);
         this.peticionRepository.save(peticion);
-        return "Cliente/indexCliente";
-    }
-
-    @GetMapping("/nuevaPeticionInactivo")
-    public String pedirActivo (Integer id, Model model, HttpSession session) {
-        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
-        model.addAttribute("cliente", cliente);
-        PeticionEntity peticion = new PeticionEntity();
-        peticion.setTipoPeticion("activar");
-        peticion.setEstadoPeticion("noprocesada");
-        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
-        peticion.setUsuarioByUsuarioIdUsuario(cliente);
-        this.peticionRepository.save(peticion);
-        return "Cliente/indexCliente";
+        return "Cliente/PeticionEnviada";
     }
 
     @GetMapping("/nuevaPeticionBloqueado")
-    public String pedirDesbloqueo (@RequestParam("idUsuario") Integer id, Model model, HttpSession session) {
-        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
-        model.addAttribute("cliente", cliente);
+    public String pedirDesbloqueo (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(idUsuario);
         PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("desbloqueo");
         peticion.setEstadoPeticion("noprocesada");
         peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
         peticion.setUsuarioByUsuarioIdUsuario(cliente);
         this.peticionRepository.save(peticion);
-        return "Cliente/indexCliente";
+        return "Cliente/PeticionEnviada";
     }
+
+    @GetMapping("/nuevaPeticionActivacion")
+    public String pedirActivacion (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+        UsuarioEntity cliente = this.usuarioRepository.getReferenceById(idUsuario);
+        PeticionEntity peticion = new PeticionEntity();
+        peticion.setTipoPeticion("activar");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+        peticion.setUsuarioByUsuarioIdUsuario(cliente);
+        this.peticionRepository.save(peticion);
+        return "Cliente/PeticionEnviada";
+    }
+
 
     @PostMapping("/guardarCliente")
     public String doGuardar (@ModelAttribute("cliente") UsuarioEntity cliente) {
@@ -245,39 +245,47 @@ public class ClienteController {
                                    @RequestParam String calle, @RequestParam String numeroVivienda, @RequestParam String planta,
                                    @RequestParam String ciudad, @RequestParam(required = false) String region,
                                    @RequestParam String pais, @RequestParam String cp, @RequestParam boolean valida,
-                                   @RequestParam String contrasena, Model model) {
+                                   @RequestParam String contrasena, @RequestParam String repcontrasena, Model model) {
         UsuarioEntity us = this.usuarioRepository.usuarioByNIF(nif);
         String urlTo = "Cliente/usuarioExistente";
-        if(us==null){
-        Byte val = 0;
-        if(valida){
-            val=1;
-        }
-        UsuarioEntity usuario = new UsuarioEntity();
-        usuario.setTipoUsuario("cliente");
-        usuario.setContrasena(contrasena);
-        usuario.setFechaNacimiento(fechaNacimiento);
-        usuario.setNif(nif);
-        usuario.setNombre(nombre);
-        usuario.setSegundoNombre(segundoNombre);
-        usuario.setPrimerApellido(apellido1);
-        usuario.setSegundoApellido(apellido2);
-        usuario.setEstadoUsuario("pendiente");
-        usuario.setFechaInicio(Date.valueOf(LocalDate.now()));
-        DireccionEntity direccion = new DireccionEntity();
-        direccion.setCalle(calle);
-        direccion.setCiudad(ciudad);
-        direccion.setNumero(numeroVivienda);
-        direccion.setCp(cp);
-        direccion.setPais(pais);
-        direccion.setRegion(region);
-        direccion.setPuerta(planta);
-        direccion.setValida(val);
-        this.direccionRepository.save(direccion);
-        usuario.setDireccionByDireccionIdDireccion(direccion);
-        this.usuarioRepository.save(usuario);
-        model.addAttribute("cliente", usuario);
-        urlTo ="Cliente/esperarVerificado";
+        if(us==null && contrasena.equals(repcontrasena)) {
+            Byte val = 0;
+            if (valida) {
+                val = 1;
+            }
+            UsuarioEntity usuario = new UsuarioEntity();
+            usuario.setTipoUsuario("cliente");
+            usuario.setContrasena(contrasena);
+            usuario.setFechaNacimiento(fechaNacimiento);
+            usuario.setNif(nif);
+            usuario.setNombre(nombre);
+            usuario.setSegundoNombre(segundoNombre);
+            usuario.setPrimerApellido(apellido1);
+            usuario.setSegundoApellido(apellido2);
+            usuario.setEstadoUsuario("pendiente");
+            usuario.setFechaInicio(Date.valueOf(LocalDate.now()));
+            DireccionEntity direccion = new DireccionEntity();
+            direccion.setCalle(calle);
+            direccion.setCiudad(ciudad);
+            direccion.setNumero(numeroVivienda);
+            direccion.setCp(cp);
+            direccion.setPais(pais);
+            direccion.setRegion(region);
+            direccion.setPuerta(planta);
+            direccion.setValida(val);
+            this.direccionRepository.save(direccion);
+            usuario.setDireccionByDireccionIdDireccion(direccion);
+            this.usuarioRepository.save(usuario);
+            model.addAttribute("cliente", usuario);
+            PeticionEntity peticion = new PeticionEntity();
+            peticion.setTipoPeticion("alta");
+            peticion.setEstadoPeticion("noprocesada");
+            peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+            peticion.setUsuarioByUsuarioIdUsuario(usuario);
+            this.peticionRepository.save(peticion);
+            urlTo = "Cliente/esperarVerificado";
+        }else{
+            urlTo = "/Cliente/crearNuevoCliente";
         }
 
         return urlTo;

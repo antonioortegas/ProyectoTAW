@@ -1,5 +1,3 @@
-
-
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
@@ -9,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <%
-    UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
+    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
     List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
 %>
 <html>
@@ -62,10 +60,10 @@
 <body>
 <div id="container">
     <h1>Cambio de Divisa</h1>
-    <div>La cuenta tiene un saldo de <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%> <%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTipoMoneda()%></div>
-    <form method="post" action="/verificarCambioDivisa">
+    <div>La cuenta tiene un saldo de <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%> <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%></div>
+    <form method="post" action="/verificarCambioDivisaEmpresa">
         <label for="cambio">Seleccione la moneda a la que desea convertir:</label>
-        <input type="hidden" name="id" value="<%=cliente.getIdUsuario()%>">
+        <input type="hidden" name="id" value="<%=empresa.getIdEmpresa()%>">
         <select id="cambio" name="cambio">
             <% for(CambiodivisaEntity cd: cambioDivisa){%>
             <option value="<%=cd.getIdCambioDivisa()%>"><%=cd.getMonedaCompra()%></option>
@@ -76,4 +74,3 @@
 </div>
 </body>
 </html>
-

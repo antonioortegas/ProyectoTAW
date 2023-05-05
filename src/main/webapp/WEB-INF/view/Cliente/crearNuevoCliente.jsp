@@ -56,6 +56,9 @@
     <label for="contrasena">Contraseña*:</label>
     <input type="password" id="contrasena" name="contrasena" required>
     <br>
+    <label for="contrasena">Repetir contraseña*:</label>
+    <input type="password" id="repcontrasena" name="repcontrasena" required>
+    <br>
     <input type="submit" value="Registrar">
     <input type="reset" value="Limpiar">
 </form>
