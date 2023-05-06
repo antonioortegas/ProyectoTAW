@@ -47,7 +47,6 @@
     divisas</a></button>
 <button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
 <button><a href="">Estado de la cuenta</a></button>
-<button><a href="">Salir</a></button>
 <br>
 <br>
 <br>
@@ -61,8 +60,10 @@
 <%
     }
 %>
-
-<button><a href="/SalirEmpresa">Salir Empresa</a></button>
+<br>
+<button><a href="/Empresa/SalirEmpresa">Cerrar sesion</a></button>
+<br>
+<button><a href="/">Salir</a></button>
 
 </body>
 </html>

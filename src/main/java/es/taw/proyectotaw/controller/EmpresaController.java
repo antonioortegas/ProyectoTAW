@@ -106,7 +106,7 @@ public class EmpresaController {
     @GetMapping("/Empresa/SalirEmpresa")
     public String salirEmpresa(Model model) {
 
-        return "../index";
+        return "Empresa/empresaPrincipal";
     }
 
 
@@ -117,12 +117,6 @@ public class EmpresaController {
         return "Empresa/crearUsuarioEmpresa";
     }
 
-
-    public String iniciarSesionEmpresa() {
-
-
-        return "Empresa/login";
-    }
 
     @PostMapping("/loginSocio")
     public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
@@ -225,10 +219,9 @@ public class EmpresaController {
                 model.addAttribute("socio", socio);
                 session.setAttribute("socio", socio);
                 urlTo = "Empresa/sesionIniciadaEmpresa";
-            }else {
+            } else {
                 urlTo = "Empresa/empresaPrincipal";
             }
-
 
 
         } else {
