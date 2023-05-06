@@ -462,4 +462,44 @@ public class EmpresaController {
         model.addAttribute("pasta", pasta);
         return "Empresa/verificarCambioDivisaEmpresa";
     }
+
+
+    @GetMapping("/nuevaPeticionAltaEmpresa")
+    public String pedirAlta (Integer id,  Model model, HttpSession session) {
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
+        model.addAttribute("empresa", empresa);
+        PeticionEntity peticion = new PeticionEntity();
+        peticion.setTipoPeticion("alta");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+        peticion.setEmpresaByEmpresaIdEmpresa(empresa);
+        this.peticionRepository.save(peticion);
+        return "Empresa/PeticionEnviadaEmpresa";
+    }
+
+    @GetMapping("/nuevaPeticionBloqueadoEmpresa")
+    public String pedirDesbloqueo (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);
+        PeticionEntity peticion = new PeticionEntity();
+        peticion.setTipoPeticion("desbloqueo");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+        peticion.setEmpresaByEmpresaIdEmpresa(empresa);
+        this.peticionRepository.save(peticion);
+        return "Empresa/PeticionEnviadaEmpresa";
+    }
+
+    @GetMapping("/nuevaPeticionActivacionEmpresa")
+    public String pedirActivacion (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+        EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);
+        PeticionEntity peticion = new PeticionEntity();
+        peticion.setTipoPeticion("activar");
+        peticion.setEstadoPeticion("noprocesada");
+        peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+        peticion.setEmpresaByEmpresaIdEmpresa(empresa);
+        this.peticionRepository.save(peticion);
+        return "Empresa/PeticionEnviadaEmpresa";
+    }
+
+
 }

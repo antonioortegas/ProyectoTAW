@@ -354,6 +354,33 @@ public class GestorController {
     //ACCIONES DE GESTOR SOBRE EMPRESAS
     //=====
 
+    //ACEPTAR ACTIVACION DE EMPRESA
+    @GetMapping("/gestor/aceptarActivarEmpresa")
+    public String activarEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "activacion");
+        for (PeticionEntity peticion: listaPeticiones) {
+            aceptarPeticion(peticion);
+        }
+        setEstadoEmpresa(empresa, "activa");
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
+    //ACEPTAR DESBLOQUEO DE EMPRESA
+    @GetMapping("/gestor/aceptarDesbloquearEmpresa")
+    public String desbloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "desbloqueo");
+        for (PeticionEntity peticion: listaPeticiones) {
+            aceptarPeticion(peticion);
+        }
+        setEstadoEmpresa(empresa, "activa");
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
+
     //ACEPTAR ALTA DE EMPRESA
     @GetMapping("/gestor/aceptarAltaEmpresa")
     public String aceptarAltaEmpresa(Model model, @RequestParam("id_empresa") Integer id){

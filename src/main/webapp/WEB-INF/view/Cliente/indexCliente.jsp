@@ -103,7 +103,7 @@
             <%} else if(cliente.getEstadoUsuario().equals("bloqueado")){%>
         <br><a href="/nuevaPeticionBloqueado?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar desbloqueo.</a>
             <%} else if(cliente.getEstadoUsuario().equals("pendiente")){%>
-        <a href="/nuevaPeticionAlta?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar desbloqueo.</a>
+        <a href="/nuevaPeticionAlta?idUsuario=<%=cliente.getIdUsuario()%>">Solicitar alta.</a>
             <%}%>
     </div>
 </div>
