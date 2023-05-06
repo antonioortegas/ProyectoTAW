@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.TransaccionEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
@@ -115,6 +116,25 @@
                             if (usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
                         %>
                         <h2>Transacciones del cliente :</h2>
+                        <hr>
+                        <div>
+                            <form:form action="/gestor/filtrarTransacciones" method="post" modelAttribute="filtroTransaccion">
+                                Propiedad:
+                                <form:select path="propiedad">
+                                    <form:option value="">-----</form:option>
+                                    <form:option value="Pago">Pago</form:option>
+                                    <form:option value="Cambio de divisa">Cambio de divisa</form:option>
+                                    <form:option value="30d">Mas de 30 dias</form:option>
+                                    <form:option value="Sospechosa">Sospechosa</form:option>
+                                </form:select>
+                                Orden:
+                                <form:select path="orden">
+                                    <form:option value="idTransaccion">ID</form:option>
+                                    <form:option value="fechaInstruccion">Fecha</form:option>
+                                </form:select>
+                                <form:button>Filtrar</form:button>
+                            </form:form>
+                        </div>
                         <tr>
                             <th>TIPO</th>
                             <th>Fecha de instruccion</th>

@@ -1,7 +1,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.proyectotaw.Entity.*" %>
 <%@ page import="java.util.*" %>
-<%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.time.LocalDate" %>
 <%--
   Created by IntelliJ IDEA.
@@ -16,7 +15,7 @@
     List<UsuarioEntity> listaUsuarios = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
     List<EmpresaEntity> listaEmpresas = (List<EmpresaEntity>) request.getAttribute("listaEmpresas");
     List<CuentabancoEntity> listaCuentasSospechosas = (List<CuentabancoEntity>) request.getAttribute("listaCuentasSospechosas");
-
+    System.out.println("LISTA CUENTAS SOSPECHOSAS: " + listaCuentasSospechosas);
     //Date field 30 days before today
     LocalDate date = LocalDate.now().minusDays(30);
     Date dateBefore30Days = java.sql.Date.valueOf(date);
@@ -63,7 +62,11 @@
                     </form:select>
                     Orden:
                     <form:select path="ordenU">
+                        <form:option value="idUsuario">ID</form:option>
                         <form:option value="nif">NIF</form:option>
+                        <form:option value="nombre">Nombre</form:option>
+                        <form:option value="empresaByEmpresaIdEmpresa">Empresa</form:option>
+                        <form:option value="tipoUsuario">Tipo</form:option>
                     </form:select>
                     <form:button>Filtrar</form:button>
                 </form:form>
@@ -79,7 +82,10 @@
                     </form:select>
                     Orden:
                     <form:select path="ordenE">
+                        <form:option value="idEmpresa">ID</form:option>
                         <form:option value="cif">CIF</form:option>
+                        <form:option value="nombre">Nombre</form:option>
+                        <form:option value="estadoEmpresa">Estado</form:option>
                     </form:select>
                     <form:button>Filtrar</form:button>
                 </form:form>
@@ -104,7 +110,7 @@
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
-
+                    <% if (listaUsuarios != null) { %>
                     <% for (UsuarioEntity usuario : listaUsuarios) { %>
                     <tr>
                         <td><%= usuario.getNif() %></td>
@@ -202,6 +208,7 @@
                         </td>
                     </tr>
                     <% } %>
+                    <% } %>
                 </table>
             </td>
 
@@ -210,9 +217,11 @@
                     <tr>
                         <th>CIF</th>
                         <th>NOMBRE</th>
+                        <th>ESTADO</th>
                         <th>ACCIONES</th>
                     </tr>
 
+                    <% if (listaEmpresas != null) { %>
                     <% for (EmpresaEntity empresa : listaEmpresas) { %>
                     <tr>
                         <td><%= empresa.getCif() %></td>
@@ -221,6 +230,7 @@
                                 <%= empresa.getNombre() %>
                             </a>
                         </td>
+                        <td><%= empresa.getEstadoEmpresa() %></td>
                         <td>
                             <% if(empresa.getPeticionsByIdEmpresa() != null){ %>
                                 <%
@@ -236,12 +246,12 @@
                                     <button><a href="/gestor/denegarAltaEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Denegar</a></button><br>
                                 <% } %>
 
-                                <% if(empresa.getEstadoEmpresa().equals("inactivo")&&listaPeticiones.contains("activar")) { %>
+                                <% if(empresa.getEstadoEmpresa().equals("inactiva")&&listaPeticiones.contains("activar")) { %>
                                     <button><a href="/gestor/aceptarActivarEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Activar</a></button>
                                     <button><a href="/gestor/denegarActivarEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Denegar</a></button>
                                 <% } %>
 
-                                <% if(empresa.getEstadoEmpresa().equals("bloqueado")&&listaPeticiones.contains("desbloqueo")) { %>
+                                <% if(empresa.getEstadoEmpresa().equals("bloqueada")&&listaPeticiones.contains("desbloqueo")) { %>
                                     <button><a href="/gestor/aceptarDesbloquearEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Desbloquear</a></button>
                                     <button><a href="/gestor/denegarDesbloquearEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Denegar</a></button>
                                 <% } %>
@@ -259,9 +269,11 @@
                                                 inactivo = false;
                                             }
                                             for (CuentabancoEntity cuentasospechosa : listaCuentasSospechosas) {
-                                                if (transaction.getPagoByPagoIdPago().getIbanBeneficiario().equals(cuentasospechosa.getIban())) {
-                                                    sospechoso = true;
-                                                    break;
+                                                if(transaction.getPagoByPagoIdPago().getIbanBeneficiario()!=null){
+                                                    if (transaction.getPagoByPagoIdPago().getIbanBeneficiario().equals(cuentasospechosa.getIban())) {
+                                                        sospechoso = true;
+                                                        break;
+                                                    }
                                                 }
                                             }
                                         }
@@ -277,6 +289,7 @@
                                 <% } %>
                         </td>
                     </tr>
+                    <% } %>
                     <% } %>
                 </table>
             </td>

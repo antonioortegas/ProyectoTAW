@@ -18,6 +18,9 @@ public class TransaccionEntity {
     @Basic
     @Column(name = "fecha_ejecucion", nullable = true)
     private Date fechaEjecucion;
+    @Basic
+    @Column(name = "id_usuario_actor", nullable = true)
+    private Integer idUsuarioActor;
     @ManyToOne
     @JoinColumn(name = "cuenta_banco_id_cuenta_banco", referencedColumnName = "id_cuenta_banco", nullable = false)
     private CuentabancoEntity cuentabancoByCuentaBancoIdCuentaBanco;
@@ -52,17 +55,25 @@ public class TransaccionEntity {
         this.fechaEjecucion = fechaEjecucion;
     }
 
+    public Integer getIdUsuarioActor() {
+        return idUsuarioActor;
+    }
+
+    public void setIdUsuarioActor(Integer idUsuarioActor) {
+        this.idUsuarioActor = idUsuarioActor;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TransaccionEntity that = (TransaccionEntity) o;
-        return Objects.equals(idTransaccion, that.idTransaccion) && Objects.equals(fechaInstruccion, that.fechaInstruccion) && Objects.equals(fechaEjecucion, that.fechaEjecucion);
+        return Objects.equals(idTransaccion, that.idTransaccion) && Objects.equals(fechaInstruccion, that.fechaInstruccion) && Objects.equals(fechaEjecucion, that.fechaEjecucion) && Objects.equals(idUsuarioActor, that.idUsuarioActor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idTransaccion, fechaInstruccion, fechaEjecucion);
+        return Objects.hash(idTransaccion, fechaInstruccion, fechaEjecucion, idUsuarioActor);
     }
 
     public CuentabancoEntity getCuentabancoByCuentaBancoIdCuentaBanco() {

@@ -8,6 +8,7 @@ import es.taw.proyectotaw.dao.UsuarioRepository;
 import es.taw.proyectotaw.ui.FiltroEmpresas;
 import es.taw.proyectotaw.ui.FiltroUsuarios;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,25 +64,43 @@ public class GestorController {
 
         List<UsuarioEntity> listaUsuarios = null;
         List<EmpresaEntity> listaEmpresas = null;
+
+        //FILTROS
+        //USUARIOS:
+        //  Propiedad - vacio, Pendiente de alta, 30d, Actividad sospechosa
+        //  Orden - id, nif, nombre, empresa, tipo
+        //EMPRESAS: id, cif, nombre
+
         if(filtroUsuarios == null){
             filtroUsuarios = new FiltroUsuarios();
             listaUsuarios = this.usuarioRepository.findAll();
         }
-        if(filtroUsuarios.getPropiedadU().equals("")&&filtroUsuarios.getOrdenU().equals("nif")){
-            listaUsuarios = this.usuarioRepository.findAll();
+        if(filtroUsuarios.getPropiedadU().equals("")){
+            listaUsuarios = this.usuarioRepository.findAll( Sort.by(filtroUsuarios.getOrdenU()));
         }
-        if(filtroUsuarios.getPropiedadU().equals("Pendiente de alta")&&filtroUsuarios.getOrdenU().equals("nif")){
-            listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeTipo("alta");
+        if (filtroUsuarios.getPropiedadU().equals("Pendiente de alta")){
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConSolicitudDeTipo(Sort.by(filtroUsuarios.getOrdenU()),"alta");
         }
-        if(filtroUsuarios.getPropiedadU().equals("30d")&&filtroUsuarios.getOrdenU().equals("nif")){
+        if(filtroUsuarios.getPropiedadU().equals("30d")){
             LocalDate date = LocalDate.now().minusDays(30);
             Date dateBefore30Days = java.sql.Date.valueOf(date);
-            listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(dateBefore30Days);
-            System.out.println(listaUsuarios.size());
+            listaUsuarios = this.usuarioRepository.buscarUsuariosConInactividadDe30Dias(Sort.by(filtroUsuarios.getOrdenU()),dateBefore30Days);
         }
-        if(filtroUsuarios.getPropiedadU().equals("Actividad sospechosa")&&filtroUsuarios.getOrdenU().equals("nif")){
-            List<UsuarioEntity> listaUsuariosCompleta = this.usuarioRepository.findAll();
-
+        if(filtroUsuarios.getPropiedadU().equals("Actividad sospechosa")){
+            List<UsuarioEntity> preListaUsuarios = this.usuarioRepository.findAll( Sort.by(filtroUsuarios.getOrdenU()));
+            for(UsuarioEntity usuario : preListaUsuarios){
+                if(usuario.getCuentabancoByCuentaBancoIdCuentaBanco()!=null && usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()!=null){
+                    for(TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()){
+                        if(transaccion.getPagoByPagoIdPago()!=null){
+                            for(CuentabancoEntity cuentasospechosa : listaCuentasSospechosas){
+                                if(transaccion.getPagoByPagoIdPago().getIbanBeneficiario()!=null && transaccion.getPagoByPagoIdPago().getIbanBeneficiario().equals(cuentasospechosa.getIban())){
+                                    listaUsuarios.add(usuario);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 
@@ -89,19 +108,32 @@ public class GestorController {
             filtroEmpresas = new FiltroEmpresas();
             listaEmpresas = this.empresaRepository.findAll();
         }
-        if(filtroEmpresas.getPropiedadE().equals("")&&filtroEmpresas.getOrdenE().equals("cif")){
-            listaEmpresas = this.empresaRepository.findAll();
+        if(filtroEmpresas.getPropiedadE().equals("")){
+            listaEmpresas = this.empresaRepository.findAll(Sort.by(filtroEmpresas.getOrdenE()));
         }
-        if(filtroEmpresas.getPropiedadE().equals("Pendiente de alta")&&filtroEmpresas.getOrdenE().equals("cif")){
-            listaEmpresas = this.empresaRepository.buscarEmpresasConSolicitudDeTipo("alta");
+        if(filtroEmpresas.getPropiedadE().equals("Pendiente de alta")){
+            listaEmpresas = this.empresaRepository.buscarEmpresasConSolicitudDeTipo(Sort.by(filtroEmpresas.getOrdenE()),"alta");
         }
-        if(filtroEmpresas.getPropiedadE().equals("30d")&&filtroEmpresas.getOrdenE().equals("cif")){
+        if(filtroEmpresas.getPropiedadE().equals("30d")){
             LocalDate date = LocalDate.now().minusDays(30);
             Date dateBefore30Days = java.sql.Date.valueOf(date);
-            listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(dateBefore30Days);
+            listaEmpresas = this.empresaRepository.buscarEmpresasConInactividadDe30Dias(Sort.by(filtroEmpresas.getOrdenE()), dateBefore30Days);
         }
-        if(filtroEmpresas.getPropiedadE().equals("Actividad sospechosa")&&filtroEmpresas.getOrdenE().equals("cif")){
-            listaEmpresas = this.empresaRepository.findAll();
+        if(filtroEmpresas.getPropiedadE().equals("Actividad sospechosa")){
+            List<EmpresaEntity> preListaEmpresas = this.empresaRepository.findAll( Sort.by(filtroEmpresas.getOrdenE()));
+            for(EmpresaEntity empresa : preListaEmpresas){
+                if(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco()!=null && empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTransaccionsByIdCuentaBanco()!=null){
+                    for(TransaccionEntity transaccion : empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTransaccionsByIdCuentaBanco()){
+                        if(transaccion.getPagoByPagoIdPago()!=null){
+                            for(CuentabancoEntity cuentasospechosa : listaCuentasSospechosas){
+                                if(transaccion.getPagoByPagoIdPago().getIbanBeneficiario()!=null && transaccion.getPagoByPagoIdPago().getIbanBeneficiario().equals(cuentasospechosa.getIban())){
+                                    listaEmpresas.add(empresa);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         model.addAttribute("listaUsuarios", listaUsuarios);
@@ -122,6 +154,10 @@ public class GestorController {
         return "gestor/cliente";
     }
 
+    //FILTRAR TRANSACCIONES DE UN CLIENTE
+    //@PostMapping("/gestor/filtrarTransacciones")
+    //public String filtrarTransaccionesCliente(Model model, )
+
     //DETALLES DE UNA EMPRESA
     @GetMapping("/gestor/empresa")
     public String verDetallesEmpresa(Model model, @RequestParam("id_empresa") Integer id){
@@ -130,6 +166,8 @@ public class GestorController {
         model.addAttribute("empresa", listaUsuarios);
         return "gestor/empresa";
     }
+
+
 
     //=====
     //ACCIONES DE GESTOR SOBRE USUARIOS
@@ -255,7 +293,7 @@ public class GestorController {
         for (PeticionEntity peticion: listaPeticiones) {
             aceptarPeticion(peticion);
         }
-        setEstadoEmpresa(empresa, "activo");
+        setEstadoEmpresa(empresa, "activa");
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
@@ -277,7 +315,7 @@ public class GestorController {
     public String bloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         rechazarPeticionesEmpresa(empresa);
-        setEstadoEmpresa(empresa, "bloqueado");
+        setEstadoEmpresa(empresa, "bloqueada");
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
@@ -287,7 +325,7 @@ public class GestorController {
     public String desactivarEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         rechazarPeticionesEmpresa(empresa);
-        setEstadoEmpresa(empresa, "inactivo");
+        setEstadoEmpresa(empresa, "inactiva");
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
@@ -352,13 +390,13 @@ public class GestorController {
     }
 
     public void setEstadoEmpresa(EmpresaEntity empresa, String nuevoEstado){
-        if(nuevoEstado.equals("activo")){
-            empresa.setEstadoEmpresa("activo");
-        }else if (empresa.getEstadoEmpresa().equals("activo")){
-            if (nuevoEstado.equals("bloqueado")){
-                empresa.setEstadoEmpresa("bloqueado");
-            }else if(nuevoEstado.equals("inactivo")){
-                empresa.setEstadoEmpresa("inactivo");
+        if(nuevoEstado.equals("activa")){
+            empresa.setEstadoEmpresa("activa");
+        }else if (empresa.getEstadoEmpresa().equals("activa")){
+            if (nuevoEstado.equals("bloqueada")){
+                empresa.setEstadoEmpresa("bloqueada");
+            }else if(nuevoEstado.equals("inactiva")){
+                empresa.setEstadoEmpresa("inactiva");
             }else if(nuevoEstado.equals("pendiente")){
                 empresa.setEstadoEmpresa("pendiente");
             }

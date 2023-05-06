@@ -2,6 +2,7 @@ package es.taw.proyectotaw.dao;
 
 import es.taw.proyectotaw.Entity.EmpresaEntity;
 import es.taw.proyectotaw.Entity.UsuarioEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,10 +32,10 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Integer>
     //Antonio vvv
     List<UsuarioEntity> findAllByEmpresaByEmpresaIdEmpresa(EmpresaEntity orElse);
 
-    @Query("select u from UsuarioEntity u inner join PeticionEntity p on u.idUsuario = p.usuarioByUsuarioIdUsuario.idUsuario where p.estadoPeticion = 'noprocesada' and p.tipoPeticion = :tipo")
-    public List<UsuarioEntity> buscarUsuariosConSolicitudDeTipo(String tipo);
+    @Query("select u from UsuarioEntity u inner join PeticionEntity p on u.idUsuario = p.usuarioByUsuarioIdUsuario.idUsuario where (p.estadoPeticion = 'noprocesada' and p.tipoPeticion = :tipo)")
+    public List<UsuarioEntity> buscarUsuariosConSolicitudDeTipo(Sort by, String tipo);
 
     @Query("SELECT u FROM UsuarioEntity u WHERE u NOT IN (SELECT DISTINCT  u FROM UsuarioEntity u JOIN u.cuentabancoByCuentaBancoIdCuentaBanco c JOIN c.transaccionsByIdCuentaBanco t WHERE t.fechaInstruccion >= :fecha)")
-    public List<UsuarioEntity> buscarUsuariosConInactividadDe30Dias(Date fecha);
+    public List<UsuarioEntity> buscarUsuariosConInactividadDe30Dias(Sort by, Date fecha);
     //Antonio ^^^
 }
