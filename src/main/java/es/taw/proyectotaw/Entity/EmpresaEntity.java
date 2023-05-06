@@ -18,12 +18,17 @@ public class EmpresaEntity {
     @Basic
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
+    @Basic
+    @Column(name = "estado_empresa", nullable = false, length = 45)
+    private String estadoEmpresa;
     @ManyToOne
     @JoinColumn(name = "Direccion_id_direccion", referencedColumnName = "id_direccion", nullable = false)
     private DireccionEntity direccionByDireccionIdDireccion;
     @ManyToOne
     @JoinColumn(name = "cuenta_empresa_id_cuenta_banco", referencedColumnName = "id_cuenta_banco")
     private CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco;
+    @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
+    private Collection<PeticionEntity> peticionsByIdEmpresa;
     @OneToMany(mappedBy = "empresaByEmpresaIdEmpresa")
     private Collection<UsuarioEntity> usuariosByIdEmpresa;
 
@@ -51,17 +56,25 @@ public class EmpresaEntity {
         this.nombre = nombre;
     }
 
+    public String getEstadoEmpresa() {
+        return estadoEmpresa;
+    }
+
+    public void setEstadoEmpresa(String estadoEmpresa) {
+        this.estadoEmpresa = estadoEmpresa;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         EmpresaEntity that = (EmpresaEntity) o;
-        return Objects.equals(idEmpresa, that.idEmpresa) && Objects.equals(cif, that.cif) && Objects.equals(nombre, that.nombre);
+        return Objects.equals(idEmpresa, that.idEmpresa) && Objects.equals(cif, that.cif) && Objects.equals(nombre, that.nombre) && Objects.equals(estadoEmpresa, that.estadoEmpresa);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idEmpresa, cif, nombre);
+        return Objects.hash(idEmpresa, cif, nombre, estadoEmpresa);
     }
 
     public DireccionEntity getDireccionByDireccionIdDireccion() {
@@ -78,6 +91,14 @@ public class EmpresaEntity {
 
     public void setCuentabancoByCuentaEmpresaIdCuentaBanco(CuentabancoEntity cuentabancoByCuentaEmpresaIdCuentaBanco) {
         this.cuentabancoByCuentaEmpresaIdCuentaBanco = cuentabancoByCuentaEmpresaIdCuentaBanco;
+    }
+
+    public Collection<PeticionEntity> getPeticionsByIdEmpresa() {
+        return peticionsByIdEmpresa;
+    }
+
+    public void setPeticionsByIdEmpresa(Collection<PeticionEntity> peticionsByIdEmpresa) {
+        this.peticionsByIdEmpresa = peticionsByIdEmpresa;
     }
 
     public Collection<UsuarioEntity> getUsuariosByIdEmpresa() {
