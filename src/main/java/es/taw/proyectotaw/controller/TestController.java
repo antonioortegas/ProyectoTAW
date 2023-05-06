@@ -21,9 +21,7 @@ public class TestController {
 
     @GetMapping("/Empresa/empresaPrincipal")
     public String goEmpresa(Model model) {
-        List<EmpresaEntity> listaEmpresa = this.empresaRepository.findAll();
 
-        model.addAttribute("empresa", listaEmpresa);
         return "Empresa/empresaPrincipal";
 
     }

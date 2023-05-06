@@ -10,24 +10,42 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<%
 
-   // List<EmpresaEntity> listaEmpresa = (List<EmpresaEntity>) request.getAttribute("empresa");
-
-%>
 
 <head>
     <title>Title</title>
+    <style>
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-<td>${pageContext.session.id}</td><br><br><br>
-<h6> Accediendo con el siguiente sessionid: <%= session.getId() %> </h6>
 
-<button> <a href="crearNuevaEmpresa"> NUEVA EMPRESA</a></button><br>
+<button> <a href="/Empresa/crearNuevaEmpresa"> NUEVA EMPRESA</a></button><br>
 <!--<button> <a href="crearUsuarioEmpresa"> NUEVO SOCIO</a></button><br>
 <button> <a href=""> INCIAR SESION EMPRESA</a></button><br>-->
-<button> <a href="loginSocio"> INCIAR SESION SOCIO</a></button><br>
-
+<button> <a href="/Empresa/loginSocio"> INCIAR SESION SOCIO</a></button><br>
+<button><a href="/">Salir</a></button>
 
 </body>
 </html>

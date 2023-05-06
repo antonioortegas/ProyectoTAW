@@ -14,9 +14,32 @@
 
 <head>
     <title>Title</title>
+    <style>
+        button {
+            background-color: #ff9800;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-<td>${pageContext.session.id}</td><br>
 <button> <a href="Empresa/empresaPrincipal">Empresa</a>  </button> <br>
 <button> <a href="Cliente/clientePrincipal">Cliente</a></button> <br>
 <button> <a href="gestor/usuarios" >Gestor </a></button><br>

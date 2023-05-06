@@ -122,7 +122,7 @@ public class EmpresaController {
     }
 
 
-    @PostMapping("/loginSocio")
+    @PostMapping("/loginSocioP")
     public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
                                Model model, HttpSession session) {
         String urlTo = "/Empresa/sesionIniciadaEmpresa";
@@ -143,7 +143,7 @@ public class EmpresaController {
 
     @GetMapping("/Empresa/loginSocio")
     public String iniciarSesionEmpleadp() {
-        return "Empresa/login";
+        return "login";
     }
 
 
@@ -159,6 +159,7 @@ public class EmpresaController {
 
         return "Empresa/crearUsuarioEmpresa";
     }
+
 
 
     @PostMapping("/procesarRegistrarNuevoSocio")
@@ -178,10 +179,6 @@ public class EmpresaController {
         } else {
             empresa = empresaRepository.findById(crearNuevoSocio.getIdEmpresa()).orElse(null);
         }
-
-
-        //System.out.println(socio.getNombre());
-        //System.out.println("=================");
 
 
         nuevoSocio.setNif(crearNuevoSocio.getNif());

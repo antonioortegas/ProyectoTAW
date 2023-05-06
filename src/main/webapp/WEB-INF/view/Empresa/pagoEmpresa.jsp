@@ -53,7 +53,7 @@
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 18px;
-            background-color: #007bff;
+            background-color: #4CAF50;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -61,7 +61,7 @@
         }
 
         button:hover {
-            background-color: #0062cc;
+            background-color: #4CAF50;
         }
     </style>
 </head>

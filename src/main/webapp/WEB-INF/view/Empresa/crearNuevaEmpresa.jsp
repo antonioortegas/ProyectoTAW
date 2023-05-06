@@ -19,7 +19,7 @@
     <title>CREAR NUEVA EMPRESA</title>
     <style type="text/css">
         h1 {
-            color: #2196F3;
+            color: #4CAF50;
             font-size: 28px;
             font-weight: bold;
             margin-top: 40px;

@@ -20,6 +20,41 @@
 %>
 <head>
     <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        h2 {
+            color: #4CAF50;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+        button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4CAF50;
+        }
+    </style>
 </head>
 <body>
 
@@ -29,7 +64,6 @@
         if (cuentaBanco != null) {
     %>
 
-    <%=socio.getNombre()%>
     <h2>Transacciones de la Empresa :</h2>
     <div>
         <%--@elvariable id="filtroTransaccionEmpresa" type=""--%>
