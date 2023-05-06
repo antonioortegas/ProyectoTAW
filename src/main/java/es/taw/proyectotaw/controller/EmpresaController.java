@@ -1,9 +1,9 @@
 package es.taw.proyectotaw.controller;
 
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
+import es.taw.proyectotaw.ui.CrearNuevaEmpresa;
 import es.taw.proyectotaw.ui.CrearNuevoSocio;
 import es.taw.proyectotaw.ui.FEditarEmpresa;
 import jakarta.servlet.http.HttpSession;
@@ -52,10 +52,56 @@ public class EmpresaController {
 
 
     @GetMapping("/Empresa/crearNuevaEmpresa")
-    public String crearNuevaEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa) {
-        //this.empresaRepository.save(empresa);
+    public String crearNuevaEmpresa(Model model) {
+        CrearNuevaEmpresa crearNuevaEmpresa = new CrearNuevaEmpresa();
+        model.addAttribute("crearNuevaEmpresa", crearNuevaEmpresa);
         return "Empresa/crearNuevaEmpresa";
     }
+
+    @PostMapping("/procesarFormularioEmpresa")
+    public String procesarFormularioEmpresa(@ModelAttribute("crearNuevaEmpresa") CrearNuevaEmpresa crearNuevaEmpresa, Model model) {
+
+        EmpresaEntity empresa = new EmpresaEntity();
+        empresa.setCif(crearNuevaEmpresa.getCif());
+        empresa.setNombre(crearNuevaEmpresa.getNombre());
+        empresa.setEstadoEmpresa("pendiente");
+
+        DireccionEntity direccion = new DireccionEntity();
+        direccion.setCalle(crearNuevaEmpresa.getCalle());
+        direccion.setNumero(crearNuevaEmpresa.getNumero());
+        direccion.setPuerta(crearNuevaEmpresa.getPuerta());
+        direccion.setCiudad(crearNuevaEmpresa.getCiudad());
+        direccion.setPais(crearNuevaEmpresa.getPais());
+        direccion.setCp(crearNuevaEmpresa.getCp());
+        direccion.setValida((byte) 1);
+
+
+        String urlTo = "";
+        if (empresa != null) {
+
+            direccionRepository.save(direccion);
+            empresa.setDireccionByDireccionIdDireccion(direccion);
+            empresaRepository.save(empresa);
+
+            PeticionEntity peticion = new PeticionEntity();
+            peticion.setTipoPeticion("alta");
+            peticion.setEstadoPeticion("noprocesada");
+            peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+            peticion.setEmpresaByEmpresaIdEmpresa(empresa);
+            this.peticionRepository.save(peticion);
+            CrearNuevoSocio crearNuevoSocio = new CrearNuevoSocio();
+
+            model.addAttribute("crearNuevoSocio", crearNuevoSocio);
+            model.addAttribute("empresa", empresa);
+
+            urlTo = "Empresa/crearUsuarioEmpresa";
+        } else {
+            System.out.println("no se ha creado la empresa");
+        }
+
+        return urlTo;
+    }
+
 
     @GetMapping("/Empresa/SalirEmpresa")
     public String salirEmpresa(Model model) {
@@ -63,25 +109,6 @@ public class EmpresaController {
         return "../index";
     }
 
-
-    @RequestMapping("/procesarFormularioEmpresa")
-    public String procesarFormularioEmpresa(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion) {
-        System.out.println("PETA 1");
-        //DireccionEntity direccionEntity = new DireccionEntity(11,"CAlle pilar","33","aa","MALAGA","SPAIN","12341", (byte) 1);
-        //DireccionEntity direccionEntity = new DireccionEntity("CAlle pilar", "33", "aa", "MALAGA", "SPAIN", "12341", (byte) 1);
-        //EmpresaEntity empresa1 = new EmpresaEntity(11, "222", "empresaPruebas", direccionEntity);
-        //this.direccionRepository.save(direccionEntity);
-        //this.empresaRepository.save(empresa1);
-        //this.empresaRepository.save(empresa);
-        System.out.println(empresa.getNombre());
-        System.out.println(empresa.getIdEmpresa());
-        System.out.println(empresa.getCif());
-        System.out.println(direccion.getCalle());
-        System.out.println(direccion.getIdDireccion());
-        System.out.println(direccion.getCp());
-        System.out.println("PETA 2");
-        return "/Empresa/crearUsuarioEmpresa";
-    }
 
     @RequestMapping("/Empresa/crearNuevoSocio")
     public String crearNuevoSocio(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion, Model model) {
@@ -139,13 +166,26 @@ public class EmpresaController {
     @PostMapping("/procesarRegistrarNuevoSocio")
     public String procesarRegistrarNuevoSocio(@ModelAttribute("crearNuevoSocio") CrearNuevoSocio crearNuevoSocio, Model model, HttpSession session) {
 
-        UsuarioEntity socio = usuarioRepository.findById(crearNuevoSocio.getId()).orElse(null);
-        System.out.println(socio.getNombre());
-        System.out.println("=================");
-
 
         DireccionEntity nuevaDireccion = new DireccionEntity();
         UsuarioEntity nuevoSocio = new UsuarioEntity();
+        EmpresaEntity empresa = new EmpresaEntity();
+        UsuarioEntity socio = new UsuarioEntity();
+        if (crearNuevoSocio.getId() != null) {
+            socio = usuarioRepository.findById(crearNuevoSocio.getId()).orElse(null);
+        }
+        if (crearNuevoSocio.getIdEmpresa() == null) {
+            empresa = socio.getEmpresaByEmpresaIdEmpresa();
+
+        } else {
+            empresa = empresaRepository.findById(crearNuevoSocio.getIdEmpresa()).orElse(null);
+        }
+
+
+        //System.out.println(socio.getNombre());
+        //System.out.println("=================");
+
+
         nuevoSocio.setNif(crearNuevoSocio.getNif());
         nuevoSocio.setNombre(crearNuevoSocio.getNombre());
         nuevoSocio.setSegundoNombre(crearNuevoSocio.getSegundoNombre());
@@ -156,7 +196,7 @@ public class EmpresaController {
         nuevoSocio.setTipoUsuario(crearNuevoSocio.getTipoUsuario());
         nuevoSocio.setEstadoUsuario("pendiente");
         nuevoSocio.setFechaInicio(Date.valueOf(LocalDate.now()));
-        nuevoSocio.setEmpresaByEmpresaIdEmpresa(socio.getEmpresaByEmpresaIdEmpresa());
+        nuevoSocio.setEmpresaByEmpresaIdEmpresa(empresa);
         nuevoSocio.setTipoPersonaRelacionada("desbloqueada");
         nuevaDireccion.setCalle(crearNuevoSocio.getCalle());
         nuevaDireccion.setNumero(crearNuevoSocio.getNumeroVivienda());
@@ -181,12 +221,18 @@ public class EmpresaController {
             peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
             peticion.setUsuarioByUsuarioIdUsuario(nuevoSocio);
             this.peticionRepository.save(peticion);
-            model.addAttribute("socio", socio);
-            session.setAttribute("socio", socio);
+            if (socio != null) {
+                model.addAttribute("socio", socio);
+                session.setAttribute("socio", socio);
+                urlTo = "Empresa/sesionIniciadaEmpresa";
+            }else {
+                urlTo = "Empresa/empresaPrincipal";
+            }
 
-            urlTo = "Empresa/sesionIniciadaEmpresa";
+
+
         } else {
-            urlTo = "/Empresa/crearUsuarioEmpresa";
+            urlTo = "/Empresa/empresaPrincipal";
         }
 
         return urlTo;

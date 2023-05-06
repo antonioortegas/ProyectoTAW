@@ -22,11 +22,24 @@ public class CrearNuevoSocio {
     String contrasena = "";
     String repcontrasena = "";
     String tipoUsuario = "";
+    Integer idEmpresa = null;
     Integer id = null;
 
     String tipoPersonaRelacionada = "";
     public CrearNuevoSocio(Integer id) {
         this.id = id;
+    }
+
+    public CrearNuevoSocio() {
+        id=0;
+    }
+
+    public Integer getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Integer idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 
     public String getTipoPersonaRelacionada() {

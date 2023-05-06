@@ -1,7 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
+<%@ page import="es.taw.proyectotaw.ui.CrearNuevaEmpresa" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -11,7 +12,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
+    CrearNuevaEmpresa crearNuevaEmpresa = (CrearNuevaEmpresa) request.getAttribute("crearNuevaEmpresa");
 %>
 
 <head>
@@ -21,7 +22,8 @@
 <% System.out.println("HOLA");%>
 <h1>HOLA PAGINA DE CREAR EMPRESAS</h1>
 <h1>Formulario de Registro de Empresa</h1>
-<form method="post" action="/procesarFormularioEmpresa" modelAttribute="empresa">
+<%--@elvariable id="crearNuevaEmpresa" type=""--%>
+<form:form method="post" action="/procesarFormularioEmpresa" modelAttribute="crearNuevaEmpresa">
     <label for="cif">CIF *</label>
     <input type="text" id="cif" name="cif" required>
     <br>
@@ -37,11 +39,8 @@
     <input type="password" id="repetirContrasena" name="repetirContrasena">
     <br>
     <input type="hidden" id="Direccion_id_direccion" name="Direccion_id_direccion">
-    <input type="submit" value="Registrarse">
 
 
-</form>
-<form method="post" action="/procesarFormularioEmpresa" modelAttribute="direccion">
     <label for="calle">Calle *</label>
     <input type="text" id="calle" name="calle" required>
     <br>
@@ -60,7 +59,10 @@
     <label for="cp">Código Postal *</label>
     <input type="text" id="cp" name="cp" required>
     <br>
-</form>
+    <form:hidden  path="valida" value="1"/>
+    <input type="submit" value="Registrarse">
+
+</form:form>
 
 </body>
 </html>

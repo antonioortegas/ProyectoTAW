@@ -1,4 +1,5 @@
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -6,7 +7,17 @@
 
 <html>
 <head>
-    <%UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");%>
+    <%
+        UsuarioEntity socio = null;
+        if ((UsuarioEntity) request.getAttribute("socio") != null) {
+            socio = (UsuarioEntity) request.getAttribute("socio");
+        }
+        EmpresaEntity empresa = null;
+        if ((EmpresaEntity) request.getAttribute("empresa") != null) {
+            empresa = (EmpresaEntity) request.getAttribute("empresa");
+        }
+
+    %>
     <title>Registrar Cliente</title>
 </head>
 <body>
@@ -59,12 +70,17 @@
     <label for="contrasena">Repetir contraseña*:</label>
     <input type="password" id="repcontrasena" name="repcontrasena" required>
     <br>
-
+    <% if (socio != null) {%>
     <label for="tipoUsuario">Tipo Usuario*:</label><br>
-
     <label><input type="radio" name="tipoUsuario" value="socio" required>Socio</label><br>
     <label><input type="radio" name="tipoUsuario" value="autorizado" required>Autorizado</label><br>
     <form:hidden path="id" value="${socio.getIdUsuario()}"/>
+    <%} else {%>
+    <form:hidden path="idEmpresa"
+                 value="${socio == null ? empresa.getIdEmpresa() :socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()}"/>
+    <form:hidden path="tipoUsuario" value="socio"/>
+    <%
+        }%>
 
     <br>
     <input type="submit" value="Registrar">

@@ -22,7 +22,7 @@
 </head>
 <body>
 
-<table>
+<table border="1">
     <%
         CuentabancoEntity cuentaBanco = socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco();
         if (cuentaBanco != null) {
@@ -60,6 +60,12 @@
 
         </td>
         <td><%= cuentaBanco.getIban() %>
+        </td>
+        <td><%= transaccion.getFechaInstruccion() %>
+        </td>
+        <td><%if (transaccion.getPagoByPagoIdPago() != null) { %>
+            <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario() %>
+            <% } %>
         </td>
         <td><%= transaccion.getFechaInstruccion() %>
         </td>
