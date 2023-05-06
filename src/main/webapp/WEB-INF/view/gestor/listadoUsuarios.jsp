@@ -31,14 +31,14 @@
 
         body {
             font-family: Arial, sans-serif;
-            font-size: 16px;
+            font-size: 13px;
             line-height: 1.5;
         }
 
         /* Styles for form elements */
         form {
             display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         select {
@@ -54,17 +54,17 @@
             padding: 5px 10px;
             border-radius: 5px;
             border: none;
-            font-size: 16px;
-            background-color: #585757;
-            color: #fff;
+            font-size: 13px;
+            color: #000000;
             cursor: pointer;
+            font-weight: bold;
         }
 
         /* Styles for table */
         table {
             border-collapse: collapse;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
         th, td {
@@ -72,6 +72,7 @@
             text-align: left;
             vertical-align: top;
             border: 1px solid #ccc;
+            font-size: 13px;
         }
 
         th {
@@ -82,20 +83,31 @@
         /* Styles for headings */
         h1 {
             margin: 0;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: bold;
             margin-bottom: 10px;
         }
 
         /* Styles for links */
         a {
-            color: #585757;
+            color: #000000;
             font-weight: bold;
             text-decoration: none;
+            width: inherit;
+            display: block;
         }
 
         a:hover {
             text-decoration: underline;
+            background-color: #DAD8D8;
+        }
+
+        tr td table tr td:hover {
+            background-color: #DAD8D8;
+        }
+
+        a:visited {
+            color: #000000;
         }
 
     </style>
@@ -107,6 +119,7 @@
     <table class="wrap">
         <tr>
             <td>
+                <%--@elvariable id="filtroUsuarios" type=""--%>
                 <form:form action="/gestor/filtrar" method="post" modelAttribute="filtroUsuarios">
                     Propiedad:
                     <form:select path="propiedadU">
@@ -127,6 +140,7 @@
                 </form:form>
             </td>
             <td>
+                <%--@elvariable id="filtroEmpresas" type=""--%>
                 <form:form action="/gestor/filtrar" method="post" modelAttribute="filtroEmpresas">
                     Propiedad:
                     <form:select path="propiedadE">

@@ -23,21 +23,89 @@
 
     <style type="text/css">
 
-        .wrap{ -webkit-border-horizontal-spacing: 100px;}
-        .wrap tr td { vertical-align: top; }
-
-        div table{
-            background-color:#eee;
-            border-collapse:collapse;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
         }
-        div table th { background-color:#000;color:white; }
-        div table td, div table th { padding:5px;border:1px solid #000; }
+
+        /* Styles for form elements */
+        form {
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        select {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
 
         button {
-            padding: 10px;
-            margin: 15px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 13px;
+            color: #000000;
+            cursor: pointer;
+            font-weight: bold;
         }
+
+        /* Styles for table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            border: 1px solid #ccc;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Styles for headings */
+        h1 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Styles for links */
+        a {
+            color: #000000;
+            font-weight: bold;
+            text-decoration: none;
+            width: inherit;
+            display: block;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            background-color: #DAD8D8;
+        }
+
+        tr td table tr td:hover {
+            background-color: #DAD8D8;
+        }
+
+        a:visited {
+            color: #000000;
+        }
+
     </style>
+    <!-- End Styles -->
 </head>
 <body>
     <table class="wrap">
