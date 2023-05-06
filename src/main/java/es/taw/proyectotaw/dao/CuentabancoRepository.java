@@ -11,6 +11,8 @@ import java.util.List;
 public interface CuentabancoRepository extends JpaRepository<CuentabancoEntity, Integer> {
     List<CuentabancoEntity> findAllByUsuariosByIdCuentaBancoIsEmpty();
 
+    List<CuentabancoEntity> findAllByEmpresasByIdCuentaBancoIsEmpty();
+
     List<CuentabancoEntity> findAllBySospechosoEquals(Integer sospechoso);
 
     @Query("select cuenta from CuentabancoEntity cuenta where cuenta.iban = :iban")

@@ -359,11 +359,18 @@ public class GestorController {
     public String aceptarAltaEmpresa(Model model, @RequestParam("id_empresa") Integer id){
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "alta");
-        for (PeticionEntity peticion: listaPeticiones) {
-            aceptarPeticion(peticion);
+
+        if(this.cuentabancoRepository.findAllByEmpresasByIdCuentaBancoIsEmpty().size() > 0){
+            CuentabancoEntity cuenta = (CuentabancoEntity) this.cuentabancoRepository.findAllByEmpresasByIdCuentaBancoIsEmpty().get(0);
+            empresa.setCuentabancoByCuentaEmpresaIdCuentaBanco(cuenta);
+            setEstadoEmpresa(empresa, "activa");
+            for(PeticionEntity peticion : listaPeticiones){
+                aceptarPeticion(peticion);
+            }
+            this.empresaRepository.save(empresa);
+        } else{
+            System.out.println("No hay cuentas disponibles");
         }
-        setEstadoEmpresa(empresa, "activa");
-        this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }
 
