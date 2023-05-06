@@ -9,9 +9,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface CuentabancoRepository extends JpaRepository<CuentabancoEntity, Integer> {
-    List<CuentabancoEntity> findAllByUsuariosByIdCuentaBancoIsEmpty();
+    List<CuentabancoEntity> findAllByUsuariosByIdCuentaBancoIsEmptyAndEmpresasByIdCuentaBancoIsEmpty();
 
-    List<CuentabancoEntity> findAllByEmpresasByIdCuentaBancoIsEmpty();
 
     List<CuentabancoEntity> findAllBySospechosoEquals(Integer sospechoso);
 

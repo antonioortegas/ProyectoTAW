@@ -247,10 +247,10 @@ public class GestorController {
     public String aceptarUsuario(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
         List<PeticionEntity> listaPeticiones = buscarPeticionesUsuarioPorTipo(usuario, "noprocesada", "alta");
-        if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().size() > 0){
+        if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmptyAndEmpresasByIdCuentaBancoIsEmpty().size() > 0){
             CuentabancoEntity cuenta = null;
             if(usuario.getTipoUsuario().equals("cliente")){
-                cuenta = this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmpty().get(0);
+                cuenta = this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmptyAndEmpresasByIdCuentaBancoIsEmpty().get(0);
             } else if((usuario.getTipoUsuario().equals("socio") || usuario.getTipoUsuario().equals("autorizado"))&& usuario.getEmpresaByEmpresaIdEmpresa().getEstadoEmpresa().equals("activo")){
                 cuenta = usuario.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco();
             } else{
@@ -360,8 +360,8 @@ public class GestorController {
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "alta");
 
-        if(this.cuentabancoRepository.findAllByEmpresasByIdCuentaBancoIsEmpty().size() > 0){
-            CuentabancoEntity cuenta = (CuentabancoEntity) this.cuentabancoRepository.findAllByEmpresasByIdCuentaBancoIsEmpty().get(0);
+        if(this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmptyAndEmpresasByIdCuentaBancoIsEmpty().size() > 0){
+            CuentabancoEntity cuenta = (CuentabancoEntity) this.cuentabancoRepository.findAllByUsuariosByIdCuentaBancoIsEmptyAndEmpresasByIdCuentaBancoIsEmpty().get(0);
             empresa.setCuentabancoByCuentaEmpresaIdCuentaBanco(cuenta);
             setEstadoEmpresa(empresa, "activa");
             for(PeticionEntity peticion : listaPeticiones){
