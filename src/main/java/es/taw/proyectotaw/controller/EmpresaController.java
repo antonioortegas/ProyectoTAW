@@ -4,6 +4,7 @@ package es.taw.proyectotaw.controller;
 import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
+import es.taw.proyectotaw.ui.CrearNuevoSocio;
 import es.taw.proyectotaw.ui.FEditarEmpresa;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,6 +114,73 @@ public class EmpresaController {
     public String iniciarSesionEmpleadp() {
         return "Empresa/login";
     }
+
+
+    @GetMapping("/Empresa/registrarNuevoSocio")
+    public String registrarNuevoSocio(Integer id, Model model) {
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+
+        CrearNuevoSocio crearNuevoSocio =  new CrearNuevoSocio(id);
+
+        model.addAttribute("crearNuevoSocio", crearNuevoSocio);
+        model.addAttribute("socio", socio);
+
+
+        return "Empresa/crearUsuarioEmpresa";
+    }
+
+
+    @PostMapping("/procesarRegistrarNuevoSocio")
+    public String procesarRegistrarNuevoSocio(@ModelAttribute("crearNuevoSocio") CrearNuevoSocio crearNuevoSocio, Model model,HttpSession session) {
+
+        UsuarioEntity socio = usuarioRepository.findById(crearNuevoSocio.getId()).orElse(null);
+        System.out.println(socio.getNombre());
+        System.out.println("=================");
+
+
+        DireccionEntity nuevaDireccion=new DireccionEntity();
+        UsuarioEntity nuevoSocio= new UsuarioEntity();
+        nuevoSocio.setNif(crearNuevoSocio.getNif());
+        nuevoSocio.setNombre(crearNuevoSocio.getNombre());
+        nuevoSocio.setSegundoNombre(crearNuevoSocio.getSegundoNombre());
+        nuevoSocio.setPrimerApellido(crearNuevoSocio.getApellido1());
+        nuevoSocio.setSegundoApellido(crearNuevoSocio.getApellido2());
+        nuevoSocio.setFechaNacimiento( crearNuevoSocio.getFechaNacimiento());
+        nuevoSocio.setContrasena(crearNuevoSocio.getContrasena());
+        nuevoSocio.setTipoUsuario(crearNuevoSocio.getTipoUsuario());
+        nuevoSocio.setEstadoUsuario("pendiente");
+        nuevoSocio.setFechaInicio(Date.valueOf(LocalDate.now()));
+        nuevoSocio.setEmpresaByEmpresaIdEmpresa(socio.getEmpresaByEmpresaIdEmpresa());
+        nuevoSocio.setTipoPersonaRelacionada("desbloqueada");
+        nuevaDireccion.setCalle(crearNuevoSocio.getCalle());
+        nuevaDireccion.setNumero(crearNuevoSocio.getNumeroVivienda());
+        nuevaDireccion.setPuerta(crearNuevoSocio.getPlanta());
+        nuevaDireccion.setCiudad(crearNuevoSocio.getCiudad());
+        nuevaDireccion.setRegion(crearNuevoSocio.getRegion());
+        nuevaDireccion.setPais(crearNuevoSocio.getPais());
+        nuevaDireccion.setCp(crearNuevoSocio.getCp());
+        nuevaDireccion.setValida((byte) 1);
+        nuevoSocio.setDireccionByDireccionIdDireccion(nuevaDireccion);
+
+
+
+        String urlTo = "Empresa/socioExistente";
+
+        if (nuevoSocio!=null ) {
+
+            direccionRepository.save(nuevaDireccion);
+            usuarioRepository.save(nuevoSocio);
+            model.addAttribute("socio", socio);
+            session.setAttribute("socio",socio);
+
+            urlTo = "Empresa/sesionIniciadaEmpresa";
+        } else {
+            urlTo = "/Empresa/crearUsuarioEmpresa";
+        }
+
+        return urlTo;
+    }
+
 
     @GetMapping("/Empresa/bloquearSocios")
     public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
@@ -243,14 +311,14 @@ public class EmpresaController {
     }
 
     @PostMapping("/guardarEmpresa")
-    public String guardarEmpresa(@ModelAttribute("fEditarEmpresa") FEditarEmpresa fEditarEmpresa,Model model) {
+    public String guardarEmpresa(@ModelAttribute("fEditarEmpresa") FEditarEmpresa fEditarEmpresa, Model model) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(fEditarEmpresa.getIdEmpresa());
         empresa.setCif(fEditarEmpresa.getCif());
         empresa.setNombre(fEditarEmpresa.getNombre());
         this.empresaRepository.save(empresa);
 
-        model.addAttribute("empresa",empresa);
-        model.addAttribute("socio",this.usuarioRepository.getReferenceById(fEditarEmpresa.getIdSocio()));
+        model.addAttribute("empresa", empresa);
+        model.addAttribute("socio", this.usuarioRepository.getReferenceById(fEditarEmpresa.getIdSocio()));
 
         return "Empresa/sesionIniciadaEmpresa";
     }

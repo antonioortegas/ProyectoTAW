@@ -38,7 +38,7 @@
         %>
 
         <%
-            if (usuario.getTipoPersonaRelacionada() == "bloqueada") {
+            if (usuario.getTipoPersonaRelacionada().toString().equals("bloqueada")) {
         %>
         <button><a href="cambiarEstadoSocio?idCambio=<%= usuario.getIdUsuario()%> ">Desbloquear</a></button>
         <%

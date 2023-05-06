@@ -28,7 +28,7 @@
     if (socio.getTipoUsuario().toLowerCase().equals("socio")) {
 
 %>
-<button><a href="Empresa/crearNuevoSocio">Dar de alta a nuevo socio</a></button>
+<button><a href="Empresa/registrarNuevoSocio?id=<%= socio.getIdUsuario() %>">Dar de alta a nuevo socio</a></button>
 <button><a href="Empresa/bloquearSocios?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Lista de socios</a>
 </button>
 <button><a href="/Empresa/editarDatosSocio?id=<%= socio.getIdUsuario() %>">Modificar datos personales</a></button>
