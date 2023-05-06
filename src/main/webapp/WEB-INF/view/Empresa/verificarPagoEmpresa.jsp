@@ -8,6 +8,7 @@
 <html>
 <%
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
 %>
 
 <head>
@@ -46,7 +47,7 @@
 <div id="container">
     <div>Pago realizado satisfactoriamente.</div>
     <div>La cuenta actualmente tiene un saldo total de <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%> <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%></div>
-    <a href="/volverIndex?id=<%=empresa.getIdEmpresa()%>">Volver al menú de inicio</a>
+    <a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">Volver al menú de inicio</a>
 </div>
 </body>
 </html>

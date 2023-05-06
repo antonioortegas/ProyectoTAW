@@ -7,7 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <%
-
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
     List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
 %>
@@ -72,12 +72,14 @@
         de <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%> <%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%>
     </div>
     <form method="post" action="/verificarTransferenciaEmpresa">
-        <input type="hidden" name="id" value="<%=empresa.getIdEmpresa()%>">
+        <input type="hidden" name="id" value="<%=socio.getIdUsuario()%>">
         Cantidad:<input type="number" name="cantidad"
                         max="<%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>">
         IBAN Beneficiario:<input type="text" name="iban">
         <button>Realizar transferencia</button>
     </form>
+    <button>    <a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
+
 </div>
 </body>
 </html>

@@ -44,9 +44,11 @@ public class EmpresaController {
     protected PeticionRepository peticionRepository;
 
     @GetMapping("/goPrincipalEmpresa")
-    public String goPrincipalEmpresa(Model model, HttpSession httpSession) {
-
-
+    public String goPrincipalEmpresa(Model model, HttpSession httpSession, @RequestParam("id") Integer id) {
+        UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+        model.addAttribute("socio", socio);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        model.addAttribute("empresa", empresa);
         return "/Empresa/sesionIniciadaEmpresa";
     }
 
@@ -353,7 +355,8 @@ public class EmpresaController {
         EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
 
         FEditarEmpresa fEditarEmpresa = new FEditarEmpresa(empresa.getNombre(), empresa.getCif(), empresa.getIdEmpresa(), empresa.getDireccionByDireccionIdDireccion().getIdDireccion(), empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIdCuentaBanco(), socio.getIdUsuario());
-
+        model.addAttribute("empresa", empresa);
+        model.addAttribute("socio", socio);
         model.addAttribute("fEditarEmpresa", fEditarEmpresa);
 
 
@@ -391,7 +394,9 @@ public class EmpresaController {
 
     @GetMapping("/pagoEmpresa")
     public String pagoCliente(Integer id, Model model, HttpSession session) {
-        EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        model.addAttribute("socio", socio);
         model.addAttribute("empresa", empresa);
         List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda());
         model.addAttribute("cambioDivisa", cambioDivisa);
@@ -403,8 +408,8 @@ public class EmpresaController {
     @PostMapping("/verificarTransferenciaEmpresa")
     public String doVerificarPago(@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad, @RequestParam("iban") String iban, Model model) {
         String UrlTo = "Empresa/verificarPagoEmpresa";
-        // UsuarioEntity cliente = this.usuarioRepository.findById(id).orElse(null);
-        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
         CuentabancoEntity cb = this.cuentabancoRepository.cuentaDestinatario(iban);
         PagoEntity pago = new PagoEntity();
         pago.setCantidad(cantidad);
@@ -416,6 +421,7 @@ public class EmpresaController {
                 empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().setSaldo(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo() - cantidad);
                 this.empresaRepository.save(empresa);
                 TransaccionEntity transaccion = new TransaccionEntity();
+                transaccion.setIdUsuarioActor(socio.getIdUsuario());
                 transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
                 transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
                 this.pagoRepository.save(pago);
@@ -436,6 +442,7 @@ public class EmpresaController {
             this.transaccionRepository.save(transaccion);
         }
         model.addAttribute("empresa", empresa);
+        model.addAttribute("socio", socio);
 
         return UrlTo;
     }
@@ -443,7 +450,10 @@ public class EmpresaController {
 
     @GetMapping("/cambioDeDivisaEmpresa")
     public String cambioDivisa(Integer id, Model model, HttpSession session) {
-        EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
+        UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
+
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        model.addAttribute("socio", socio);
         model.addAttribute("empresa", empresa);
         List<CambiodivisaEntity> cambioDivisa = this.cambiodivisaRepository.listaCambioDivisa(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda());
         model.addAttribute("cambioDivisa", cambioDivisa);
@@ -465,7 +475,7 @@ public class EmpresaController {
 
 
     @GetMapping("/nuevaPeticionAltaEmpresa")
-    public String pedirAlta (Integer id,  Model model, HttpSession session) {
+    public String pedirAlta(Integer id, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
         model.addAttribute("empresa", empresa);
         PeticionEntity peticion = new PeticionEntity();
@@ -478,7 +488,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/nuevaPeticionBloqueadoEmpresa")
-    public String pedirDesbloqueo (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+    public String pedirDesbloqueo(@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);
         PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("desbloqueo");
@@ -490,7 +500,7 @@ public class EmpresaController {
     }
 
     @GetMapping("/nuevaPeticionActivacionEmpresa")
-    public String pedirActivacion (@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
+    public String pedirActivacion(@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);
         PeticionEntity peticion = new PeticionEntity();
         peticion.setTipoPeticion("activar");

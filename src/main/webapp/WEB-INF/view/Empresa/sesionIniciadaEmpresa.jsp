@@ -21,6 +21,19 @@
 <h1>Bienvenido a la Aplicación Bancaria</h1>
 <h2>Menú Principal</h2>
 <%="Bienvenido " + socio.getNombre()%> <br>
+
+<div class="status <%=empresa.getEstadoEmpresa()%>">
+    Su cuenta se encuentra en estado: <%=empresa.getEstadoEmpresa()%>.
+    <% if (empresa.getEstadoEmpresa().equals("inactiva")) {%>
+    <br><a href="/nuevaPeticionInactivoEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>" class="button">Solicitar
+    activación</a>
+    <%} else if (empresa.getEstadoEmpresa().equals("bloqueada")) {%>
+    <br><a href="/nuevaPeticionBloqueadoEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>">Solicitar desbloqueo.</a>
+    <%} else if (empresa.getEstadoEmpresa().equals("pendiente")) {%>
+    <a href="/nuevaPeticionAltaEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>">Solicitar alta.</a>
+    <%} else { %>
+</div>
+
 <%
     if (!socio.getTipoPersonaRelacionada().toLowerCase().equals("bloqueada")) {
 %>
@@ -41,12 +54,11 @@
 <br>
 <%=socio.getEmpresaByEmpresaIdEmpresa().getNombre()%>
 <br>
-<button><a href="/pagoEmpresa?id=<%=socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()%>">Transferencia bancaria</a>
+<button><a href="/pagoEmpresa?id=<%=socio.getIdUsuario()%>">Transferencia bancaria</a>
 </button>
-<button><a href="/cambioDeDivisaEmpresa?id=<%= socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa() %>">Cambio de
+<button><a href="/cambioDeDivisaEmpresa?id=<%= socio.getIdUsuario() %>">Cambio de
     divisas</a></button>
 <button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
-<button><a href="">Estado de la cuenta</a></button>
 <br>
 <br>
 <br>
@@ -60,17 +72,11 @@
     }
 %>
 
+<%
+    }
+%>
 
-<div class="status <%=empresa.getEstadoEmpresa()%>">
-    Su cuenta se encuentra en estado: <%=empresa.getEstadoEmpresa()%>.
-    <% if(empresa.getEstadoEmpresa().equals("inactiva")){%>
-    <br><a href="/nuevaPeticionInactivoEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>" class="button">Solicitar activación</a>
-    <%} else if(empresa.getEstadoEmpresa().equals("bloqueada")){%>
-    <br><a href="/nuevaPeticionBloqueadoEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>">Solicitar desbloqueo.</a>
-    <%} else if(empresa.getEstadoEmpresa().equals("pendiente")){%>
-    <a href="/nuevaPeticionAltaEmpresa?idUsuario=<%=empresa.getIdEmpresa()%>">Solicitar alta.</a>
-    <%}%>
-</div>
+
 <br>
 <button><a href="/Empresa/SalirEmpresa">Cerrar sesion</a></button>
 <br>

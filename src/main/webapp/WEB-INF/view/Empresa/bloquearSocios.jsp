@@ -53,7 +53,7 @@
     </li>
 
     <%}%>
-    <button><a href="goEmpresaPrincipal">SALIR</a></button>
+    <button>    <a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
     <!-- Añadir más elementos de lista para los demás socios -->
 </ul>
 

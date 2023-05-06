@@ -7,6 +7,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <%
+        UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
     EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
     List<CambiodivisaEntity> cambioDivisa = (List<CambiodivisaEntity>) request.getAttribute("cambioDivisa");
 %>
@@ -71,6 +72,8 @@
         </select>
         <button>Realizar cambio</button>
     </form>
+    <button><a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
+
 </div>
 </body>
 </html>

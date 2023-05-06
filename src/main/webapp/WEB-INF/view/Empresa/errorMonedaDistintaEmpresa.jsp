@@ -7,7 +7,7 @@
 
 <html>
 <%
-    UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
 %>
 <head>
     <title>Title</title>
@@ -37,7 +37,8 @@
 <body>
 <div class="mensaje">
     <p>La cuenta a la que intenta hacer un pago no utiliza el mismo tipo de moneda que usted.
-        Si lo desea puede realizar un cambio de divisa desde el menú principal.<br> <a href="/volverIndex?id=<%=cliente.getIdUsuario()%>">Volver al menú de inicio</a>></p>
+        Si lo desea puede realizar un cambio de divisa desde el menú principal.<br>     <button>    <a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">Volver al menú de inicio>SALIR</a></button>
+        Volver al menú de inicio</a>></p>
 </div>
 </body>
 

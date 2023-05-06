@@ -74,8 +74,11 @@
     <label for="tipoUsuario">Tipo Usuario*:</label><br>
     <label><input type="radio" name="tipoUsuario" value="socio" required>Socio</label><br>
     <label><input type="radio" name="tipoUsuario" value="autorizado" required>Autorizado</label><br>
+    <button><a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
+
     <form:hidden path="id" value="${socio.getIdUsuario()}"/>
     <%} else {%>
+
     <form:hidden path="idEmpresa"
                  value="${socio == null ? empresa.getIdEmpresa() :socio.getEmpresaByEmpresaIdEmpresa().getIdEmpresa()}"/>
     <form:hidden path="tipoUsuario" value="socio"/>

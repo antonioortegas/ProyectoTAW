@@ -37,6 +37,7 @@
     <form:hidden path="tipoUsuario"/>
     <form:button>Submit</form:button>
 </form:form>
+<button><a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
 
 </body>
 </html>

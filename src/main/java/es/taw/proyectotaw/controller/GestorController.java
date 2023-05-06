@@ -367,6 +367,18 @@ public class GestorController {
         return "redirect:/gestor/usuarios";
     }
 
+    //DENEGAR ACTIVACION DE EMPRESA
+    @GetMapping("/gestor/denegarActivarEmpresa")
+    public String denegarActivarEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "activacion");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
     //ACEPTAR DESBLOQUEO DE EMPRESA
     @GetMapping("/gestor/aceptarDesbloquearEmpresa")
     public String desbloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
@@ -376,6 +388,20 @@ public class GestorController {
             aceptarPeticion(peticion);
         }
         setEstadoEmpresa(empresa, "activa");
+        this.empresaRepository.save(empresa);
+        return "redirect:/gestor/usuarios";
+    }
+
+
+
+    //DENEGAR DESBLOQUEO DE EMPRESA
+    @GetMapping("/gestor/denegarDesbloquearEmpresa")
+    public String denegarDesbloquearEmpresa(Model model, @RequestParam("id_empresa") Integer id){
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<PeticionEntity> listaPeticiones = buscarPeticionesEmpresaPorTipo(empresa, "noprocesada", "desbloqueo");
+        for (PeticionEntity peticion: listaPeticiones) {
+            rechazarPeticion(peticion);
+        }
         this.empresaRepository.save(empresa);
         return "redirect:/gestor/usuarios";
     }

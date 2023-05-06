@@ -84,5 +84,7 @@
 
 
 </table>
+<button><a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
+
 </body>
 </html>

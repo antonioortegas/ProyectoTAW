@@ -14,6 +14,7 @@
 <%
 
     FEditarEmpresa fEditarEmpresa = (FEditarEmpresa) request.getAttribute("fEditarEmpresa");
+    UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
 %>
 
 <head>
@@ -31,6 +32,7 @@
     <form:hidden path="idSocio"></form:hidden>
     <form:button>Submit</form:button>
 </form:form>
+<button>    <a href="/goPrincipalEmpresa?id=<%=socio.getIdUsuario()%>">SALIR</a></button>
 
 </body>
 </html>
