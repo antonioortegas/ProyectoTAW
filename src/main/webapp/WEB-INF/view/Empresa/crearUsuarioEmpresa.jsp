@@ -19,51 +19,57 @@
 
     %>
     <title>Registrar Cliente</title>
-    <style type="text/css">
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+        }
+
         h1 {
-            color: #2196F3;
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 40px;
-            margin-bottom: 20px;
+            color: #333;
             text-align: center;
+            margin-top: 50px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px #999;
         }
 
         label {
-            color: #333;
-            font-size: 18px;
-            font-weight: bold;
-            margin-top: 10px;
             display: block;
+            margin-bottom: 10px;
         }
 
-        input[type="text"], input[type="password"] {
-            font-size: 16px;
-            padding: 8px;
-            border: 2px solid #ccc;
-            border-radius: 4px;
-            margin-top: 5px;
+        input[type="text"],
+        input[type="password"] {
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            box-shadow: 0px 0px 5px #999;
             margin-bottom: 20px;
             width: 100%;
-            box-sizing: border-box;
         }
 
-        input[type="submit"] {
+        input[type="submit"],
+        input[type="reset"] {
             background-color: #4CAF50;
+            color: #fff;
             border: none;
-            color: white;
-            padding: 12px 24px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            border-radius: 4px;
+            padding: 10px;
+            border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
         }
 
-        input[type="submit"]:hover {
+        input[type="submit"]:hover,
+        input[type="reset"]:hover {
             background-color: #3e8e41;
         }
     </style>
@@ -134,7 +140,7 @@
     <%
         }%>
 
-    <br>
+
     <input type="submit" value="Registrar">
     <input type="reset" value="Limpiar">
 </form:form>
