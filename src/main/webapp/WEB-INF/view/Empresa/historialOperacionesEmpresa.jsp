@@ -16,6 +16,7 @@
 <%
     UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
     List<UsuarioEntity> actores = (List<UsuarioEntity>) request.getAttribute("actores");
+    List<TransaccionEntity> transacciones = (List<TransaccionEntity>) request.getAttribute("listaTransacciones");
 %>
 <head>
     <title>Title</title>
@@ -27,7 +28,30 @@
         CuentabancoEntity cuentaBanco = socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco();
         if (cuentaBanco != null) {
     %>
+
+    <%=socio.getNombre()%>
     <h2>Transacciones de la Empresa :</h2>
+    <div>
+        <%--@elvariable id="filtroTransaccionEmpresa" type=""--%>
+        <form:form action="/Empresa/filtrarTransaccionesEmpresa" method="post"
+                   modelAttribute="filtroTransaccionEmpresa">
+            <form:hidden path="id_empresa" value="${empresa.getIdEmpresa()}"/>
+            <form:hidden path="id_socio" value="${socio. getIdUsuario()}"/>
+            Propiedad:
+            <form:select path="propiedad">
+                <form:option value="">-----</form:option>
+                <form:option value="Pago">Pago</form:option>
+                <form:option value="Cambio de divisa">Cambio de divisa</form:option>
+
+            </form:select>
+            Orden:
+            <form:select path="orden">
+                <form:option value="idTransaccion">ID</form:option>
+                <form:option value="fechaInstruccion">Fecha</form:option>
+            </form:select>
+            <form:button>Filtrar</form:button>
+        </form:form>
+    </div>
     <tr>
         <th>Nombre</th>
         <th>IBAN</th>
@@ -38,7 +62,7 @@
 
 
     <%
-        for (TransaccionEntity transaccion : cuentaBanco.getTransaccionsByIdCuentaBanco()) {
+        for (TransaccionEntity transaccion : transacciones) {
 
     %>
     <tr>
@@ -73,7 +97,6 @@
             <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra() %>
             <% } %>
         </td>
-
 
 
     </tr>

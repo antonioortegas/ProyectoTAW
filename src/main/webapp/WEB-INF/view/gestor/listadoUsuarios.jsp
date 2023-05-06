@@ -29,20 +29,75 @@
     <!-- Start Styles -->
     <style type="text/css">
 
-        table table{
-            background-color:#eee;
-            border-collapse:collapse;
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
         }
-        table table th { background-color:#000;color:white; }
-        table table td, table table th { padding:5px;border:1px solid #000; }
 
-        .wrap { -webkit-border-horizontal-spacing: 100px; }
-        .wrap tr td { vertical-align: top; }
-
-        div button {
-            padding: 5px;
-            margin: 5px;
+        /* Styles for form elements */
+        form {
+            display: inline-block;
+            margin-bottom: 20px;
         }
+
+        select {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            background-color: #fff;
+            color: #333;
+        }
+
+        button {
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+            background-color: #585757;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Styles for table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Styles for headings */
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        /* Styles for links */
+        a {
+            color: #585757;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
     </style>
     <!-- End Styles -->
 

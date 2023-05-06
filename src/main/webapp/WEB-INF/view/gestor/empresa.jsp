@@ -121,6 +121,7 @@
             <td>
                 <h2>Transacciones de la empresa :</h2>
                 <div>
+                    <%--@elvariable id="filtroTransaccionEmpresa" type=""--%>
                     <form:form action="/gestor/filtrarTransaccionesEmpresa" method="post" modelAttribute="filtroTransaccionEmpresa">
                         <form:hidden path="id_empresa" value="${empresa.getIdEmpresa()}"/>
                         Propiedad:

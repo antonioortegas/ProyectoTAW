@@ -16,6 +16,110 @@
 %>
 <head>
     <title>Aplicación Bancaria</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        css
+        Copy code
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+        }
+
+        status {
+            padding: 10px;
+            margin: 20px auto;
+            max-width: 500px;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        inactive {
+            background-color: #ff9800;
+        }
+
+        blocked {
+            background-color: #f44336;
+        }
+
+        pending {
+            background-color: #2196f3;
+        }
+
+        button {
+            display: inline-block;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: #fff;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+            border-radius: 5px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        card h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        card a {
+            display: block;
+            margin-top: 10px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        card a:hover {
+            background-color: #3e8e41;
+        }
+    </style>
 </head>
 <body>
 <h1>Bienvenido a la Aplicación Bancaria</h1>

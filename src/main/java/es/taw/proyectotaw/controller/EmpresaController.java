@@ -6,8 +6,10 @@ import es.taw.proyectotaw.dao.*;
 import es.taw.proyectotaw.ui.CrearNuevaEmpresa;
 import es.taw.proyectotaw.ui.CrearNuevoSocio;
 import es.taw.proyectotaw.ui.FEditarEmpresa;
+import es.taw.proyectotaw.ui.FiltroTransaccionEmpresa;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -381,15 +383,72 @@ public class EmpresaController {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("socio", socio);
         EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        model.addAttribute("empresa", empresa);
 
         List<UsuarioEntity> actores = new ArrayList<>();
-
         for (UsuarioEntity u : empresa.getUsuariosByIdEmpresa()) {
             actores.add(u);
         }
         model.addAttribute("actores", actores);
+
+        if(model.containsAttribute("filtroTransaccionesEmpresa") && model.getAttribute("filtroTransaccionesEmpresa")!=null) {
+            return procesarFiltradoTransaccionesEmpresa(id, model, (FiltroTransaccionEmpresa) model.getAttribute("filtroTransaccionesEmpresa"));
+        } else {
+            return procesarFiltradoTransaccionesEmpresa(id, model, null);
+        }
+    }
+
+
+    @PostMapping("/Empresa/filtrarTransaccionesEmpresa")
+    public String filtrarTransaccionesEmpresa(Model model, @ModelAttribute("filtroTransaccionesEmpresa") FiltroTransaccionEmpresa filtroTransaccion) {
+        return procesarFiltradoTransaccionesEmpresa(filtroTransaccion.getId_socio(), model, filtroTransaccion);
+    }
+
+    private String procesarFiltradoTransaccionesEmpresa(Integer id, Model model, FiltroTransaccionEmpresa filtro) {
+        System.out.println(id);
+
+        UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findAllByEmpresaByEmpresaIdEmpresa(empresa);
+
+        model.addAttribute("listaUsuarios", listaUsuarios);
+        model.addAttribute("socio", socio);
+
+        model.addAttribute("empresa", empresa);
+        System.out.println(socio.getNombre());
+        System.out.println(empresa.getNombre());
+
+
+        List<TransaccionEntity> listaTransacciones = null;
+        List<UsuarioEntity> actores = new ArrayList<>();
+        for (UsuarioEntity u : empresa.getUsuariosByIdEmpresa()) {
+            actores.add(u);
+        }
+        model.addAttribute("actores", actores);
+
+        if(filtro == null){
+            filtro = new FiltroTransaccionEmpresa();
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
+        }
+        if(filtro.getPropiedad().equals("")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
+        }
+        if(filtro.getPropiedad().equals("Pago")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
+        }
+        if(filtro.getPropiedad().equals("Cambio de divisa")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
+        }
+
+        model.addAttribute("listaTransacciones", listaTransacciones);
+        model.addAttribute("filtroTransaccionEmpresa", filtro);
+
         return "Empresa/historialOperacionesEmpresa";
     }
+
+
+
+
 
 
     @GetMapping("/pagoEmpresa")

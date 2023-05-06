@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface TransaccionRepository extends JpaRepository <TransaccionEntity, Integer> {
 
-    List<TransaccionEntity> findAllByIdUsuarioActorEqualsAndPagoByPagoIdPagoNotNull(Integer actor, Sort by);
-    List<TransaccionEntity> findAllByIdUsuarioActorEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(Integer actor, Sort by);
+    List<TransaccionEntity> findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(CuentabancoEntity c, Sort by);
+    List<TransaccionEntity> findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(CuentabancoEntity c, Sort by);
 
-    List<TransaccionEntity> findAllByIdUsuarioActor(Sort by, Integer actor);
+    List<TransaccionEntity> findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort by, CuentabancoEntity c);
 }

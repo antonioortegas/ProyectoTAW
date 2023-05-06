@@ -170,16 +170,16 @@ public class GestorController {
 
         if(filtroTransaccion == null){
             filtroTransaccion = new FiltroTransaccion();
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtroTransaccion.getOrden()) ,usuario.getIdUsuario());
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtroTransaccion.getOrden()) ,usuario.getCuentabancoByCuentaBancoIdCuentaBanco());
         }
         if(filtroTransaccion.getPropiedad().equals("")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtroTransaccion.getOrden()) ,usuario.getIdUsuario());
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtroTransaccion.getOrden()) ,usuario.getCuentabancoByCuentaBancoIdCuentaBanco());
         }
         if(filtroTransaccion.getPropiedad().equals("Pago")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndPagoByPagoIdPagoNotNull(usuario.getIdUsuario(), Sort.by(filtroTransaccion.getOrden()));
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(usuario.getCuentabancoByCuentaBancoIdCuentaBanco(), Sort.by(filtroTransaccion.getOrden()));
         }
         if(filtroTransaccion.getPropiedad().equals("Cambio de divisa")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(usuario.getIdUsuario(), Sort.by(filtroTransaccion.getOrden()));
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(usuario.getCuentabancoByCuentaBancoIdCuentaBanco(), Sort.by(filtroTransaccion.getOrden()));
         }
 
         model.addAttribute("listaTransacciones", listaTransacciones);
@@ -219,16 +219,16 @@ public class GestorController {
 
         if(filtro == null){
             filtro = new FiltroTransaccionEmpresa();
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtro.getOrden()) ,empresa.getIdEmpresa());
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
         }
         if(filtro.getPropiedad().equals("")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtro.getOrden()) ,empresa.getIdEmpresa());
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
         }
         if(filtro.getPropiedad().equals("Pago")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndPagoByPagoIdPagoNotNull(empresa.getIdEmpresa(), Sort.by(filtro.getOrden()));
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
         }
         if(filtro.getPropiedad().equals("Cambio de divisa")){
-            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(empresa.getIdEmpresa(), Sort.by(filtro.getOrden()));
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
         }
 
         model.addAttribute("listaTransacciones", listaTransacciones);
