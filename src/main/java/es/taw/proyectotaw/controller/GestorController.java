@@ -1,11 +1,10 @@
 package es.taw.proyectotaw.controller;
 
 import es.taw.proyectotaw.Entity.*;
-import es.taw.proyectotaw.dao.CuentabancoRepository;
-import es.taw.proyectotaw.dao.EmpresaRepository;
-import es.taw.proyectotaw.dao.PeticionRepository;
-import es.taw.proyectotaw.dao.UsuarioRepository;
+import es.taw.proyectotaw.dao.*;
 import es.taw.proyectotaw.ui.FiltroEmpresas;
+import es.taw.proyectotaw.ui.FiltroTransaccion;
+import es.taw.proyectotaw.ui.FiltroTransaccionEmpresa;
 import es.taw.proyectotaw.ui.FiltroUsuarios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -34,6 +33,9 @@ public class GestorController {
 
     @Autowired
     private PeticionRepository peticionRepository;
+
+    @Autowired
+    private TransaccionRepository transaccionRepository;
 
 
     //LISTADO DE USUARIOS
@@ -139,8 +141,6 @@ public class GestorController {
         model.addAttribute("listaUsuarios", listaUsuarios);
         model.addAttribute("listaEmpresas", listaEmpresas);
 
-
-
         model.addAttribute("filtroUsuarios", filtroUsuarios);
         model.addAttribute("filtroEmpresas", filtroEmpresas);
         return "gestor/listadoUsuarios";
@@ -151,6 +151,40 @@ public class GestorController {
     public String verDetallesCliente(Model model, @RequestParam("id_usuario") Integer id){
         UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
         model.addAttribute("usuario", usuario);
+        if(model.containsAttribute("filtroTransacciones") && model.getAttribute("filtroTransacciones")!=null) {
+            return procesarFiltradoTransacciones(id, model, (FiltroTransaccion) model.getAttribute("filtroTransacciones"));
+        } else {
+            return procesarFiltradoTransacciones(id, model, null);
+        }
+    }
+
+    @PostMapping("/gestor/filtrarTransacciones")
+    public String filtrarTransaccionesCliente(Model model, @ModelAttribute("filtroTransacciones") FiltroTransaccion filtroTransaccion) {
+        return procesarFiltradoTransacciones(filtroTransaccion.getId_usuario(), model, filtroTransaccion);
+    }
+
+    private String procesarFiltradoTransacciones(Integer id, Model model, FiltroTransaccion filtroTransaccion) {
+        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
+        model.addAttribute("usuario", usuario);
+        List<TransaccionEntity> listaTransacciones = null;
+
+        if(filtroTransaccion == null){
+            filtroTransaccion = new FiltroTransaccion();
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtroTransaccion.getOrden()) ,usuario.getIdUsuario());
+        }
+        if(filtroTransaccion.getPropiedad().equals("")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtroTransaccion.getOrden()) ,usuario.getIdUsuario());
+        }
+        if(filtroTransaccion.getPropiedad().equals("Pago")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndPagoByPagoIdPagoNotNull(usuario.getIdUsuario(), Sort.by(filtroTransaccion.getOrden()));
+        }
+        if(filtroTransaccion.getPropiedad().equals("Cambio de divisa")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(usuario.getIdUsuario(), Sort.by(filtroTransaccion.getOrden()));
+        }
+
+        model.addAttribute("listaTransacciones", listaTransacciones);
+        model.addAttribute("filtroTransaccion", filtroTransaccion);
+
         return "gestor/cliente";
     }
 
@@ -164,9 +198,44 @@ public class GestorController {
         EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
         List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findAllByEmpresaByEmpresaIdEmpresa(empresa);
         model.addAttribute("empresa", listaUsuarios);
-        return "gestor/empresa";
+        if(model.containsAttribute("filtroTransaccionesEmpresa") && model.getAttribute("filtroTransaccionesEmpresa")!=null) {
+            return procesarFiltradoTransaccionesEmpresa(id, model, (FiltroTransaccionEmpresa) model.getAttribute("filtroTransaccionesEmpresa"));
+        } else {
+            return procesarFiltradoTransaccionesEmpresa(id, model, null);
+        }
     }
 
+    @PostMapping("/gestor/filtrarTransaccionesEmpresa")
+    public String filtrarTransaccionesEmpresa(Model model, @ModelAttribute("filtroTransaccionesEmpresa") FiltroTransaccionEmpresa filtroTransaccion) {
+        return procesarFiltradoTransaccionesEmpresa(filtroTransaccion.getId_empresa(), model, filtroTransaccion);
+    }
+
+    private String procesarFiltradoTransaccionesEmpresa(Integer id, Model model, FiltroTransaccionEmpresa filtro) {
+        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        List<UsuarioEntity> listaUsuarios = this.usuarioRepository.findAllByEmpresaByEmpresaIdEmpresa(empresa);
+        model.addAttribute("listaUsuarios", listaUsuarios);
+        model.addAttribute("empresa", empresa);
+        List<TransaccionEntity> listaTransacciones = null;
+
+        if(filtro == null){
+            filtro = new FiltroTransaccionEmpresa();
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtro.getOrden()) ,empresa.getIdEmpresa());
+        }
+        if(filtro.getPropiedad().equals("")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActor(Sort.by(filtro.getOrden()) ,empresa.getIdEmpresa());
+        }
+        if(filtro.getPropiedad().equals("Pago")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndPagoByPagoIdPagoNotNull(empresa.getIdEmpresa(), Sort.by(filtro.getOrden()));
+        }
+        if(filtro.getPropiedad().equals("Cambio de divisa")){
+            listaTransacciones = this.transaccionRepository.findAllByIdUsuarioActorEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(empresa.getIdEmpresa(), Sort.by(filtro.getOrden()));
+        }
+
+        model.addAttribute("listaTransacciones", listaTransacciones);
+        model.addAttribute("filtroTransaccionEmpresa", filtro);
+
+        return "gestor/empresa";
+    }
 
 
     //=====

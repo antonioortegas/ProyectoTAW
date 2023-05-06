@@ -280,11 +280,11 @@
                                     }
                                 }
 
-                                if (sospechoso) { %>
+                                if (sospechoso && empresa.getEstadoEmpresa().equals("activa")) { %>
                                     <button><a href="/gestor/bloquearEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Bloquear</a></button>
                                 <% } %>
                                 <%
-                                if (inactivo) { %>
+                                if (inactivo && empresa.getEstadoEmpresa().equals("activa")) { %>
                                     <button><a href="/gestor/desactivarEmpresa?id_empresa=<%= empresa.getIdEmpresa() %>">Desactivar</a></button>
                                 <% } %>
                         </td>

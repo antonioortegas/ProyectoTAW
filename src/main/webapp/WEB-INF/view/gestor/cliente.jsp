@@ -1,7 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.TransaccionEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
+<%@ page import="org.w3c.dom.stylesheets.LinkStyle" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 30/04/2023
@@ -13,6 +15,7 @@
 <%
     UsuarioEntity usuario = (UsuarioEntity) request.getAttribute("usuario");
     EmpresaEntity empresa = usuario.getEmpresaByEmpresaIdEmpresa();
+    List<TransaccionEntity> listaTransacciones = (List<TransaccionEntity>) request.getAttribute("listaTransacciones");
 %>
 
 <html>
@@ -119,13 +122,12 @@
                         <hr>
                         <div>
                             <form:form action="/gestor/filtrarTransacciones" method="post" modelAttribute="filtroTransaccion">
+                                <form:hidden path="id_usuario" value="${usuario.getIdUsuario()}"/>
                                 Propiedad:
                                 <form:select path="propiedad">
                                     <form:option value="">-----</form:option>
                                     <form:option value="Pago">Pago</form:option>
                                     <form:option value="Cambio de divisa">Cambio de divisa</form:option>
-                                    <form:option value="30d">Mas de 30 dias</form:option>
-                                    <form:option value="Sospechosa">Sospechosa</form:option>
                                 </form:select>
                                 Orden:
                                 <form:select path="orden">
@@ -144,7 +146,7 @@
 
 
                         <%
-                            for (TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
+                            for (TransaccionEntity transaccion : listaTransacciones) {
                         %>
                         <tr>
                             <td>

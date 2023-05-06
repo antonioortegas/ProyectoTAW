@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.TransaccionEntity" %>
@@ -11,8 +12,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<UsuarioEntity> usuariosDeLaEmpresa = (List<UsuarioEntity>) request.getAttribute("empresa");
-    EmpresaEntity empresa = usuariosDeLaEmpresa.get(0).getEmpresaByEmpresaIdEmpresa();
+    List<UsuarioEntity> usuariosDeLaEmpresa = (List<UsuarioEntity>) request.getAttribute("listaUsuarios");
+    EmpresaEntity empresa = (EmpresaEntity) request.getAttribute("empresa");
+    List<TransaccionEntity> listaTransacciones = (List<TransaccionEntity>) request.getAttribute("listaTransacciones");
 %>
 
 <html>
@@ -59,7 +61,12 @@
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getCalle()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getNumero()
                     + ", " + empresa.getDireccionByDireccionIdDireccion().getPuerta() %><br>
-                Iban de la empresa: <%= empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban() %><br>
+                Iban de la empresa:
+                <% if(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco() != null) { %>
+                <%= empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban() %><br>
+                <% } else { %>
+                PENDIENTE DE ASIGNAR
+                <% } %>
                 <hr>
                 <h2>Socios / Autorizados</h2>
                 <div>
@@ -114,63 +121,50 @@
             <td>
                 <h2>Transacciones de la empresa :</h2>
                 <div>
+                    <form:form action="/gestor/filtrarTransaccionesEmpresa" method="post" modelAttribute="filtroTransaccionEmpresa">
+                        <form:hidden path="id_empresa" value="${empresa.getIdEmpresa()}"/>
+                        Propiedad:
+                        <form:select path="propiedad">
+                            <form:option value="">-----</form:option>
+                            <form:option value="Pago">Pago</form:option>
+                            <form:option value="Cambio de divisa">Cambio de divisa</form:option>
+                        </form:select>
+                        Orden:
+                        <form:select path="orden">
+                            <form:option value="idTransaccion">ID</form:option>
+                            <form:option value="fechaInstruccion">Fecha</form:option>
+                        </form:select>
+                        <form:button>Filtrar</form:button>
+                    </form:form>
+                </div>
+                <div>
                     <table>
 
                         <tr>
-                            <th>Nombre</th>
-                            <th>TIPO</th>
                             <th>Fecha de instruccion</th>
                             <th>IBAN destino</th>
                             <th>Cambio de divisa</th>
                         </tr>
 
                         <%
-                            for (UsuarioEntity u : usuariosDeLaEmpresa) {
-                                if(u.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
-                                for (TransaccionEntity transaccion : u.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()){
+                            if(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco()!=null && empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTransaccionsByIdCuentaBanco()!=null){
+                                for (TransaccionEntity transaccion : listaTransacciones) {
                         %>
                         <tr>
-                            <td>
-                                <%= u.getNombre() %>
-                                <%= u.getPrimerApellido() %>
-                                <%
-                                    if(u.getSegundoApellido() != null) {
-                                %>
-                                <%= u.getSegundoApellido() %>
-                                <%
-                                    }
-                                %>
-                            </td>
-                            <td>
-                                <%
-                                if(transaccion.getPagoByPagoIdPago() != null){
-                                %>
-                                <%= "Pago" %>
-                                <%
-                                } else {
-                                %>
-                                    <%= "Cambio de divisa" %>
-                                <% } %>
-                            </td>
                             <td><%= transaccion.getFechaInstruccion() %></td>
                             <td>
-                            <%
-                                if(transaccion.getPagoByPagoIdPago() != null){
-                            %>
-                                    <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario()%>
-                            <% } %>
+                                <% if(transaccion.getPagoByPagoIdPago() != null) { %>
+                                    <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario() %>
+                                <% } %>
                             </td>
                             <td>
-                            <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null){ %>
-                                    <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() + " -> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
-                            <% } %>
+                                <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null) { %>
+                                    <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() +
+                                    " --> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
+                                <% } %>
                             </td>
-
-
-
                         </tr>
                         <%
-                                    }
                                 }
                             }
                         %>

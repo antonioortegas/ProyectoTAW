@@ -1,25 +1,25 @@
 package es.taw.proyectotaw.ui;
 
-public class FiltroTransaccion {
+public class FiltroTransaccionEmpresa {
 
-    public FiltroTransaccion() {
+    public FiltroTransaccionEmpresa() {
         this.propiedad = "";
         this.orden = "idTransaccion";
-        this.id_usuario = null;
+        this.id_empresa = null;
     }
 
 
 
-    private Integer id_usuario;
+    private Integer id_empresa;
     private String propiedad;
     private String orden;
 
-    public Integer getId_usuario() {
-        return id_usuario;
+    public Integer getId_empresa() {
+        return id_empresa;
     }
 
-    public void setId_usuario(Integer id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setId_empresa(Integer id_empresa) {
+        this.id_empresa = id_empresa;
     }
 
     public String getPropiedad() {
