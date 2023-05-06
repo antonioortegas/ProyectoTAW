@@ -4,7 +4,7 @@ public class FiltroEmpresas {
 
     public FiltroEmpresas() {
         this.propiedadE = "";
-        this.ordenE = "cif";
+        this.ordenE = "idEmpresa";
     }
 
     private String propiedadE;

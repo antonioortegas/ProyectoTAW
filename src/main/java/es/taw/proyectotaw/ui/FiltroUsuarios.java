@@ -4,7 +4,7 @@ public class FiltroUsuarios {
 
     public FiltroUsuarios() {
         this.propiedadU = "";
-        this.ordenU = "nif";
+        this.ordenU = "idUsuario";
     }
 
     private String propiedadU;
