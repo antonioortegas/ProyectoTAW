@@ -3,28 +3,28 @@ package es.taw.proyectotaw.ui;
 public class FiltroUsuarios {
 
     public FiltroUsuarios() {
-        this.propiedad = "";
-        this.orden = "nif";
+        this.propiedadU = "";
+        this.ordenU = "idUsuario";
     }
 
-    private String propiedad;
-    private String orden;
+    private String propiedadU;
+    private String ordenU;
 
 
-    public String getPropiedad() {
-        return propiedad;
+    public String getPropiedadU() {
+        return propiedadU;
     }
 
-    public void setPropiedad(String propiedad) {
-        this.propiedad = propiedad;
+    public void setPropiedadU(String propiedadU) {
+        this.propiedadU = propiedadU;
     }
 
-    public String getOrden() {
-        return orden;
+    public String getOrdenU() {
+        return ordenU;
     }
 
-    public void setOrden(String orden) {
-        this.orden = orden;
+    public void setOrdenU(String ordenU) {
+        this.ordenU = ordenU;
     }
 
 

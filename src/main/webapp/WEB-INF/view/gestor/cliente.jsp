@@ -1,6 +1,9 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.TransaccionEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
+<%@ page import="org.w3c.dom.stylesheets.LinkStyle" %>
+<%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 30/04/2023
@@ -12,6 +15,7 @@
 <%
     UsuarioEntity usuario = (UsuarioEntity) request.getAttribute("usuario");
     EmpresaEntity empresa = usuario.getEmpresaByEmpresaIdEmpresa();
+    List<TransaccionEntity> listaTransacciones = (List<TransaccionEntity>) request.getAttribute("listaTransacciones");
 %>
 
 <html>
@@ -115,30 +119,60 @@
                             if (usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
                         %>
                         <h2>Transacciones del cliente :</h2>
+                        <hr>
+                        <div>
+                            <form:form action="/gestor/filtrarTransacciones" method="post" modelAttribute="filtroTransaccion">
+                                <form:hidden path="id_usuario" value="${usuario.getIdUsuario()}"/>
+                                Propiedad:
+                                <form:select path="propiedad">
+                                    <form:option value="">-----</form:option>
+                                    <form:option value="Pago">Pago</form:option>
+                                    <form:option value="Cambio de divisa">Cambio de divisa</form:option>
+                                </form:select>
+                                Orden:
+                                <form:select path="orden">
+                                    <form:option value="idTransaccion">ID</form:option>
+                                    <form:option value="fechaInstruccion">Fecha</form:option>
+                                </form:select>
+                                <form:button>Filtrar</form:button>
+                            </form:form>
+                        </div>
                         <tr>
-                            <th>Nombre</th>
-                            <th>IBAN</th>
-                            <th>Fecha de Instruccion</th>
+                            <th>TIPO</th>
+                            <th>Fecha de instruccion</th>
+                            <th>IBAN destino</th>
+                            <th>Cambio de divisa</th>
                         </tr>
 
 
                         <%
-                            for (TransaccionEntity transaccion : usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
+                            for (TransaccionEntity transaccion : listaTransacciones) {
                         %>
                         <tr>
                             <td>
-                                <%= usuario.getNombre() %>
-                                <%= usuario.getPrimerApellido() %>
                                 <%
-                                    if(usuario.getSegundoApellido() != null) {
+                                    if(transaccion.getPagoByPagoIdPago() != null){
                                 %>
-                                <%= usuario.getSegundoApellido() %>
+                                <%= "Pago" %>
                                 <%
-                                    }
+                                } else {
                                 %>
+                                <%= "Cambio de divisa" %>
+                                <% } %>
                             </td>
-                            <td><%= usuario.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
                             <td><%= transaccion.getFechaInstruccion() %></td>
+                            <td>
+                                <%
+                                    if(transaccion.getPagoByPagoIdPago() != null){
+                                %>
+                                <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario()%>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null){ %>
+                                <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() + " -> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
+                                <% } %>
+                            </td>
 
 
 

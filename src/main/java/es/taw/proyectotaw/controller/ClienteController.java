@@ -79,6 +79,7 @@ public class ClienteController {
             urlTo = "Cliente/esperarActivacion";
         }else {
             model.addAttribute("cliente", usuario);
+            session.setAttribute("usuario", usuario);
             urlTo = "Cliente/indexCliente";
         }
         return urlTo;
