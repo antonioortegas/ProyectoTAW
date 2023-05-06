@@ -18,7 +18,7 @@ public class CrearNuevoSocio {
     String region = null;
     String pais = "";
     String cp = "";
-    Byte valida = 0;
+    Byte valida = 1;
     String contrasena = "";
     String repcontrasena = "";
     String tipoUsuario = "";

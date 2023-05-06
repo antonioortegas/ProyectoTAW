@@ -32,6 +32,8 @@
         <th>Nombre</th>
         <th>IBAN</th>
         <th>Fecha de Instruccion</th>
+        <th>PAGO</th>
+        <th>CAMBIO DE DIVISA</th>
     </tr>
 
 
@@ -67,8 +69,11 @@
             <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario() %>
             <% } %>
         </td>
-        <td><%= transaccion.getFechaInstruccion() %>
+        <td><%if (transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null) { %>
+            <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra() %>
+            <% } %>
         </td>
+
 
 
     </tr>
