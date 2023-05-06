@@ -3,7 +3,8 @@
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.TransaccionEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.CuentabancoEntity" %><%--
+<%@ page import="es.taw.proyectotaw.Entity.CuentabancoEntity" %>
+<%@ page import="es.taw.proyectotaw.dao.UsuarioRepository" %><%--
   Created by IntelliJ IDEA.
   User: anton
   Date: 20/04/2023
@@ -14,6 +15,7 @@
 <html>
 <%
     UsuarioEntity socio = (UsuarioEntity) request.getAttribute("socio");
+    List<UsuarioEntity> actores = (List<UsuarioEntity>) request.getAttribute("actores");
 %>
 <head>
     <title>Title</title>
@@ -23,7 +25,7 @@
 <table>
     <%
         CuentabancoEntity cuentaBanco = socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco();
-        if (cuentaBanco != null){
+        if (cuentaBanco != null) {
     %>
     <h2>Transacciones de la Empresa :</h2>
     <tr>
@@ -35,22 +37,32 @@
 
     <%
         for (TransaccionEntity transaccion : cuentaBanco.getTransaccionsByIdCuentaBanco()) {
+
     %>
     <tr>
         <td>
-            <%= socio.getNombre() %>
-            <%= socio.getPrimerApellido() %>
             <%
-                if(socio.getSegundoApellido() != null) {
+                for (UsuarioEntity u : actores) {
+                    if (u.getIdUsuario() == transaccion.getIdUsuarioActor()) {
             %>
-            <%= socio.getSegundoApellido() %>
+            <%=       u.getNombre() %>
+            <%=       u.getPrimerApellido() %>
             <%
+                if (u.getSegundoApellido() != null) {
+            %>
+            <%= u.getSegundoApellido() %>
+            <%
+                        }
+                    }
                 }
             %>
-        </td>
-        <td><%= cuentaBanco.getIban() %></td>
-        <td><%= transaccion.getFechaInstruccion() %></td>
 
+
+        </td>
+        <td><%= cuentaBanco.getIban() %>
+        </td>
+        <td><%= transaccion.getFechaInstruccion() %>
+        </td>
 
 
     </tr>

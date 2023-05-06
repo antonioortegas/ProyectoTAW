@@ -3,7 +3,6 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "cambiodivisa", schema = "mydb", catalog = "")
@@ -71,13 +70,29 @@ public class CambiodivisaEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         CambiodivisaEntity that = (CambiodivisaEntity) o;
-        return Objects.equals(idCambioDivisa, that.idCambioDivisa) && Objects.equals(monedaVenta, that.monedaVenta) && Objects.equals(monedaCompra, that.monedaCompra) && Objects.equals(cantidadCompra, that.cantidadCompra) && Objects.equals(cantidadVenta, that.cantidadVenta);
+
+        if (idCambioDivisa != null ? !idCambioDivisa.equals(that.idCambioDivisa) : that.idCambioDivisa != null)
+            return false;
+        if (monedaVenta != null ? !monedaVenta.equals(that.monedaVenta) : that.monedaVenta != null) return false;
+        if (monedaCompra != null ? !monedaCompra.equals(that.monedaCompra) : that.monedaCompra != null) return false;
+        if (cantidadCompra != null ? !cantidadCompra.equals(that.cantidadCompra) : that.cantidadCompra != null)
+            return false;
+        if (cantidadVenta != null ? !cantidadVenta.equals(that.cantidadVenta) : that.cantidadVenta != null)
+            return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(idCambioDivisa, monedaVenta, monedaCompra, cantidadCompra, cantidadVenta);
+        int result = idCambioDivisa != null ? idCambioDivisa.hashCode() : 0;
+        result = 31 * result + (monedaVenta != null ? monedaVenta.hashCode() : 0);
+        result = 31 * result + (monedaCompra != null ? monedaCompra.hashCode() : 0);
+        result = 31 * result + (cantidadCompra != null ? cantidadCompra.hashCode() : 0);
+        result = 31 * result + (cantidadVenta != null ? cantidadVenta.hashCode() : 0);
+        return result;
     }
 
     public Collection<TransaccionEntity> getTransaccionsByIdCambioDivisa() {

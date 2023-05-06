@@ -13,8 +13,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.currentTimeMillis;
 
 @Controller
 public class EmpresaController {
@@ -36,6 +40,8 @@ public class EmpresaController {
     protected PagoRepository pagoRepository;
     @Autowired
     protected TransaccionRepository transaccionRepository;
+    @Autowired
+    protected PeticionRepository peticionRepository;
 
     @GetMapping("/goPrincipalEmpresa")
     public String goPrincipalEmpresa(Model model, HttpSession httpSession) {
@@ -120,7 +126,7 @@ public class EmpresaController {
     public String registrarNuevoSocio(Integer id, Model model) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
 
-        CrearNuevoSocio crearNuevoSocio =  new CrearNuevoSocio(id);
+        CrearNuevoSocio crearNuevoSocio = new CrearNuevoSocio(id);
 
         model.addAttribute("crearNuevoSocio", crearNuevoSocio);
         model.addAttribute("socio", socio);
@@ -131,21 +137,21 @@ public class EmpresaController {
 
 
     @PostMapping("/procesarRegistrarNuevoSocio")
-    public String procesarRegistrarNuevoSocio(@ModelAttribute("crearNuevoSocio") CrearNuevoSocio crearNuevoSocio, Model model,HttpSession session) {
+    public String procesarRegistrarNuevoSocio(@ModelAttribute("crearNuevoSocio") CrearNuevoSocio crearNuevoSocio, Model model, HttpSession session) {
 
         UsuarioEntity socio = usuarioRepository.findById(crearNuevoSocio.getId()).orElse(null);
         System.out.println(socio.getNombre());
         System.out.println("=================");
 
 
-        DireccionEntity nuevaDireccion=new DireccionEntity();
-        UsuarioEntity nuevoSocio= new UsuarioEntity();
+        DireccionEntity nuevaDireccion = new DireccionEntity();
+        UsuarioEntity nuevoSocio = new UsuarioEntity();
         nuevoSocio.setNif(crearNuevoSocio.getNif());
         nuevoSocio.setNombre(crearNuevoSocio.getNombre());
         nuevoSocio.setSegundoNombre(crearNuevoSocio.getSegundoNombre());
         nuevoSocio.setPrimerApellido(crearNuevoSocio.getApellido1());
         nuevoSocio.setSegundoApellido(crearNuevoSocio.getApellido2());
-        nuevoSocio.setFechaNacimiento( crearNuevoSocio.getFechaNacimiento());
+        nuevoSocio.setFechaNacimiento(crearNuevoSocio.getFechaNacimiento());
         nuevoSocio.setContrasena(crearNuevoSocio.getContrasena());
         nuevoSocio.setTipoUsuario(crearNuevoSocio.getTipoUsuario());
         nuevoSocio.setEstadoUsuario("pendiente");
@@ -163,15 +169,20 @@ public class EmpresaController {
         nuevoSocio.setDireccionByDireccionIdDireccion(nuevaDireccion);
 
 
-
         String urlTo = "Empresa/socioExistente";
 
-        if (nuevoSocio!=null ) {
+        if (nuevoSocio != null) {
 
             direccionRepository.save(nuevaDireccion);
             usuarioRepository.save(nuevoSocio);
+            PeticionEntity peticion = new PeticionEntity();
+            peticion.setTipoPeticion("alta");
+            peticion.setEstadoPeticion("noprocesada");
+            peticion.setFechaPeticion(new Timestamp(currentTimeMillis()));
+            peticion.setUsuarioByUsuarioIdUsuario(nuevoSocio);
+            this.peticionRepository.save(peticion);
             model.addAttribute("socio", socio);
-            session.setAttribute("socio",socio);
+            session.setAttribute("socio", socio);
 
             urlTo = "Empresa/sesionIniciadaEmpresa";
         } else {
@@ -327,6 +338,14 @@ public class EmpresaController {
     public String mostrarHistorial(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
         model.addAttribute("socio", socio);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+
+        List<UsuarioEntity> actores = new ArrayList<>();
+
+        for (UsuarioEntity u : empresa.getUsuariosByIdEmpresa()) {
+            actores.add(u);
+        }
+        model.addAttribute("actores", actores);
         return "Empresa/historialOperacionesEmpresa";
     }
 
