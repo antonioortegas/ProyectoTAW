@@ -162,4 +162,6 @@ public class DireccionEntity {
     public void setUsuariosByIdDireccion(Collection<UsuarioEntity> usuariosByIdDireccion) {
         this.usuariosByIdDireccion = usuariosByIdDireccion;
     }
+
+
 }
