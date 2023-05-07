@@ -45,6 +45,15 @@ public class EmpresaController {
     @Autowired
     protected PeticionRepository peticionRepository;
 
+
+    //Metodo para cerrar la sesion
+    @GetMapping("/Empresa/SalirEmpresa")
+    public String salirEmpresa(Model model) {
+
+        return "Empresa/empresaPrincipal";
+    }
+
+    //Metodo para ir a la pagina principal de la empresa
     @GetMapping("/goPrincipalEmpresa")
     public String goPrincipalEmpresa(Model model, HttpSession httpSession, @RequestParam("id") Integer id) {
         UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
@@ -54,7 +63,7 @@ public class EmpresaController {
         return "/Empresa/sesionIniciadaEmpresa";
     }
 
-
+    //Metodo para crear una nueva empresa
     @GetMapping("/Empresa/crearNuevaEmpresa")
     public String crearNuevaEmpresa(Model model) {
         CrearNuevaEmpresa crearNuevaEmpresa = new CrearNuevaEmpresa();
@@ -62,6 +71,7 @@ public class EmpresaController {
         return "Empresa/crearNuevaEmpresa";
     }
 
+    //Metodo para procesar el formulario de crear una nueva empresa
     @PostMapping("/procesarFormularioEmpresa")
     public String procesarFormularioEmpresa(@ModelAttribute("crearNuevaEmpresa") CrearNuevaEmpresa crearNuevaEmpresa, Model model) {
 
@@ -78,7 +88,6 @@ public class EmpresaController {
         direccion.setPais(crearNuevaEmpresa.getPais());
         direccion.setCp(crearNuevaEmpresa.getCp());
         direccion.setValida((byte) 1);
-
 
         String urlTo = "";
         if (empresa != null) {
@@ -107,46 +116,6 @@ public class EmpresaController {
     }
 
 
-    @GetMapping("/Empresa/SalirEmpresa")
-    public String salirEmpresa(Model model) {
-
-        return "Empresa/empresaPrincipal";
-    }
-
-
-    @RequestMapping("/Empresa/crearNuevoSocio")
-    public String crearNuevoSocio(@ModelAttribute("empresa") EmpresaEntity empresa, @ModelAttribute("direccion") DireccionEntity direccion, Model model) {
-        List<UsuarioEntity> lu = (List<UsuarioEntity>) empresa.getUsuariosByIdEmpresa();
-        model.addAttribute("lu", lu);
-        return "Empresa/crearUsuarioEmpresa";
-    }
-
-
-    @PostMapping("/loginSocioP")
-    public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
-                               Model model, HttpSession session) {
-        String urlTo = "/Empresa/sesionIniciadaEmpresa";
-        UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
-        if (socio == null) {
-            model.addAttribute("error", "Credenciales incorrectas");
-            urlTo = "loginSocio";
-        } else {
-            EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
-            model.addAttribute("socio", socio);
-            session.setAttribute("socio", socio);
-            model.addAttribute("empresa", empresa);
-            session.setAttribute("empresa", empresa);
-        }
-
-        return urlTo;
-    }
-
-    @GetMapping("/Empresa/loginSocio")
-    public String iniciarSesionEmpleadp() {
-        return "Empresa/login";
-    }
-
-
     @GetMapping("/Empresa/registrarNuevoSocio")
     public String registrarNuevoSocio(Integer id, Model model) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -155,13 +124,13 @@ public class EmpresaController {
 
         model.addAttribute("crearNuevoSocio", crearNuevoSocio);
         model.addAttribute("socio", socio);
+        model.addAttribute("empresa", socio.getEmpresaByEmpresaIdEmpresa());
 
 
         return "Empresa/crearUsuarioEmpresa";
     }
 
-
-
+    //Metodo para procesar el formulario de crear el primer socio o anadir uno mas
     @PostMapping("/procesarRegistrarNuevoSocio")
     public String procesarRegistrarNuevoSocio(@ModelAttribute("crearNuevoSocio") CrearNuevoSocio crearNuevoSocio, Model model, HttpSession session) {
 
@@ -218,6 +187,7 @@ public class EmpresaController {
             this.peticionRepository.save(peticion);
             if (socio != null) {
                 model.addAttribute("socio", socio);
+                model.addAttribute("empresa", socio.getEmpresaByEmpresaIdEmpresa());
                 session.setAttribute("socio", socio);
                 urlTo = "Empresa/sesionIniciadaEmpresa";
             } else {
@@ -232,7 +202,35 @@ public class EmpresaController {
         return urlTo;
     }
 
+    //Metodo para procesar el formulario de crear el primer socio o anadir uno mas
+    @PostMapping("/loginSocioP")
+    public String doAutenticar(@RequestParam("nif") String nif, @RequestParam("contrasena") String contrasena,
+                               Model model, HttpSession session) {
+        String urlTo = "/Empresa/sesionIniciadaEmpresa";
+        UsuarioEntity socio = this.usuarioRepository.autenticarUsuarioEmpresa(nif, contrasena);
+        if (socio == null) {
+            model.addAttribute("error", "Credenciales incorrectas");
+            urlTo = "loginSocio";
+        } else {
+            EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+            model.addAttribute("socio", socio);
+            session.setAttribute("socio", socio);
+            model.addAttribute("empresa", empresa);
+            session.setAttribute("empresa", empresa);
+        }
 
+        return urlTo;
+    }
+
+    //Metodo para hacer login en la empresa
+    @GetMapping("/Empresa/loginSocio")
+    public String iniciarSesionEmpleadp() {
+        return "Empresa/login";
+    }
+
+
+
+    //Metodo para listar los socios de una empresa
     @GetMapping("/Empresa/bloquearSocios")
     public String bloquarSocios(Integer id, Model model, HttpSession httpSession) {
         UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
@@ -250,6 +248,7 @@ public class EmpresaController {
         return "Empresa/bloquearSocios";
     }
 
+    //Metodo para cambiar el estado de un socio
     @GetMapping("/Empresa/cambiarEstadoSocio")
     public String cambioEstadoSocio(Integer idCambio, Model model, HttpSession httpSession) {
         String desbloqueada = "desbloqueada";
@@ -293,6 +292,7 @@ public class EmpresaController {
 
     }
 
+    //Filtro para mostrar solo los socios
     @GetMapping("/Empresa/mostrarSoloSocios")
     public String mostrarSoloSocios(Integer idEmpresa, Model model, HttpSession httpSession) {
         UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
@@ -306,6 +306,7 @@ public class EmpresaController {
         return "Empresa/bloquearSocios";
 
     }
+    //Filtro para mostrar solo los autorizados
 
     @GetMapping("/Empresa/mostrarSoloAutorizados")
     public String mostrarSoloAutorizados(Integer idEmpresa, Model model, HttpSession httpSession) {
@@ -319,6 +320,7 @@ public class EmpresaController {
 
     }
 
+    //Filtro para mostrar todos los usuarios
     @GetMapping("/Empresa/mostrarTodos")
     public String mostrarTodos(Integer idEmpresa, Model model, HttpSession httpSession) {
         UsuarioEntity socio = (UsuarioEntity) httpSession.getAttribute("socio");
@@ -332,6 +334,7 @@ public class EmpresaController {
     }
 
 
+    //Metodo para editar los datos de un socio
     @GetMapping("/Empresa/editarDatosSocio")
     public String editarSocio(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -341,13 +344,17 @@ public class EmpresaController {
         return "Empresa/editarDatosSocio";
     }
 
+    //Metodo para guardar los datos de un socio
     @PostMapping("/guardarSocio")
-    public String guardarSocio(@ModelAttribute("socio") UsuarioEntity socio) {
+    public String guardarSocio(@ModelAttribute("socio") UsuarioEntity socio, Model model) {
         this.usuarioRepository.save(socio);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        model.addAttribute("empresa", empresa);
+        model.addAttribute("socio", socio);
         return "Empresa/sesionIniciadaEmpresa";
     }
 
-
+    //Metodo para editar los datos de una empresa
     @GetMapping("/Empresa/editarDatosEmpresa")
     public String editarEmpresa(Integer id, Model model, HttpSession httpSession) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -361,7 +368,7 @@ public class EmpresaController {
 
         return "Empresa/editarDatosEmpresa";
     }
-
+    //Metodo para guardar los datos de una empresa
     @PostMapping("/guardarEmpresa")
     public String guardarEmpresa(@ModelAttribute("fEditarEmpresa") FEditarEmpresa fEditarEmpresa, Model model) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(fEditarEmpresa.getIdEmpresa());
@@ -374,7 +381,7 @@ public class EmpresaController {
 
         return "Empresa/sesionIniciadaEmpresa";
     }
-
+    //Metodo para ver el historial de operaciones de una empresa
     @GetMapping("/historialOperacionesEmpresa")
     public String mostrarHistorial(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -388,19 +395,18 @@ public class EmpresaController {
         }
         model.addAttribute("actores", actores);
 
-        if(model.containsAttribute("filtroTransaccionesEmpresa") && model.getAttribute("filtroTransaccionesEmpresa")!=null) {
+        if (model.containsAttribute("filtroTransaccionesEmpresa") && model.getAttribute("filtroTransaccionesEmpresa") != null) {
             return procesarFiltradoTransaccionesEmpresa(id, model, (FiltroTransaccionEmpresa) model.getAttribute("filtroTransaccionesEmpresa"));
         } else {
             return procesarFiltradoTransaccionesEmpresa(id, model, null);
         }
     }
 
-
+    //Metodo para filtrar las transacciones de una empresa
     @PostMapping("/Empresa/filtrarTransaccionesEmpresa")
     public String filtrarTransaccionesEmpresa(Model model, @ModelAttribute("filtroTransaccionesEmpresa") FiltroTransaccionEmpresa filtroTransaccion) {
         return procesarFiltradoTransaccionesEmpresa(filtroTransaccion.getId_socio(), model, filtroTransaccion);
     }
-
     private String procesarFiltradoTransaccionesEmpresa(Integer id, Model model, FiltroTransaccionEmpresa filtro) {
         System.out.println(id);
 
@@ -423,17 +429,17 @@ public class EmpresaController {
         }
         model.addAttribute("actores", actores);
 
-        if(filtro == null){
+        if (filtro == null) {
             filtro = new FiltroTransaccionEmpresa();
-            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()), empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
         }
-        if(filtro.getPropiedad().equals("")){
-            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()) ,empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
+        if (filtro.getPropiedad().equals("")) {
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtro.getOrden()), empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
         }
-        if(filtro.getPropiedad().equals("Pago")){
+        if (filtro.getPropiedad().equals("Pago")) {
             listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
         }
-        if(filtro.getPropiedad().equals("Cambio de divisa")){
+        if (filtro.getPropiedad().equals("Cambio de divisa")) {
             listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco(), Sort.by(filtro.getOrden()));
         }
 
@@ -443,11 +449,7 @@ public class EmpresaController {
         return "Empresa/historialOperacionesEmpresa";
     }
 
-
-
-
-
-
+    //Metodo para realizar una transferencia
     @GetMapping("/pagoEmpresa")
     public String pagoCliente(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -460,11 +462,12 @@ public class EmpresaController {
         return "Empresa/pagoEmpresa";
     }
 
-
+    //Metodo para procesar una transferencia
     @PostMapping("/verificarTransferenciaEmpresa")
     public String doVerificarPago(@RequestParam("id") Integer id, @RequestParam("cantidad") Integer cantidad, @RequestParam("iban") String iban, Model model) {
         String UrlTo = "Empresa/verificarPagoEmpresa";
         UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+
         EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
         CuentabancoEntity cb = this.cuentabancoRepository.cuentaDestinatario(iban);
         PagoEntity pago = new PagoEntity();
@@ -504,6 +507,7 @@ public class EmpresaController {
     }
 
 
+    //Metodo para realizar un cambio de divisa
     @GetMapping("/cambioDeDivisaEmpresa")
     public String cambioDivisa(Integer id, Model model, HttpSession session) {
         UsuarioEntity socio = this.usuarioRepository.getReferenceById(id);
@@ -516,20 +520,42 @@ public class EmpresaController {
 
         return "Empresa/cambioDivisaEmpresa";
     }
+    //Metodo para procesar un cambio de divisa
 
     @PostMapping("/verificarCambioDivisaEmpresa")
     public String doVerificarCambioDivisa(@RequestParam("id") Integer id, @RequestParam("cambio") Integer cambio, Model model) {
-        EmpresaEntity empresa = this.empresaRepository.findById(id).orElse(null);
+        UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
         CambiodivisaEntity cd = this.cambiodivisaRepository.findById(cambio).orElse(null);
         model.addAttribute("cambioDivisa", cd);
+        model.addAttribute("socio", socio);
         model.addAttribute("empresa", empresa);
         float f = Float.valueOf(cd.getCantidadVenta()).floatValue() / Float.valueOf(cd.getCantidadCompra()).floatValue() * empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo();
         int pasta = Float.valueOf(f).intValue();
         model.addAttribute("pasta", pasta);
         return "Empresa/verificarCambioDivisaEmpresa";
     }
+    //Metodo para realizar cambio de divisa
+    @GetMapping("/realizarCambioEmpresa")
+    public String realizarCambio(Integer id, Integer cambioDivisa, Integer pasta, Model model, HttpSession session) {
+        UsuarioEntity socio = this.usuarioRepository.findById(id).orElse(null);
+        EmpresaEntity empresa = socio.getEmpresaByEmpresaIdEmpresa();
+        CambiodivisaEntity cd = this.cambiodivisaRepository.findById(cambioDivisa).orElse(null);
+        empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().setSaldo(pasta);
+        empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().setTipoMoneda(cd.getMonedaCompra());
+        this.empresaRepository.save(empresa);
+        TransaccionEntity transaccion = new TransaccionEntity();
+        transaccion.setFechaInstruccion(Date.valueOf(LocalDate.now()));
+        transaccion.setCuentabancoByCuentaBancoIdCuentaBanco(empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco());
+        transaccion.setCambiodivisaByCambioDivisaIdCambioDivisa(cd);
+        this.transaccionRepository.save(transaccion);
+        model.addAttribute("empresa", empresa);
+        model.addAttribute("socio", socio);
+        return "/Empresa/sesionIniciadaEmpresa";
+    }
 
 
+    //Metodo para pedir una peticion de alta
     @GetMapping("/nuevaPeticionAltaEmpresa")
     public String pedirAlta(Integer id, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(id);
@@ -543,6 +569,7 @@ public class EmpresaController {
         return "Empresa/PeticionEnviadaEmpresa";
     }
 
+    //Metodo para pedir una peticion de baja
     @GetMapping("/nuevaPeticionBloqueadoEmpresa")
     public String pedirDesbloqueo(@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);
@@ -555,6 +582,7 @@ public class EmpresaController {
         return "Empresa/PeticionEnviadaEmpresa";
     }
 
+    //Metodo para pedir una peticion de activacion
     @GetMapping("/nuevaPeticionActivacionEmpresa")
     public String pedirActivacion(@RequestParam("idUsuario") Integer idUsuario, Model model, HttpSession session) {
         EmpresaEntity empresa = this.empresaRepository.getReferenceById(idUsuario);

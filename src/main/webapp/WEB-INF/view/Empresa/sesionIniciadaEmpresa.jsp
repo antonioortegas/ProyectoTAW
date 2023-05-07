@@ -142,7 +142,7 @@
 </div>
 
 <a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
-<a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%><br>
+<a>SALDO:</a><%=empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo() + " "+empresa.getCuentabancoByCuentaEmpresaIdCuentaBanco().getTipoMoneda()%><br>
 <%
     if (!socio.getTipoPersonaRelacionada().toLowerCase().equals("bloqueada")) {
 %>
