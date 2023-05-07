@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.System.currentTimeMillis;
-//Codigo hecho por Sergio Morejon
+//Codigo hecho por Sergio Morejon 90
+//colaboracion del 10% por Antonio
 @Controller
 public class EmpresaController {
 
