@@ -203,7 +203,7 @@ AUTOR : Edgar Antonio Álvarez González - 100%
                 <form action="/Asistencia/logout" method="post">
                     <button type="submit">Logout</button>
                 </form>
-                <%if (usuarioLogeado.getEmpresaByEmpresaIdEmpresa() != null) {%>
+                <%if (usuarioLogeado.getEmpresaByEmpresaIdEmpresa() != null && !usuarioLogeado.getTipoUsuario().equals("asistente")) {%>
                 <button><a href="/goPrincipalEmpresa?id=<%=usuarioLogeado.getIdUsuario()%>">SALIR</a></button>
 
                 <%}%>

@@ -1,7 +1,6 @@
 /*
 AUTOR : Edgar Antonio Álvarez González - 100%
  */
-
 package es.taw.proyectotaw.controller;
 
 import es.taw.proyectotaw.Entity.MensajeEntity;
@@ -20,22 +19,26 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
-public class MensajeController {
+public class MensajeController
+{
     @Autowired
     protected MensajeRepository mensajeRepository;
     @Autowired
     protected UsuarioRepository usuarioRepository;
 
     @GetMapping("/Asistencia/asistente")
-    public String doListarMensajes(@RequestParam(name = "contactId", required = false) Integer contact, Model model, HttpSession httpSession) {
-        UsuarioEntity usuarioLogeado = new UsuarioEntity();
-        if (httpSession.getAttribute("usuario") != null) {
-            usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
+    public String doListarMensajes(@RequestParam(name = "contactId", required = false) Integer contact, Model model, HttpSession httpSession)
+    {
+        UsuarioEntity usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
+
+        if (httpSession.getAttribute("cliente") != null) {
+            usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("cliente");
         } else if (httpSession.getAttribute("socio") != null) {
             usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("socio");
         } else {
-            usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("cliente");
+            usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
         }
+
         if (usuarioLogeado == null) return "/Asistencia/loginAyuda";
 
         model.addAttribute("usuarioLogeado", usuarioLogeado);
@@ -45,7 +48,8 @@ public class MensajeController {
 
         UsuarioEntity contactUser;
         if (contact == null) contactUser = usuarioLogeado;
-        else {
+        else
+        {
             contactUser = usuarioRepository.findById(contact).orElse(null);
 
         }
@@ -61,13 +65,15 @@ public class MensajeController {
 
 
     @PostMapping("/Asistencia/asistente/sendMessage")
-    public String sendMessage(@RequestParam("message") String message, @RequestParam(name = "contactId", required = true) Integer contact, HttpSession httpSession) {
+    public String sendMessage(@RequestParam("message") String message, @RequestParam(name = "contactId", required = true) Integer contact, HttpSession httpSession)
+    {
         UsuarioEntity contactUser = usuarioRepository.findById(contact).orElse(null);
         UsuarioEntity usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
         List<UsuarioEntity> listaUsuarios = usuarioRepository.findAll();
 
 
-        if (message != null && !message.isEmpty() && !message.isBlank() && contact != usuarioLogeado.getIdUsuario()) {
+        if (message != null && !message.isEmpty() && !message.isBlank() && contact != usuarioLogeado.getIdUsuario() )
+        {
             // Retrieve the user information from the session
 
             // Create a new message entity and set its properties
@@ -89,7 +95,8 @@ public class MensajeController {
     @PostMapping("/Asistencia/loginAyuda")
     public String doLoginCredentials(@RequestParam("nif") String nif,
                                      @RequestParam("password") String password,
-                                     Model model, HttpSession session) {
+                                     Model model, HttpSession session)
+    {
         UsuarioEntity userLogged = usuarioRepository.usuarioByNIFyContrasena(nif, password);
 
         session.setAttribute("usuario", userLogged);
@@ -98,7 +105,8 @@ public class MensajeController {
     }
 
     @PostMapping("/Asistencia/logout")
-    public String doLogoutAndKillSessionID(HttpSession session) {
+    public String doLogoutAndKillSessionID(HttpSession session)
+    {
         session.invalidate();
         return "redirect:/Asistencia/asistente";
     }
