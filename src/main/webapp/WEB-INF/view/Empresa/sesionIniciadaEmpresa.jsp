@@ -23,13 +23,15 @@
         }
         css
         Copy code
-        h1, h2 {
+        h1 {
             text-align: center;
             color: #333;
         }
 
         h2 {
             margin-top: 20px;
+            color: #333;
+
         }
 
         status {
@@ -124,7 +126,8 @@
 <body>
 <h1>Bienvenido a la Aplicación Bancaria</h1>
 <h2>Menú Principal</h2>
-<%="Bienvenido " + socio.getNombre()%> <br>
+<%="Bienvenido " + socio.getNombre() + ", "+ socio.getTipoUsuario()+"  de la Empresa: " + socio.getEmpresaByEmpresaIdEmpresa().getNombre()%> <br>
+
 
 <div class="status <%=empresa.getEstadoEmpresa()%>">
     Su cuenta se encuentra en estado: <%=empresa.getEstadoEmpresa()%>.
@@ -138,6 +141,8 @@
     <%} else { %>
 </div>
 
+<a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
+<a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%><br>
 <%
     if (!socio.getTipoPersonaRelacionada().toLowerCase().equals("bloqueada")) {
 %>
@@ -156,18 +161,15 @@
 %>
 
 <br>
-<%=socio.getEmpresaByEmpresaIdEmpresa().getNombre()%>
 <br>
 <button><a href="/pagoEmpresa?id=<%=socio.getIdUsuario()%>">Transferencia bancaria</a>
 </button>
 <button><a href="/cambioDeDivisaEmpresa?id=<%= socio.getIdUsuario() %>">Cambio de
     divisas</a></button>
 <button><a href="/historialOperacionesEmpresa?id=<%=socio.getIdUsuario()%>">Ver historial de operaciones</a></button>
+<button><a href="/Asistencia/asistente">Chat de ayuda</a></button>
 <br>
-<br>
-<br>
-<a>IBAN: </a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getIban()%><br>
-<a>SALDO:</a><%=socio.getEmpresaByEmpresaIdEmpresa().getCuentabancoByCuentaEmpresaIdCuentaBanco().getSaldo()%>
+
 <%
 } else {
 %><a>Estas bloqueado/a por la empresa, contacata con tu superior</a>
