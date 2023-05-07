@@ -9,6 +9,84 @@ Date: 06/05/2023
 Time: 14:00
 --%>
 <html>
+<style>
+    /* Estilos para la página */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+    form {
+        margin: 20px auto;
+        width: 80%;
+        max-width: 600px;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    label {
+        display: inline-block;
+        width: 130px;
+        margin-bottom: 10px;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="date"],
+    input[type="email"] {
+        padding: 5px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+    input[type="checkbox"] {
+        margin-left: 5px;
+    }
+    input[type="submit"],
+    input[type="reset"] {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+        background-color: #3e8e41;
+    }
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #f44336;
+        color: #fff;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    button:hover {
+        background-color: #d32f2f;
+    }
+    a {
+        color: #fff;
+        text-decoration: none;
+    }
+</style>
 <head>
     <title>Registrar Cliente</title>
 </head>
