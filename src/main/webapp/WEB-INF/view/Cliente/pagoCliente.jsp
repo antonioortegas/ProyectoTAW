@@ -66,6 +66,7 @@
         Cantidad:<input type="number" name="cantidad" max="<%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%>">
         IBAN Beneficiario:<input type="text" name="iban">
         <button>Realizar transferencia</button>
+        <br><button> <a href="/">Salir</a></button><br>
     </form>
 </div>
 </body>

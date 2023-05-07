@@ -53,6 +53,7 @@
 <div class="container">
     <a href="crearNuevoCliente">Crear nuevo cliente</a>
     <a href="loginCliente">Iniciar sesión como cliente</a>
+    <br><button> <a href="/">Salir</a></button><br>
 </div>
 </body>
 </html>

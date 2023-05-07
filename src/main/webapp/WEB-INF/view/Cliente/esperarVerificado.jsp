@@ -39,6 +39,7 @@
 <div class="mensaje">
     <h1>Bienvenido <%=cliente.getNombre()%></h1>
     <p>Su cuenta está esperando a ser verificada por uno de nuestros gestores, disculpe las molestias.</p>
+    <br><button> <a href="/">Salir</a></button><br>
 </div>
 </body>
 

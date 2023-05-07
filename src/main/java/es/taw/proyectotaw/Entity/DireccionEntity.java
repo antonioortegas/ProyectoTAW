@@ -3,6 +3,7 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Table(name = "direccion", schema = "mydb", catalog = "")
@@ -116,35 +117,13 @@ public class DireccionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         DireccionEntity direccion = (DireccionEntity) o;
-
-        if (idDireccion != null ? !idDireccion.equals(direccion.idDireccion) : direccion.idDireccion != null)
-            return false;
-        if (calle != null ? !calle.equals(direccion.calle) : direccion.calle != null) return false;
-        if (numero != null ? !numero.equals(direccion.numero) : direccion.numero != null) return false;
-        if (puerta != null ? !puerta.equals(direccion.puerta) : direccion.puerta != null) return false;
-        if (ciudad != null ? !ciudad.equals(direccion.ciudad) : direccion.ciudad != null) return false;
-        if (pais != null ? !pais.equals(direccion.pais) : direccion.pais != null) return false;
-        if (cp != null ? !cp.equals(direccion.cp) : direccion.cp != null) return false;
-        if (region != null ? !region.equals(direccion.region) : direccion.region != null) return false;
-        if (valida != null ? !valida.equals(direccion.valida) : direccion.valida != null) return false;
-
-        return true;
+        return Objects.equals(idDireccion, direccion.idDireccion) && Objects.equals(calle, direccion.calle) && Objects.equals(numero, direccion.numero) && Objects.equals(puerta, direccion.puerta) && Objects.equals(ciudad, direccion.ciudad) && Objects.equals(pais, direccion.pais) && Objects.equals(cp, direccion.cp) && Objects.equals(region, direccion.region) && Objects.equals(valida, direccion.valida);
     }
 
     @Override
     public int hashCode() {
-        int result = idDireccion != null ? idDireccion.hashCode() : 0;
-        result = 31 * result + (calle != null ? calle.hashCode() : 0);
-        result = 31 * result + (numero != null ? numero.hashCode() : 0);
-        result = 31 * result + (puerta != null ? puerta.hashCode() : 0);
-        result = 31 * result + (ciudad != null ? ciudad.hashCode() : 0);
-        result = 31 * result + (pais != null ? pais.hashCode() : 0);
-        result = 31 * result + (cp != null ? cp.hashCode() : 0);
-        result = 31 * result + (region != null ? region.hashCode() : 0);
-        result = 31 * result + (valida != null ? valida.hashCode() : 0);
-        return result;
+        return Objects.hash(idDireccion, calle, numero, puerta, ciudad, pais, cp, region, valida);
     }
 
     public Collection<EmpresaEntity> getEmpresasByIdDireccion() {
@@ -162,6 +141,4 @@ public class DireccionEntity {
     public void setUsuariosByIdDireccion(Collection<UsuarioEntity> usuariosByIdDireccion) {
         this.usuariosByIdDireccion = usuariosByIdDireccion;
     }
-
-
 }

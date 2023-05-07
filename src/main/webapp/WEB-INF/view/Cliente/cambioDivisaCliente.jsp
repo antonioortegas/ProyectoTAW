@@ -72,6 +72,7 @@
             <%}%>
         </select>
         <button>Realizar cambio</button>
+        <br><button> <a href="/">Salir</a></button><br>
     </form>
 </div>
 </body>

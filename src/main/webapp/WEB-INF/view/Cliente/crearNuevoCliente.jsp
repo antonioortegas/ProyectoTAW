@@ -63,5 +63,6 @@
     <input type="reset" value="Limpiar">
 </form>
 <br>
+<br><button> <a href="/">Salir</a></button><br>
 </body>
 </html>

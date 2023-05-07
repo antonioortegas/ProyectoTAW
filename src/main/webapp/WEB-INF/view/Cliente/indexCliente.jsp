@@ -96,6 +96,8 @@
         <a href="/historialOperaciones?id=<%= cliente.getIdUsuario() %>">Historial de operaciones</a>
     </div>
 
+    <button> <a href="/">Salir</a></button><br>
+
     <div class="status <%=cliente.getEstadoUsuario()%>">
         Su cuenta se encuentra en estado: <%=cliente.getEstadoUsuario()%>.
             <% if(cliente.getEstadoUsuario().equals("inactivo")){%>

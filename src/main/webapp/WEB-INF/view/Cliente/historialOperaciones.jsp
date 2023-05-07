@@ -12,51 +12,73 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <%
-    UsuarioEntity cliente = (UsuarioEntity) request.getAttribute("cliente");
+    UsuarioEntity usuario = (UsuarioEntity) request.getAttribute("usuario");
+    List<TransaccionEntity> listaTransacciones = (List<TransaccionEntity>) request.getAttribute("listaTransacciones");
 %>
 <head>
     <title>Title</title>
 </head>
 <body>
-
 <table>
     <%
-        if (cliente.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
+        if (usuario.getCuentabancoByCuentaBancoIdCuentaBanco() != null){
     %>
-    <h2>Historial de transacciones:</h2>
+    <h2>Historial de transacciones :</h2>
+    <hr>
+    <div>
+        <%--@elvariable id="filtroTransaccion" type=""--%>
+        <form:form action="/Cliente/filtrarTransacciones" method="post" modelAttribute="filtroTransaccion">
+            <form:hidden path="id_usuario" value="${usuario.getIdUsuario()}"/>
+            Propiedad:
+            <form:select path="propiedad">
+                <form:option value="">-----</form:option>
+                <form:option value="Pago">Pago</form:option>
+                <form:option value="Cambio de divisa">Cambio de divisa</form:option>
+            </form:select>
+            Orden:
+            <form:select path="orden">
+                <form:option value="idTransaccion">ID</form:option>
+                <form:option value="fechaInstruccion">Fecha</form:option>
+            </form:select>
+            <form:button>Filtrar</form:button>
+        </form:form>
+    </div>
     <tr>
-        <th>Nombre</th>
-        <th>IBAN</th>
-        <th>Fecha de Instruccion</th>
-        <th>Tipo</th>
+        <th>TIPO</th>
+        <th>Fecha de instruccion</th>
+        <th>IBAN destino</th>
+        <th>Cambio de divisa</th>
     </tr>
 
 
     <%
-        for (TransaccionEntity transaccion : cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getTransaccionsByIdCuentaBanco()) {
+        for (TransaccionEntity transaccion : listaTransacciones) {
     %>
     <tr>
         <td>
-            <%= cliente.getNombre() %>
-            <%= cliente.getPrimerApellido() %>
             <%
-                if(cliente.getSegundoApellido() != null) {
+                if(transaccion.getPagoByPagoIdPago() != null){
             %>
-            <%= cliente.getSegundoApellido() %>
+            <%= "Pago" %>
             <%
-                }
+            } else {
             %>
+            <%= "Cambio de divisa" %>
+            <% } %>
         </td>
-        <td><%= cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getIban() %></td>
         <td><%= transaccion.getFechaInstruccion() %></td>
-        <td><%if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa()!=null){ %>
-            Cambio de divisa
-        <%}else{%>
-            Pago
-            <%}%>
+        <td>
+            <%
+                if(transaccion.getPagoByPagoIdPago() != null){
+            %>
+            <%= transaccion.getPagoByPagoIdPago().getIbanBeneficiario()%>
+            <% } %>
         </td>
-
-
+        <td>
+            <% if(transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa() != null){ %>
+            <%= transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaVenta() + " -> " + transaccion.getCambiodivisaByCambioDivisaIdCambioDivisa().getMonedaCompra()%>
+            <% } %>
+        </td>
     </tr>
     <%
             }
@@ -65,5 +87,7 @@
 
 
 </table>
+
+<br><button> <a href="/">Salir</a></button><br>
 </body>
 </html>

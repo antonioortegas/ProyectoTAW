@@ -3,6 +3,7 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 @Table(name = "empresa", schema = "mydb", catalog = "")
@@ -67,25 +68,13 @@ public class EmpresaEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        EmpresaEntity empresa = (EmpresaEntity) o;
-
-        if (idEmpresa != null ? !idEmpresa.equals(empresa.idEmpresa) : empresa.idEmpresa != null) return false;
-        if (cif != null ? !cif.equals(empresa.cif) : empresa.cif != null) return false;
-        if (nombre != null ? !nombre.equals(empresa.nombre) : empresa.nombre != null) return false;
-        if (estadoEmpresa != null ? !estadoEmpresa.equals(empresa.estadoEmpresa) : empresa.estadoEmpresa != null)
-            return false;
-
-        return true;
+        EmpresaEntity that = (EmpresaEntity) o;
+        return Objects.equals(idEmpresa, that.idEmpresa) && Objects.equals(cif, that.cif) && Objects.equals(nombre, that.nombre) && Objects.equals(estadoEmpresa, that.estadoEmpresa);
     }
 
     @Override
     public int hashCode() {
-        int result = idEmpresa != null ? idEmpresa.hashCode() : 0;
-        result = 31 * result + (cif != null ? cif.hashCode() : 0);
-        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
-        result = 31 * result + (estadoEmpresa != null ? estadoEmpresa.hashCode() : 0);
-        return result;
+        return Objects.hash(idEmpresa, cif, nombre, estadoEmpresa);
     }
 
     public DireccionEntity getDireccionByDireccionIdDireccion() {
