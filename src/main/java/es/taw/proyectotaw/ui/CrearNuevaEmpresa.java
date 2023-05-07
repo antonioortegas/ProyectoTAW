@@ -1,3 +1,7 @@
+/*
+AUTOR : Sergio Morejón Pérez - 100%
+ */
+
 package es.taw.proyectotaw.ui;
 
 public class CrearNuevaEmpresa {

@@ -1,5 +1,9 @@
 package es.taw.proyectotaw.dao;
 
+/*
+    AUTOR : Edgar Antonio Álvarez González - 100%
+ */
+
 import es.taw.proyectotaw.Entity.MensajeEntity;
 import es.taw.proyectotaw.Entity.UsuarioEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

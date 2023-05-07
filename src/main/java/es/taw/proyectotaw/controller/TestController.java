@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-//Codigo hecho por Sergio y Carlos
+//Codigo hecho por
+// Sergio - 50 %
+// Carlos - 50 %
 @Controller
 public class TestController {
     @Autowired

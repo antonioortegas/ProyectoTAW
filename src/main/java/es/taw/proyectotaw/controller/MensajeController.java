@@ -1,3 +1,7 @@
+/*
+AUTOR : Edgar Antonio Álvarez González - 100%
+ */
+
 package es.taw.proyectotaw.controller;
 
 import es.taw.proyectotaw.Entity.MensajeEntity;
@@ -25,7 +29,9 @@ public class MensajeController {
     @GetMapping("/Asistencia/asistente")
     public String doListarMensajes(@RequestParam(name = "contactId", required = false) Integer contact, Model model, HttpSession httpSession) {
         UsuarioEntity usuarioLogeado = new UsuarioEntity();
-        if (httpSession.getAttribute("socio") != null) {
+        if (httpSession.getAttribute("usuario") != null) {
+            usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("usuario");
+        } else if (httpSession.getAttribute("socio") != null) {
             usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("socio");
         } else {
             usuarioLogeado = (UsuarioEntity) httpSession.getAttribute("cliente");

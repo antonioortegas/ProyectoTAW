@@ -1,3 +1,7 @@
+/*
+AUTOR : ANTONIO ORTEGA SANTAOLALLA - 100%
+ */
+
 package es.taw.proyectotaw.ui;
 
 public class FiltroEmpresas {
