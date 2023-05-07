@@ -4,7 +4,12 @@
 <%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--
+Created by IntelliJ IDEA.
+User: Carlos Dominguez
+Date: 06/05/2023
+Time: 14:00
+--%>
 <html>
 
 <head>

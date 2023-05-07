@@ -2,7 +2,12 @@
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--
+Created by IntelliJ IDEA.
+User: Carlos Dominguez
+Date: 06/05/2023
+Time: 14:00
+--%>
 <html>
 <head>
     <title>Registrar Cliente</title>
