@@ -3,6 +3,7 @@ package es.taw.proyectotaw.Entity;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 @Table(name = "peticion", schema = "mydb", catalog = "")
@@ -63,26 +64,13 @@ public class PeticionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
-        PeticionEntity that = (PeticionEntity) o;
-
-        if (idPeticion != null ? !idPeticion.equals(that.idPeticion) : that.idPeticion != null) return false;
-        if (tipoPeticion != null ? !tipoPeticion.equals(that.tipoPeticion) : that.tipoPeticion != null) return false;
-        if (fechaPeticion != null ? !fechaPeticion.equals(that.fechaPeticion) : that.fechaPeticion != null)
-            return false;
-        if (estadoPeticion != null ? !estadoPeticion.equals(that.estadoPeticion) : that.estadoPeticion != null)
-            return false;
-
-        return true;
+        PeticionEntity peticion = (PeticionEntity) o;
+        return Objects.equals(idPeticion, peticion.idPeticion) && Objects.equals(tipoPeticion, peticion.tipoPeticion) && Objects.equals(fechaPeticion, peticion.fechaPeticion) && Objects.equals(estadoPeticion, peticion.estadoPeticion);
     }
 
     @Override
     public int hashCode() {
-        int result = idPeticion != null ? idPeticion.hashCode() : 0;
-        result = 31 * result + (tipoPeticion != null ? tipoPeticion.hashCode() : 0);
-        result = 31 * result + (fechaPeticion != null ? fechaPeticion.hashCode() : 0);
-        result = 31 * result + (estadoPeticion != null ? estadoPeticion.hashCode() : 0);
-        return result;
+        return Objects.hash(idPeticion, tipoPeticion, fechaPeticion, estadoPeticion);
     }
 
     public UsuarioEntity getUsuarioByUsuarioIdUsuario() {

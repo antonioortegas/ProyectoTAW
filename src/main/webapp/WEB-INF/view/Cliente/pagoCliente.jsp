@@ -3,7 +3,12 @@
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.CambiodivisaEntity" %>
-
+<%--
+Created by IntelliJ IDEA.
+User: Carlos Dominguez
+Date: 06/05/2023
+Time: 14:00
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
     <%
@@ -66,6 +71,7 @@
         Cantidad:<input type="number" name="cantidad" max="<%=cliente.getCuentabancoByCuentaBancoIdCuentaBanco().getSaldo()%>">
         IBAN Beneficiario:<input type="text" name="iban">
         <button>Realizar transferencia</button>
+        <br><button> <a href="/">Salir</a></button><br>
     </form>
 </div>
 </body>

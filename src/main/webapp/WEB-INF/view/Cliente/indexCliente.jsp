@@ -1,12 +1,12 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
-<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %><%--
-  Created by IntelliJ IDEA.
-  User: anton
-  Date: 20/04/2023
-  Time: 11:02
-  To change this template use File | Settings | File Templates.
+<%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
+<%--
+Created by IntelliJ IDEA.
+User: Carlos Dominguez
+Date: 06/05/2023
+Time: 14:00
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -95,6 +95,8 @@
         <a href="/cambioDeDivisaCliente?id=<%= cliente.getIdUsuario() %>">Realizar un cambio de divisa</a>
         <a href="/historialOperaciones?id=<%= cliente.getIdUsuario() %>">Historial de operaciones</a>
     </div>
+
+    <button> <a href="/">Salir</a></button><br>
 
     <div class="status <%=cliente.getEstadoUsuario()%>">
         Su cuenta se encuentra en estado: <%=cliente.getEstadoUsuario()%>.

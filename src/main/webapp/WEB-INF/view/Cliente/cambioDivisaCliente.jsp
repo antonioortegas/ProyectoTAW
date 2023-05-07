@@ -1,4 +1,9 @@
-
+<%--
+Created by IntelliJ IDEA.
+User: Carlos Dominguez
+Date: 06/05/2023
+Time: 14:00
+--%>
 
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="java.util.List" %>
@@ -72,6 +77,7 @@
             <%}%>
         </select>
         <button>Realizar cambio</button>
+        <br><button> <a href="/">Salir</a></button><br>
     </form>
 </div>
 </body>

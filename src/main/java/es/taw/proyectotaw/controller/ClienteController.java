@@ -1,10 +1,18 @@
 package es.taw.proyectotaw.controller;
+        /*
+  Created by IntelliJ IDEA.
+  User: Carlos Dominguez
+  Date: 06/05/2023
+  Time: 14:00
+        */
 
 import es.taw.proyectotaw.Entity.*;
 import es.taw.proyectotaw.dao.*;
+import es.taw.proyectotaw.ui.FiltroTransaccion;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -95,7 +103,41 @@ public class ClienteController {
     @GetMapping("/historialOperaciones")
     public String mostrarHistorial (Integer id, Model model, HttpSession session) {
         UsuarioEntity cliente = this.usuarioRepository.getReferenceById(id);
-        model.addAttribute("cliente", cliente);
+        model.addAttribute("usuario", cliente);
+        if(model.containsAttribute("filtroTransacciones") && model.getAttribute("filtroTransacciones")!=null) {
+            return procesarFiltradoTransacciones(id, model, (FiltroTransaccion) model.getAttribute("filtroTransacciones"));
+        } else {
+            return procesarFiltradoTransacciones(id, model, null);
+        }
+    }
+
+    @PostMapping("/Cliente/filtrarTransacciones")
+    public String filtrarTransaccionesCliente(Model model, @ModelAttribute("filtroTransacciones") FiltroTransaccion filtroTransaccion) {
+        return procesarFiltradoTransacciones(filtroTransaccion.getId_usuario(), model, filtroTransaccion);
+    }
+
+    private String procesarFiltradoTransacciones(Integer id, Model model, FiltroTransaccion filtroTransaccion) {
+        UsuarioEntity usuario = this.usuarioRepository.findById(id).orElse(null);
+        model.addAttribute("usuario", usuario);
+        List<TransaccionEntity> listaTransacciones = null;
+
+        if(filtroTransaccion == null){
+            filtroTransaccion = new FiltroTransaccion();
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtroTransaccion.getOrden()) ,usuario.getCuentabancoByCuentaBancoIdCuentaBanco());
+        }
+        if(filtroTransaccion.getPropiedad().equals("")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBanco(Sort.by(filtroTransaccion.getOrden()) ,usuario.getCuentabancoByCuentaBancoIdCuentaBanco());
+        }
+        if(filtroTransaccion.getPropiedad().equals("Pago")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(usuario.getCuentabancoByCuentaBancoIdCuentaBanco(), Sort.by(filtroTransaccion.getOrden()));
+        }
+        if(filtroTransaccion.getPropiedad().equals("Cambio de divisa")){
+            listaTransacciones = this.transaccionRepository.findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndCambiodivisaByCambioDivisaIdCambioDivisaNotNull(usuario.getCuentabancoByCuentaBancoIdCuentaBanco(), Sort.by(filtroTransaccion.getOrden()));
+        }
+
+        model.addAttribute("listaTransacciones", listaTransacciones);
+        model.addAttribute("filtroTransaccion", filtroTransaccion);
+
         return "Cliente/historialOperaciones";
     }
 
