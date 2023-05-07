@@ -44,9 +44,13 @@ AUTOR : Sergio Morejón Pérez - 100%
     </style>
 </head>
 <body>
-<button> <a href="Empresa/empresaPrincipal">Empresa</a>  </button> <br>
-<button> <a href="Cliente/clientePrincipal">Cliente</a></button> <br>
-<button> <a href="gestor/usuarios" >Gestor </a></button><br>
-<button> <a href="Asistencia/asistente" >Asistente </a></button><br>
+<a href="Empresa/empresaPrincipal"><button>Empresa</button></a>
+<br>
+<a href="Cliente/cientePrincipal"><button>Cliente</button></a>
+<br>
+<a href="gestor/usuarios"><button>Gestor</button></a>
+<br>
+<a href="Asistencia/asistente"><button>Asistente</button></a>
+<br>
 </body>
 </html>
