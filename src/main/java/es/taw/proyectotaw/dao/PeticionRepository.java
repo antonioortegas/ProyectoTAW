@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.security.Timestamp;
 import java.util.Date;
 import java.util.List;
-
+/*User: Antonio Ortega*/
 public interface PeticionRepository extends JpaRepository<PeticionEntity, Integer> {
 
     List<PeticionEntity> findAllByUsuarioByUsuarioIdUsuarioEqualsAndEstadoPeticionEquals(UsuarioEntity usuario, String estado);

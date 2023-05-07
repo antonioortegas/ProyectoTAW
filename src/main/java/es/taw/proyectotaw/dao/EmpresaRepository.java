@@ -18,7 +18,7 @@ public interface EmpresaRepository extends JpaRepository<EmpresaEntity,Integer> 
     @Query("select u from UsuarioEntity u where u.empresaByEmpresaIdEmpresa.idEmpresa = :idEmpresa and lower(u.tipoUsuario) like 'autorizado' ")
     List<UsuarioEntity> buscarAutorizados(@Param("idEmpresa")Integer idEmpresa);
 
-    //Antonio vvv
+    //Antonio Ortega
     @Query("select e from EmpresaEntity e inner join PeticionEntity p on e.idEmpresa = p.empresaByEmpresaIdEmpresa.idEmpresa where p.estadoPeticion = 'noprocesada' and p.tipoPeticion = :tipo")
     public List<EmpresaEntity> buscarEmpresasConSolicitudDeTipo(Sort by, String tipo);
 

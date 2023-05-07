@@ -7,6 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+/*
+  Created by IntelliJ IDEA.
+  User: Carlos Dominguez
+  Date: 06/05/2023
+  Time: 14:00
+        */
 
 public interface CambiodivisaRepository extends JpaRepository<CambiodivisaEntity, Integer> {
 

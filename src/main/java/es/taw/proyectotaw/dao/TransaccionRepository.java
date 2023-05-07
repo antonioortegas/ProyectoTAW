@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Date;
 import java.util.List;
-
+/*User: Sergio Morejón*/
 public interface TransaccionRepository extends JpaRepository <TransaccionEntity, Integer> {
 
     List<TransaccionEntity> findAllByCuentabancoByCuentaBancoIdCuentaBancoEqualsAndPagoByPagoIdPagoNotNull(CuentabancoEntity c, Sort by);
