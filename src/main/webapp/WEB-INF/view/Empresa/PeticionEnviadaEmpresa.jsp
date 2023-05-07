@@ -2,7 +2,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.proyectotaw.Entity.UsuarioEntity" %>
 <%@ page import="es.taw.proyectotaw.Entity.EmpresaEntity" %>
-
+<%--
+  Created by IntelliJ IDEA.
+  User: Sergio Morejon Perez
+  Date: 30/04/2023
+  Time: 2:55
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>

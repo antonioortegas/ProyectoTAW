@@ -27,16 +27,16 @@
         }
 
         html,
-         body,
-         .container,
-         .conversations,
-         .chat {
-             width: 100%;
-             height: 100%;
-             margin: 0;
-             padding: 0;
-             overflow-x: hidden;
-         }
+        body,
+        .container,
+        .conversations,
+        .chat {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
 
         .containers {
             display: flex;
@@ -137,6 +137,7 @@
             padding: 10px;
             background-color: #f2f2f2;
         }
+
         .input-container input {
             flex: 1;
             padding: 10px;
@@ -155,6 +156,7 @@
             color: #fff;
             cursor: pointer;
         }
+
         .contact:hover {
             background-color: white;
             cursor: pointer;
@@ -179,145 +181,149 @@
     listaUsuarios.remove(usuarioLogeado);
     List<UsuarioEntity> listaAsistentes = new LinkedList<>();
 
-    for (UsuarioEntity asistente : listaUsuarios)
-    {
-        if (asistente.getTipoUsuario().equals("asistente") && asistente.getIdUsuario() != usuarioLogeado.getIdUsuario())
-        {
-                listaAsistentes.add(asistente);
-                System.out.println("Loading asistente.." + asistente.getNombre());
+    for (UsuarioEntity asistente : listaUsuarios) {
+        if (asistente.getTipoUsuario().equals("asistente") && asistente.getIdUsuario() != usuarioLogeado.getIdUsuario()) {
+            listaAsistentes.add(asistente);
+            System.out.println("Loading asistente.." + asistente.getNombre());
         }
     }
 
 %>
- <div id="wrapper">
-     <div class="containers">
-         <div class="conversations">
-             <div class="header">
-                 <h2>Usuario: <%= usuarioLogeado.getNombre() %>  </h2>
-                 <h2>id: <%= usuarioLogeado.getIdUsuario() %></h2>
-                 <form action="/Asistencia/logout" method="post">
-                     <button type="submit">Logout</button>
-                 </form>
-             </div>
-             <% if (!usuarioLogeado.getTipoUsuario().equals("asistente"))
-             {
-                 System.out.println("loading list of asistentes..");
-                 listaUsuarios = listaAsistentes;
-                 System.out.println("done loading list of asistentes.");
-             }
+<div id="wrapper">
+    <div class="containers">
+        <div class="conversations">
+            <div class="header">
+                <h2>Usuario: <%= usuarioLogeado.getNombre() %>
+                </h2>
+                <h2>id: <%= usuarioLogeado.getIdUsuario() %>
+                </h2>
+                <form action="/Asistencia/logout" method="post">
+                    <button type="submit">Logout</button>
+                </form>
+                <%if (usuarioLogeado.getEmpresaByEmpresaIdEmpresa() != null) {%>
+                <button><a href="/goPrincipalEmpresa?id=<%=usuarioLogeado.getIdUsuario()%>">SALIR</a></button>
 
-                 for (UsuarioEntity contactos : listaUsuarios) {
-             %>
-             <a href="/Asistencia/asistente?contactId=<%=contactos.getIdUsuario() %>"><ul>
-                 <li class="contact" onclick="selectContact('<%= contactos.getNombre() %>')">
-                     <%= contactos.getNombre() %> (id: <%= contactos.getIdUsuario() %>)
-                 </li>
-             </ul></a>
+                <%}%>
 
-             <%
-                 }
-             %>
+            </div>
+            <% if (!usuarioLogeado.getTipoUsuario().equals("asistente")) {
+                System.out.println("loading list of asistentes..");
+                listaUsuarios = listaAsistentes;
+                System.out.println("done loading list of asistentes.");
+            }
 
-         </div>
-         <div class="chat">
-             <div class="header">
+                for (UsuarioEntity contactos : listaUsuarios) {
+            %>
+            <a href="/Asistencia/asistente?contactId=<%=contactos.getIdUsuario() %>">
+                <ul>
+                    <li class="contact" onclick="selectContact('<%= contactos.getNombre() %>')">
+                        <%= contactos.getNombre() %> (id: <%= contactos.getIdUsuario() %>)
+                    </li>
+                </ul>
+            </a>
+
+            <%
+                }
+            %>
+
+        </div>
+        <div class="chat">
+            <div class="header">
                 <%
-                    if (contacto.getIdUsuario() == usuarioLogeado.getIdUsuario())
-                    {
+                    if (contacto.getIdUsuario() == usuarioLogeado.getIdUsuario()) {
                 %>
-                         <h2>Welcome to the assistant</h2>
+                <h2>Welcome to the assistant</h2>
                 <%
-                    } else {
+                } else {
                 %>
-                        <h2> Chatting with - "<%= contacto.getNombre() %>" </h2>
+                <h2> Chatting with - "<%= contacto.getNombre() %>" </h2>
                 <%
                     }
                 %>
-             </div>
-             <div class="messages">
+            </div>
+            <div class="messages">
 
 
-                 <%
-                     for (MensajeEntity mensaje : mensajesPersonales)
-                     {
-                         if (mensaje.getUsuarioByUsuarioDestino().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
-                 %>
-                 <div class="message received">
+                <%
+                    for (MensajeEntity mensaje : mensajesPersonales) {
+                        if (mensaje.getUsuarioByUsuarioDestino().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
+                %>
+                <div class="message received">
 
-                     <%
-                         }
-                         if (mensaje.getUsuarioByUsuarioOrigen().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
-                     %>
-                     <div class="message sent">
-                         <%
-                             }
-                         %>
-                         <p> <%= mensaje.getContenido()%>  <%
-                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                             String time = format.format(mensaje.getFechaEnvio());
-                         %> <span class="time-stamp"><%= time %></span></p>
-                     </div>
+                    <%
+                        }
+                        if (mensaje.getUsuarioByUsuarioOrigen().getIdUsuario() != usuarioLogeado.getIdUsuario()) {
+                    %>
+                    <div class="message sent">
+                        <%
+                            }
+                        %>
+                        <p><%= mensaje.getContenido()%>  <%
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            String time = format.format(mensaje.getFechaEnvio());
+                        %> <span class="time-stamp"><%= time %></span></p>
+                    </div>
 
-                     <%    }
-                     %>
+                    <% }
+                    %>
 
-                 </div>
-                 <form action="/Asistencia/asistente/sendMessage?contactId=<%= contacto.getIdUsuario() %>" method="POST" onsubmit="return validateForm();">
-                     <div class="input-container">
-                         <input type="text" name="message" id="message" placeholder="Type a message...">
-                         <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
-                     </div>
-                 </form>
-
-
+                </div>
+                <form action="/Asistencia/asistente/sendMessage?contactId=<%= contacto.getIdUsuario() %>" method="POST"
+                      onsubmit="return validateForm();">
+                    <div class="input-container">
+                        <input type="text" name="message" id="message" placeholder="Type a message...">
+                        <button type="submit" class="send-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </form>
 
 
-             </div>
-         </div>
-     </div>
- </div>
-    <script>
-        function validateForm() {
-            var message = document.getElementById("message").value;
-            if (message.trim() == "") {
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function validateForm() {
+        var message = document.getElementById("message").value;
+        if (message.trim() == "") {
 
-                return false;
-            }
-            inputField.focus()
-            return true;
+            return false;
         }
-    </script>
+        inputField.focus()
+        return true;
+    }
+</script>
 
-    <script> // Script para que siempre esté abajo del todo de la conver
-        const messagesContainer = document.querySelector(".messages");
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        const inputField = document.querySelector("input[type='text']");
-        inputField.addEventListener("focus", () => {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        });
-        const sendButton = document.querySelector(".send-btn");
-        sendButton.addEventListener("click", () => {
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        });inputField.focus();
-    </script>
+<script> // Script para que siempre esté abajo del todo de la conver
+const messagesContainer = document.querySelector(".messages");
+messagesContainer.scrollTop = messagesContainer.scrollHeight;
+const inputField = document.querySelector("input[type='text']");
+inputField.addEventListener("focus", () => {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+const sendButton = document.querySelector(".send-btn");
+sendButton.addEventListener("click", () => {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+});
+inputField.focus();
+</script>
 
-    <script>
-        function selectContact(contactName) {
-            // Remove the 'active' class from any previously active contact
-            let activeContact = document.querySelector('.contact.active');
-            if (activeContact) {
-                activeContact.classList.remove('active');
-            }
-
-            // Add the 'active' class to the clicked contact
-            let clickedContact = event.target;
-            clickedContact.classList.add('active');
+<script>
+    function selectContact(contactName) {
+        // Remove the 'active' class from any previously active contact
+        let activeContact = document.querySelector('.contact.active');
+        if (activeContact) {
+            activeContact.classList.remove('active');
         }
-    </script>
+
+        // Add the 'active' class to the clicked contact
+        let clickedContact = event.target;
+        clickedContact.classList.add('active');
+    }
+</script>
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"
-            integrity="sha512-fJ1tpzsHwKjNliDARaL2IbgH9KspJ2G8fYrT3nqOraln0zaMhKgI+Brn/qmee0UsG9ILH2Q1yEYfT0AtukKs7w=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.min.js"
+        integrity="sha512-fJ1tpzsHwKjNliDARaL2IbgH9KspJ2G8fYrT3nqOraln0zaMhKgI+Brn/qmee0UsG9ILH2Q1yEYfT0AtukKs7w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </body>
 </html>

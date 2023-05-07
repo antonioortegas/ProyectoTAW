@@ -4,7 +4,13 @@
 <%@ taglib prefix="th" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--
+  Created by IntelliJ IDEA.
+  User: Sergio Morejon Perez
+  Date: 30/04/2023
+  Time: 2:55
+  To change this template use File | Settings | File Templates.
+--%>
 <html>
 <head>
     <%
