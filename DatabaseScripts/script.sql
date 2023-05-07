@@ -175,7 +175,7 @@
 	  `cuenta_banco_id_cuenta_banco` INT NOT NULL,
 	  `cambio_divisa_id_cambio_divisa` INT,
 	  `Pago_id_pago` INT,
-	  `idUsuarioActor` INT,
+	  `id_usuario_actor` INT,
 	  PRIMARY KEY (`id_transaccion`),
 	  INDEX `fk_Transaccion_CuentaBanco1_idx` (`cuenta_banco_id_cuenta_banco` ASC) VISIBLE,
 	  INDEX `fk_Transaccion_CambioDivisa1_idx` (`cambio_divisa_id_cambio_divisa` ASC) VISIBLE,

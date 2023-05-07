@@ -20,7 +20,7 @@ AUTOR : Sergio Morejón Pérez - 100%
     <title>Title</title>
     <style>
         button {
-            background-color: #ff9800;
+            background-color: #333;
             border: none;
             color: white;
             padding: 15px 32px;
@@ -46,7 +46,7 @@ AUTOR : Sergio Morejón Pérez - 100%
 <body>
 <a href="Empresa/empresaPrincipal"><button>Empresa</button></a>
 <br>
-<a href="Cliente/cientePrincipal"><button>Cliente</button></a>
+<a href="Cliente/clientePrincipal"><button>Cliente</button></a>
 <br>
 <a href="gestor/usuarios"><button>Gestor</button></a>
 <br>
