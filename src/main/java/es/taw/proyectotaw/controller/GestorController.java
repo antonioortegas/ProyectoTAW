@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -68,8 +69,8 @@ public class GestorController {
         List<CuentabancoEntity> listaCuentasSospechosas = this.cuentabancoRepository.findAllBySospechosoEquals(1);
         model.addAttribute("listaCuentasSospechosas", listaCuentasSospechosas);
 
-        List<UsuarioEntity> listaUsuarios = null;
-        List<EmpresaEntity> listaEmpresas = null;
+        List<UsuarioEntity> listaUsuarios = new ArrayList<>();
+        List<EmpresaEntity> listaEmpresas = new ArrayList<>();
 
         //FILTROS
         //USUARIOS:
